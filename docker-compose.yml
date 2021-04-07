@@ -1,23 +1,23 @@
 version: "3.1"
 services:
-  app:
+  frontend:
     env_file:
       - .env
-    build:
-      context: ./app
+    build: frontend
     depends_on:
-      - api
+      - backend
     volumes:
-      - ./app/:/usr/src/app
-  api:
+      - ./frontend:/usr/src/app
+      - appmodules:/usr/src/app/node_modules
+  backend:
     env_file:
       - .env
-    build:
-      context: ./api
+    build: backend
     depends_on:
       - db
     volumes:
-      - ./api/:/usr/src/api
+      - ./backend:/usr/src/app
+      - servermodules:/usr/src/app/node_modules
   db:
     image: mongo:latest
     env_file:
@@ -29,8 +29,11 @@ services:
     env_file:
       - .env
     depends_on:
-      - app
-      - api
+      - frontend
+      - backend
     ports:
       - "${PORT}:${PORT}"
-    
+    restart: always
+volumes:
+  appmodules: {}
+  servermodules: {}

@@ -3,10 +3,10 @@ server {
     server_name  localhost;
 
     location / {
-        proxy_pass http://app:$PORT;
+        proxy_pass http://frontend:$PORT;
     }
 
     location /api {
-        proxy_pass http://api:$PORT;
+        proxy_pass http://backend:$PORT;
     }
 }

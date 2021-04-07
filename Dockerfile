@@ -1,12 +1,12 @@
 FROM node:lts-alpine AS builder
 WORKDIR /usr/src/app
-COPY ./app/ .
+COPY ./frontend/ .
 RUN yarn install
 RUN yarn build
 
 FROM node:lts-alpine AS production
 WORKDIR /usr/src/app
-COPY ./api/ .
+COPY ./backend/ .
 COPY --from=builder /usr/src/app/build ./public
 RUN yarn install
 
