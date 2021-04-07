@@ -1,0 +1,36 @@
+version: "3.1"
+services:
+  app:
+    env_file:
+      - .env
+    build:
+      context: ./app
+    depends_on:
+      - api
+    volumes:
+      - ./app/:/usr/src/app/
+  api:
+    env_file:
+      - .env
+    build:
+      context: ./api
+    depends_on:
+      - db
+    volumes:
+      - ./api/:/usr/src/app/
+  db:
+    image: mongo:latest
+    env_file:
+      - .env
+    restart: always
+  proxy:
+    build:
+      context: ./.nginx
+    env_file:
+      - .env
+    depends_on:
+      - app
+      - api
+    ports:
+      - "${PORT}:${PORT}"
+    

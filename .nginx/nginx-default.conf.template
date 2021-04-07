@@ -1,0 +1,12 @@
+server {
+    listen       $PORT;
+    server_name  localhost;
+
+    location / {
+        proxy_pass http://app:$PORT;
+    }
+
+    location /api {
+        proxy_pass http://api:$PORT;
+    }
+}
