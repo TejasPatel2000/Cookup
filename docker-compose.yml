@@ -7,8 +7,9 @@ services:
     depends_on:
       - backend
     volumes:
-      - ./frontend:/usr/src/app
-      - appmodules:/usr/src/app/node_modules
+      - ./frontend:/home/node/app
+    expose:
+      - "${PORT}"
   backend:
     env_file:
       - .env
@@ -16,16 +17,16 @@ services:
     depends_on:
       - db
     volumes:
-      - ./backend:/usr/src/app
-      - servermodules:/usr/src/app/node_modules
+      - ./backend:/home/node/app
+    expose:
+      - "${PORT}"
   db:
     image: mongo:latest
     env_file:
       - .env
     restart: always
   proxy:
-    build:
-      context: ./.nginx
+    build: .nginx
     env_file:
       - .env
     depends_on:
@@ -34,6 +35,3 @@ services:
     ports:
       - "${PORT}:${PORT}"
     restart: always
-volumes:
-  appmodules: {}
-  servermodules: {}
