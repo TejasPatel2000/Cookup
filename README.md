@@ -1,5 +1,5 @@
 # CookUp
-A web app designed to share and find recipees.
+A web app designed to share and find recipes.
 ### Getting Started
 Install Docker from [here](https://docs.docker.com/get-docker/).
 
@@ -10,7 +10,9 @@ Finally run these commands to get up and running.
 ```bash
 git clone https://github.com/CookUpApp/cookup.git
 cd cookup
-echo "PORT=80" > .env # The port the app will listen on ("PORT=$PORT" for c9)
+# The port the app will listen on
+# Use "PORT=$PORT" for cloud9 sessions
+echo "PORT=80" > .env
 docker-compose up
 ```
 
