@@ -1,10 +1,10 @@
 FROM node:lts-alpine
-WORKDIR /usr/src/app
+RUN apk update && apk upgrade
 
-ADD package.json /usr/src/app
+USER node
+RUN mkdir -p /home/node/app && chown -R node:node /home/node/app
+WORKDIR /home/node/app
 
-RUN apk update && apk upgrade && yarn install
+COPY --chown=node:node . /home/node/app
 
-ADD . /usr/src/app
-
-CMD ["yarn", "start"]
+CMD [ -d "node_modules" ] && yarn start || yarn install && yarn start
