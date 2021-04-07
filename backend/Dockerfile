@@ -3,8 +3,8 @@ WORKDIR /usr/src/app
 
 ADD package.json /usr/src/app
 
-RUN npm install
+RUN apk update && apk upgrade && npm install
 
 ADD . /usr/src/app
 
-CMD ["npm", "start"]
+CMD ["yarn", "start"]
