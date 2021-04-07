@@ -8,7 +8,7 @@ services:
     depends_on:
       - api
     volumes:
-      - ./app/:/usr/src/app/
+      - ./app/:/usr/src/app
   api:
     env_file:
       - .env
@@ -17,7 +17,7 @@ services:
     depends_on:
       - db
     volumes:
-      - ./api/:/usr/src/app/
+      - ./api/:/usr/src/api
   db:
     image: mongo:latest
     env_file:

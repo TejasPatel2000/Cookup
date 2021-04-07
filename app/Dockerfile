@@ -1,5 +1,7 @@
 FROM node:lts-alpine
 WORKDIR /usr/src/app
-COPY . .
+
+VOLUME [ "/usr/src/app/node_modules/" ]
+
 RUN yarn install
 CMD ["yarn", "start"]
