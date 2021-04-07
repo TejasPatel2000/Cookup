@@ -11,8 +11,6 @@ Finally run this command to get up and running.
 git clone https://github.com/CookUpApp/cookup.git
 cd cookup
 echo "PORT=80" > .env # The port the app will listen on ("PORT=$PORT" for c9)
-docker-compose run app yarn install
-docker-compose run api yarn install
 docker-compose up
 ```
 
