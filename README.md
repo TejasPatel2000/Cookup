@@ -1,5 +1,5 @@
 # CookUp
-An web app designed to share and find recipees.
+A web app designed to share and find recipees.
 ### Getting Started
 Install Docker from [here](https://docs.docker.com/get-docker/).
 
