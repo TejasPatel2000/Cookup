@@ -7,7 +7,7 @@ RUN yarn build
 FROM node:lts-alpine AS production
 WORKDIR /usr/src/app
 COPY ./backend/ .
-COPY --from=builder /usr/src/app/build ./src/public
+COPY --from=builder /usr/src/app/build ./public
 RUN yarn install
 
 EXPOSE $PORT
