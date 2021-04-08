@@ -5,6 +5,8 @@
     },
     "extends": [
         "plugin:react/recommended",
+        "plugin:jest/recommended",
+        "plugin:jest/style",
         "airbnb"
     ],
     "parserOptions": {
@@ -15,7 +17,8 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react"
+        "react",
+        "jest"
     ],
     "rules": {
     }
