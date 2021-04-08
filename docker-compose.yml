@@ -15,17 +15,19 @@ services:
       - .env
     build: backend
     depends_on:
-      - db
+      - mongo
     volumes:
       - ./backend:/home/node/app
     expose:
       - "${PORT}"
-  db:
+  mongo:
     image: mongo:latest
     env_file:
       - .env
+    ports:
+      - 27017:27017
     restart: always
-  proxy:
+  nginx:
     build: .nginx
     env_file:
       - .env
