@@ -1,11 +1,14 @@
-const Router = require('@koa/router')
+const Router = require('@koa/router');
+const auth = require('./auth');
 
 const router = new Router({
-    prefix: '/api'
-})
+  prefix: '/api',
+});
 
-router.get('/users', ctx => {
-    ctx.body = 'Respond with a resource'
-})
+router.get('/users', async (ctx) => {
+  ctx.body = 'Respond with a resource';
+});
 
-module.exports = router.routes()
+router.use('/auth', auth);
+
+module.exports = router.routes();
