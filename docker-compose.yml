@@ -7,25 +7,28 @@ services:
     depends_on:
       - backend
     volumes:
-      - ./frontend:/usr/src/app
-      - appmodules:/usr/src/app/node_modules
+      - ./frontend:/home/node/app
+    expose:
+      - "${PORT}"
   backend:
     env_file:
       - .env
     build: backend
     depends_on:
-      - db
+      - mongo
     volumes:
-      - ./backend:/usr/src/app
-      - servermodules:/usr/src/app/node_modules
-  db:
+      - ./backend:/home/node/app
+    expose:
+      - "${PORT}"
+  mongo:
     image: mongo:latest
     env_file:
       - .env
+    ports:
+      - 27017:27017
     restart: always
-  proxy:
-    build:
-      context: ./.nginx
+  nginx:
+    build: .nginx
     env_file:
       - .env
     depends_on:
@@ -34,6 +37,3 @@ services:
     ports:
       - "${PORT}:${PORT}"
     restart: always
-volumes:
-  appmodules: {}
-  servermodules: {}
