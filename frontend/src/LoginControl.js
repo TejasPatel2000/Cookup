@@ -13,7 +13,6 @@ export function LoginControl(props) {
   //fetch('http://example.com/movies.json')
     //.then(response => response.json())
     //.then(data => console.log(data));
-  
   function UserGreeting() {
     return <h1> Welcome! </h1>;
   }
