@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable react/jsx-filename-extension */
-/* eslint-disable import/prefer-default-export */
 /* eslint-disable react/prop-types */
 /* enslint-disable no-shadow */
 
