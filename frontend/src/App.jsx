@@ -1,5 +1,6 @@
+import React from 'react';
 import './App.css';
-import { LoginControl } from './LoginControl';
+import LoginControl from './LoginControl';
 
 function App() {
   return (
