@@ -5,14 +5,13 @@
 
 import React, { useState, useRef } from 'react';
 
-export function LoginControl(props) {
+export function LoginControl() {
   const userRef = useRef(null);
   const [logged, setLogin] = useState(false);
   const [thisUser, setthisUser] = useState('');
   //fetch('http://example.com/movies.json')
     //.then(response => response.json())
     //.then(data => console.log(data));
-  
   function UserGreeting() {
     return <h1> Welcome! </h1>;
   }
