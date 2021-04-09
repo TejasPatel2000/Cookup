@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 
-export function LoginControl(props) {
+export function LoginControl() {
   const userRef = useRef(null);
   const [logged, setLogin] = useState(false);
   const [thisUser, setthisUser] = useState('');
