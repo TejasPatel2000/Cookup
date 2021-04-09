@@ -1,0 +1,106 @@
+/* eslint-disable react/jsx-filename-extension */
+/* eslint-disable react/jsx-filename-extension */
+/* eslint-disable import/prefer-default-export */
+/* eslint-disable react/prop-types */
+/* enslint-disable no-shadow */
+
+import React, { useState, useRef } from 'react';
+
+export function LoginControl(props) {
+  const userRef = useRef(null);
+  const [logged, setLogin] = useState(false);
+  const [thisUser, setthisUser] = useState('');
+  
+  function UserGreeting() {
+    return <h1> Welcome! </h1>;
+  }
+
+  function GuestGreeting() {
+    return <h1> Sign in! </h1>;
+  }
+
+  function Greeting(status) {
+    const { isLoggedIn } = status;
+    if (isLoggedIn) {
+      return <UserGreeting />;
+    }
+    return <GuestGreeting />;
+  }
+
+  function LoginButton(logClick) {
+    const { onClick } = logClick;
+    return <button type="button" onClick={onClick}>Login</button>;
+  }
+
+  function LogoutButton(outClick) {
+    const { onClick } = outClick;
+    return <button type="button" onClick={onClick}>Logout</button>;
+  }
+  function SendUser() {
+    if (userRef != null) {
+      const username = userRef.current.value;
+      setthisUser(username);
+      console.log(username);
+      //socket.emit('user', { user: username });
+    }
+    setLogin(true);
+  }
+  function RemoveUser() {
+    if (userRef != null) {
+      const username = userRef.current.value;
+      setthisUser(username);
+      //socket.emit('user logout', { user: username });
+    }
+    setLogin(false);
+  }
+
+  let button;
+  let board;
+  let chat;
+  let leader;
+  if (logged) {
+    button = (
+      <div className="toppane">
+        <Greeting className="greeting" isLoggedIn={logged} />
+        Username here:
+        {' '}
+        <input ref={userRef} type="text" />
+        <LogoutButton onClick={RemoveUser} />
+      </div>
+    );
+    chat = (
+      <div className="leftpane">
+      </div>
+    );
+    board = (
+      <div className="middlepane">
+      </div>
+    );
+    leader = (
+      <div className="rightpane">
+      </div>
+    );
+  } else {
+    button = (
+      <div className="toppane">
+        <Greeting className="greeting" isLoggedIn={logged} />
+        {' '}
+        Username here:
+        {' '}
+        <input ref={userRef} type="text" />
+        <LoginButton onClick={() => SendUser()} />
+      </div>
+    );
+    board = null;
+    chat = null;
+    leader = null;
+  }
+  return (
+    <div className="container">
+      {button}
+      {chat}
+      {board}
+      {leader}
+    </div>
+  );
+}
