@@ -25,8 +25,8 @@ exports.randomUsername = async () => {
   let username = '';
 
   do {
-    username = `user${exports.random(10000000000, 99999999999)}}`;
-  // eslint-disable-next-line no-await-in-loop
+    username = `user${exports.random(10000000000, 99999999999)}`;
+    // eslint-disable-next-line no-await-in-loop
   } while (await User.findByLogin(username));
 
   return username;
