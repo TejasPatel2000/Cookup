@@ -3,7 +3,7 @@ services:
   frontend:
     env_file:
       - .env
-    build: frontend
+    build: ./frontend
     depends_on:
       - backend
     volumes:
@@ -13,7 +13,7 @@ services:
   backend:
     env_file:
       - .env
-    build: backend
+    build: ./backend
     depends_on:
       - mongo
     volumes:
