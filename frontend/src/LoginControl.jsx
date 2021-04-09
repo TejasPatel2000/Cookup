@@ -79,3 +79,5 @@ export function LoginControl() {
     </div>
   );
 }
+
+export default LoginControl;
