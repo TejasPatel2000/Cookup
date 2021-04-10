@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import _uniqueId from 'lodash/uniqueId';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
+import './styles/Dropdown.scss';
 
 function Dropdown(props) {
   const { label, items, onSelect } = props;
@@ -19,7 +20,7 @@ function Dropdown(props) {
         <button type="button" className="button" onClick={() => setVisible(!visible)} aria-haspopup="true" aria-controls="dropdown-menu">
           <span>{label}</span>
           <span className="icon is-small">
-            <FontAwesomeIcon icon={faAngleDown} />
+            <FontAwesomeIcon icon={visible ? faAngleUp : faAngleDown} />
           </span>
         </button>
       </div>
