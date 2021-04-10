@@ -1,86 +1,56 @@
+import React, { useState } from 'react';
+import _uniqueId from 'lodash/uniqueId';
+import Dropdown from './components/Dropdown';
+import { getMonthList } from './utils';
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable react/prop-types */
 /* enslint-disable no-shadow */
 
-import React, { useState, useRef } from 'react';
+function LoginControl() {
+  const date = new Date();
+  const dateYear = date.getFullYear();
+  const [nameId] = useState(_uniqueId());
 
-export function LoginControl() {
-  const userRef = useRef(null);
-  const [logged, setLogin] = useState(false);
-  const [thisUser, setthisUser] = useState('');
-  //fetch('http://example.com/movies.json')
-    //.then(response => response.json())
-    //.then(data => console.log(data));
-  function UserGreeting() {
-    return <h1> Welcome! </h1>;
-  }
-
-  function GuestGreeting() {
-    return <h1> Sign in! </h1>;
-  }
-
-  function Greeting(status) {
-    const { isLoggedIn } = status;
-    if (isLoggedIn) {
-      return <UserGreeting />;
-    }
-    return <GuestGreeting />;
-  }
-
-  function LoginButton(logClick) {
-    const { onClick } = logClick;
-    return <button type="button" onClick={onClick}>Login</button>;
-  }
-
-  function LogoutButton(outClick) {
-    const { onClick } = outClick;
-    return <button type="button" onClick={onClick}>Logout</button>;
-  }
-  function SendUser() {
-    if (userRef != null) {
-      const username = userRef.current.value;
-      setthisUser(username);
-      console.log(username);
-      //socket.emit('user', { user: username });
-    }
-    setLogin(true);
-  }
-  function RemoveUser() {
-    if (userRef != null) {
-      const username = userRef.current.value;
-      setthisUser(username);
-      //socket.emit('user logout', { user: username });
-    }
-    setLogin(false);
-  }
-
-  let button;
-  if (logged) {
-    button = (
-      <div className="toppane">
-        <Greeting className="greeting" isLoggedIn={logged} />
-        Username here:
-        {' '}
-        <input ref={userRef} type="text" />
-        <LogoutButton onClick={RemoveUser} />
-      </div>
-    );
-  } else {
-    button = (
-      <div className="toppane">
-        <Greeting className="greeting" isLoggedIn={logged} />
-        {' '}
-        Username here:
-        {' '}
-        <input ref={userRef} type="text" />
-        <LoginButton onClick={() => SendUser()} />
-      </div>
-    );
-  }
   return (
-    <div className="container">
-      {button}
+    <div className="grid">
+      <div className="column is-6">
+        <div className="card">
+          <header className="card-header">
+            <p className="card-header-title">
+              Sign up
+            </p>
+          </header>
+          <div className="card-content">
+            <div className="content">
+              <div className="field">
+                <label htmlFor={nameId} className="label">What&apos;s your name?</label>
+                <div className="control">
+                  <input id={nameId} className="input" type="text" placeholder="Full name" />
+                </div>
+              </div>
+              <div className="field">
+                <label htmlFor={nameId} className="label">When were you born?</label>
+                <div className="field is-grouped is-grouped-multiline">
+                  <p className="control">
+                    <Dropdown label="Month" items={getMonthList()} />
+                  </p>
+                  <p className="control">
+                    <Dropdown label="Day" items={(new Array(31)).fill().map((_, indx) => indx + 1)} />
+                  </p>
+                  <p className="control">
+                    <Dropdown label="Year" items={(new Array(101 + (dateYear % 100))).fill().map((_, indx) => dateYear - indx)} />
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <footer className="card-footer">
+            <a href="/" className="card-footer-item has-background-white-bis">Login</a>
+            <a href="/" className="card-footer-item">Register</a>
+          </footer>
+        </div>
+      </div>
     </div>
   );
 }

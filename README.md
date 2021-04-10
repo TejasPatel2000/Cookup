@@ -19,10 +19,17 @@ echo "TWILIO_NUMBER=+1.........." > .env
 docker-compose up
 ```
 
-### Deploying to heroku
+### Deploying to Heroku
 ```bash
 heroku container:login
 heroku create
 heroku container:push web
 heroku container:release web
+```
+
+### Adding Packages
+All dependency files are are owned by the node user within their respective containers.
+DO NOT RUN `npm install` OR `npm i` IN BACKEND OR FRONTEND.
+```bash
+npm run add PACKAGES ...
 ```
