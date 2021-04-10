@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable react/jsx-filename-extension */
-/* eslint-disable import/prefer-default-export */
 /* eslint-disable react/prop-types */
 /* enslint-disable no-shadow */
 
@@ -58,9 +57,6 @@ export function LoginControl(props) {
   }
 
   let button;
-  let board;
-  let chat;
-  let leader;
   if (logged) {
     button = (
       <div className="toppane">
@@ -69,18 +65,6 @@ export function LoginControl(props) {
         {' '}
         <input ref={userRef} type="text" />
         <LogoutButton onClick={RemoveUser} />
-      </div>
-    );
-    chat = (
-      <div className="leftpane">
-      </div>
-    );
-    board = (
-      <div className="middlepane">
-      </div>
-    );
-    leader = (
-      <div className="rightpane">
       </div>
     );
   } else {
@@ -94,16 +78,12 @@ export function LoginControl(props) {
         <LoginButton onClick={() => SendUser()} />
       </div>
     );
-    board = null;
-    chat = null;
-    leader = null;
   }
   return (
     <div className="container">
       {button}
-      {chat}
-      {board}
-      {leader}
     </div>
   );
 }
+
+export default LoginControl;
