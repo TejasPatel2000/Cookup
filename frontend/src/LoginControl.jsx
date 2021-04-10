@@ -1,19 +1,17 @@
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable react/jsx-filename-extension */
-/* eslint-disable import/prefer-default-export */
 /* eslint-disable react/prop-types */
 /* enslint-disable no-shadow */
 
 import React, { useState, useRef } from 'react';
 
-export function LoginControl(props) {
+export function LoginControl() {
   const userRef = useRef(null);
   const [logged, setLogin] = useState(false);
   const [thisUser, setthisUser] = useState('');
   //fetch('http://example.com/movies.json')
     //.then(response => response.json())
     //.then(data => console.log(data));
-  
   function UserGreeting() {
     return <h1> Welcome! </h1>;
   }
@@ -58,9 +56,6 @@ export function LoginControl(props) {
   }
 
   let button;
-  let board;
-  let chat;
-  let leader;
   if (logged) {
     button = (
       <div className="toppane">
@@ -69,18 +64,6 @@ export function LoginControl(props) {
         {' '}
         <input ref={userRef} type="text" />
         <LogoutButton onClick={RemoveUser} />
-      </div>
-    );
-    chat = (
-      <div className="leftpane">
-      </div>
-    );
-    board = (
-      <div className="middlepane">
-      </div>
-    );
-    leader = (
-      <div className="rightpane">
       </div>
     );
   } else {
@@ -94,16 +77,12 @@ export function LoginControl(props) {
         <LoginButton onClick={() => SendUser()} />
       </div>
     );
-    board = null;
-    chat = null;
-    leader = null;
   }
   return (
     <div className="container">
       {button}
-      {chat}
-      {board}
-      {leader}
     </div>
   );
 }
+
+export default LoginControl;
