@@ -10,7 +10,6 @@ services:
     volumes:
       - ./frontend:/home/node/app
     command: /bin/sh -c "npm i && npm start"
-    user: node
     expose:
       - "${PORT}"
   backend:
@@ -23,7 +22,6 @@ services:
     volumes:
       - ./backend:/home/node/app
     command: /bin/sh -c "npm i && npm start"
-    user: node
     expose:
       - "${PORT}"
   mongo:
