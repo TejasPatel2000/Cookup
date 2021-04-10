@@ -1,25 +1,29 @@
 version: "3.1"
 services:
   frontend:
+    image: node:lts-alpine
     env_file:
       - .env
-    build: ./frontend
     depends_on:
       - backend
+    working_dir: /home/node/app
     volumes:
       - ./frontend:/home/node/app
-      - /home/node/app/node_modules/
+    command: /bin/sh -c "npm i && npm start"
+    user: node
     expose:
       - "${PORT}"
   backend:
+    image: node:lts-alpine
     env_file:
       - .env
-    build: ./backend
     depends_on:
       - mongo
+    working_dir: /home/node/app
     volumes:
       - ./backend:/home/node/app
-      - /home/node/app/node_modules/
+    command: /bin/sh -c "npm i && npm start"
+    user: node
     expose:
       - "${PORT}"
   mongo:

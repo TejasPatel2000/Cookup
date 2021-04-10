@@ -32,7 +32,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint src --ext .js,.jsx --fix"
+    "lint": "eslint src --ext .js,.jsx --fix",
+    "add": "docker-compose -f ../docker-compose.yml exec -d -u node frontend npm i"
   },
   "eslintConfig": {
     "extends": [

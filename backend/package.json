@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./src/app",
-    "lint": "eslint src --ext .js --fix"
+    "lint": "eslint src --ext .js --fix",
+    "add": "docker-compose -f ../docker-compose.yml exec -d -u node backend npm i"
   },
   "keywords": [],
   "author": "",
