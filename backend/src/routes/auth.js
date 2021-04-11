@@ -48,6 +48,7 @@ router.post('/login', async (ctx) => {
   if (success) {
     const session = await ctx.session();
     session.set('user', user.phone).then(session.update);
+    ctx.body.user = user;
   }
 });
 
