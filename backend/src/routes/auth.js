@@ -29,6 +29,10 @@ router.post('/sms/send', async (ctx) => {
 // POST /api/auth/login
 router.post('/login', async (ctx) => {
   ctx.body = {};
+  const session = ctx.session;
+
+  console.log(session);
+  
   const {
     login, token,
   } = ctx.request.body;
@@ -46,8 +50,7 @@ router.post('/login', async (ctx) => {
   ctx.body.success = success;
 
   if (success) {
-    const session = await ctx.session();
-    session.set('user', user.phone).then(session.update);
+    session.user = user.phone;
     ctx.body.user = user;
   }
 });
@@ -55,6 +58,8 @@ router.post('/login', async (ctx) => {
 // POST /api/auth/register
 router.post('/register', async (ctx) => {
   ctx.body = {};
+  const session = ctx.session;
+
   const {
     phone, token, fullName, dob,
   } = ctx.request.body;
@@ -72,9 +77,9 @@ router.post('/register', async (ctx) => {
 
     try {
       await user.save();
-      const session = await ctx.session();
-      session.set('user', user.phone).then(session.update);
+      session.user = user.phone;
     } catch (err) {
+      console.log(err);
       ctx.body.success = false;
       return;
     }

@@ -6,22 +6,23 @@ import PropTypes from 'prop-types';
 import './styles/Dropdown.scss';
 
 const Dropdown = React.forwardRef((props, ref) => {
-  const { label, items, onChange } = props;
+  const {
+    label, items, onChange, value,
+  } = props;
+
   const [dropDownId] = useState(_uniqueId());
-  const [selected, setSelected] = useState(null);
   const [visible, setVisible] = useState(false);
 
   function itemSelected(indx) {
     setVisible(!visible);
-    setSelected(indx);
     onChange(indx);
   }
 
   return (
     <div className={`dropdown ${visible ? 'is-active' : ''}`} role="menu">
       <div className="dropdown-trigger">
-        <button ref={ref} value={selected} type="button" className="button" onClick={() => setVisible(!visible)} aria-haspopup="true" aria-controls={dropDownId}>
-          <span>{items[selected] ? items[selected] : label}</span>
+        <button ref={ref} value={value} type="button" className="button" onClick={() => setVisible(!visible)} aria-haspopup="true" aria-controls={dropDownId}>
+          <span>{items[value] ? items[value] : label}</span>
           <span className="icon is-small">
             <FontAwesomeIcon icon={visible ? faAngleUp : faAngleDown} />
           </span>
@@ -44,10 +45,12 @@ Dropdown.propTypes = {
   label: PropTypes.string.isRequired,
   items: (PropTypes.arrayOf(PropTypes.any) || PropTypes.objectOf(PropTypes.any)).isRequired,
   onChange: PropTypes.func,
+  value: PropTypes.number,
 };
 
 Dropdown.defaultProps = {
   onChange: () => {},
+  value: null,
 };
 
 export default Dropdown;

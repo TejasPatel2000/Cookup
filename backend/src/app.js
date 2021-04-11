@@ -4,14 +4,14 @@ const logger = require('koa-logger');
 const koaBody = require('koa-body');
 const mongoose = require('mongoose');
 
-const koaSession = require('koa-atomic-session');
+const koaSession = require('koa-generic-session');
+const MongoStore = require('koa-generic-session-mongo');
 
 const routes = require('./routes');
 const { normalizePort } = require('./utils');
 
 const app = new Koa();
 app.keys = [process.env.SESSION_KEY || 'secret'];
-const mongoSession = koaSession(app);
 const port = normalizePort(process.env.PORT || '3000');
 
 app.use(logger());
@@ -29,9 +29,11 @@ mongoose.connect(
 );
 
 mongoose.connection.once('open', async () => {
-  mongoSession.collection = mongoose.connection.db.collection('sessions');
-  mongoSession.ensureIndex();
+  app.use(koaSession({
+    store: new MongoStore({ db: mongoose.connection.db })
+  }))
+
+  app.use(routes);
+
   app.listen(port);
 });
-
-app.use(routes);

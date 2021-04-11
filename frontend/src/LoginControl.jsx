@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import moment from 'moment';
 import _uniqueId from 'lodash/uniqueId';
+import AppContext from './AppContext';
 import Dropdown from './components/Dropdown';
 
 const codePtrn = /^\d{6}$/;
@@ -25,6 +26,8 @@ function LoginControl() {
   const [day, setDay] = useState(null);
   const [year, setYear] = useState(null);
 
+  const appContext = useContext(AppContext);
+
   async function sms() {
     fetch('/api/auth/sms/send', {
       method: 'POST',
@@ -37,7 +40,7 @@ function LoginControl() {
 
   async function register() {
     if (name.length && month && day && year && phonePtrn.test(phone) && codePtrn.test(code)) {
-      fetch('/api/auth/register', {
+      const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -49,13 +52,15 @@ function LoginControl() {
           token: code,
         }),
       });
+
+      const result = await res.json();
+      appContext.setProfile(result.success ? result.user : {});
     }
   }
 
   async function login() {
     if (phonePtrn.test(phone) && codePtrn.test(code)) {
-      console.log('logging in...');
-      fetch('/api/auth/login', {
+      const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -65,6 +70,9 @@ function LoginControl() {
           token: code,
         }),
       });
+
+      const result = await res.json();
+      appContext.setProfile(result.success ? result.user : {});
     }
   }
 
@@ -80,13 +88,13 @@ function LoginControl() {
         <label htmlFor={dobId} className="label">When were you born?</label>
         <div id={dobId} className="field is-grouped is-grouped-multiline">
           <div className="control">
-            <Dropdown label="Month" items={months} onChange={(indx) => { setMonth(indx); }} />
+            <Dropdown label="Month" value={month} items={months} onChange={(indx) => { setMonth(indx); }} />
           </div>
           <div className="control">
-            <Dropdown label="Day" items={days} onChange={(indx) => { setDay(indx); }} />
+            <Dropdown label="Day" value={day} items={days} onChange={(indx) => { setDay(indx); }} />
           </div>
           <div className="control is-grouped-right">
-            <Dropdown label="Year" items={years} onChange={(indx) => { setYear(indx); }} />
+            <Dropdown label="Year" value={year} items={years} onChange={(indx) => { setYear(indx); }} />
           </div>
         </div>
       </div>
