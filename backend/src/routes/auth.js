@@ -6,6 +6,7 @@ const { randomUsername } = require('../utils');
 
 const router = new Router();
 
+// POST /api/auth/sms/send
 router.post('/sms/send', async (ctx) => {
   ctx.body = {};
   const { phone } = ctx.request.body;
@@ -25,6 +26,7 @@ router.post('/sms/send', async (ctx) => {
   ctx.body.success = true;
 });
 
+// POST /api/auth/login
 router.post('/login', async (ctx) => {
   ctx.body = {};
   const {
@@ -43,9 +45,13 @@ router.post('/login', async (ctx) => {
 
   ctx.body.success = success;
 
-  if (success) ctx.body.jwt = 'jwt_';
+  if (success) {
+    const session = await ctx.session();
+    session.set('user', user.phone).then(session.update);
+  }
 });
 
+// POST /api/auth/register
 router.post('/register', async (ctx) => {
   ctx.body = {};
   const {
@@ -65,6 +71,8 @@ router.post('/register', async (ctx) => {
 
     try {
       await user.save();
+      const session = await ctx.session();
+      session.set('user', user.phone).then(session.update);
     } catch (err) {
       ctx.body.success = false;
       return;
@@ -75,7 +83,6 @@ router.post('/register', async (ctx) => {
     return;
   }
 
-  // TODO: Create a new user and return a JWT
   ctx.body.success = false;
 });
 

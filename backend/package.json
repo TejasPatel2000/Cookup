@@ -14,6 +14,7 @@
     "@koa/router": "^10.0.0",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.13.1",
+    "koa-atomic-session": "^1.0.0",
     "koa-body": "^4.2.0",
     "koa-jwt": "^4.0.1",
     "koa-logger": "^3.2.1",

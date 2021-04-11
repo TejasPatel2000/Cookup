@@ -13,6 +13,7 @@ cd cookup
 # The port the app will listen on
 # Use "PORT=$PORT" for cloud9 sessions
 echo "PORT=8080" > .env
+echo "SESSION_KEY=..." > .env
 echo "TWILIO_SID=....." > .env
 echo "TWILIO_TOKEN=....." > .env
 echo "TWILIO_NUMBER=+1.........." > .env
