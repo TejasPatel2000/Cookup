@@ -30,8 +30,8 @@ mongoose.connect(
 
 mongoose.connection.once('open', async () => {
   app.use(koaSession({
-    store: new MongoStore({ db: mongoose.connection.db })
-  }))
+    store: new MongoStore({ db: mongoose.connection.db }),
+  }));
 
   app.use(routes);
 
