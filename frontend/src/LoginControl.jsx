@@ -2,21 +2,21 @@ import React, { useState } from 'react';
 import moment from 'moment';
 import _uniqueId from 'lodash/uniqueId';
 import Dropdown from './components/Dropdown';
-import { getMonthList } from './utils';
+
+const codePtrn = /^\d{6}$/;
+const phonePtrn = /^\d{10}$/;
+
+const date = new Date();
+const dateYear = date.getFullYear();
+const months = moment.monthsShort();
+const days = (new Array(31)).fill().map((_, indx) => indx + 1);
+const years = (new Array(101 + (dateYear % 100))).fill().map((_, indx) => dateYear - indx);
 
 function LoginControl() {
-  const date = new Date();
-  const dateYear = date.getFullYear();
-  const months = getMonthList();
-  const days = (new Array(31)).fill().map((_, indx) => indx + 1);
-  const years = (new Array(101 + (dateYear % 100))).fill().map((_, indx) => dateYear - indx);
-
-  const phonePtrn = /([0-9]){10}/g;
-  const codePtrn = /([0-9]){6}/g;
-
   const [nameId] = useState(_uniqueId());
   const [phoneId] = useState(_uniqueId());
   const [dobId] = useState(_uniqueId());
+  const [newUser, setNewUser] = useState(true);
 
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -52,37 +52,59 @@ function LoginControl() {
     }
   }
 
+  async function login() {
+    if (phonePtrn.test(phone) && codePtrn.test(code)) {
+      console.log('logging in...');
+      fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          login: `+1${phone}`,
+          token: code,
+        }),
+      });
+    }
+  }
+
+  const infoFields = newUser ? (
+    <div>
+      <div className="field">
+        <label htmlFor={nameId} className="label">What&apos;s your name?</label>
+        <div className="control">
+          <input id={nameId} value={name} onChange={(event) => { setName(event.target.value); }} className="input" type="text" placeholder="Full name" />
+        </div>
+      </div>
+      <div className="field">
+        <label htmlFor={dobId} className="label">When were you born?</label>
+        <div id={dobId} className="field is-grouped is-grouped-multiline">
+          <div className="control">
+            <Dropdown label="Month" items={months} onChange={(indx) => { setMonth(indx); }} />
+          </div>
+          <div className="control">
+            <Dropdown label="Day" items={days} onChange={(indx) => { setDay(indx); }} />
+          </div>
+          <div className="control is-grouped-right">
+            <Dropdown label="Year" items={years} onChange={(indx) => { setYear(indx); }} />
+          </div>
+        </div>
+      </div>
+    </div>
+  ) : null;
+
   return (
     <div className="grid">
       <div className="column is-4">
         <div className="card">
           <header className="card-header">
             <p className="card-header-title">
-              Sign up
+              { newUser ? 'Sign up' : 'Login' }
             </p>
           </header>
           <div className="card-content">
             <div className="content">
-              <div className="field">
-                <label htmlFor={nameId} className="label">What&apos;s your name?</label>
-                <div className="control">
-                  <input id={nameId} value={name} onChange={(event) => { setName(event.target.value); }} className="input" type="text" placeholder="Full name" />
-                </div>
-              </div>
-              <div className="field">
-                <label htmlFor={dobId} className="label">When were you born?</label>
-                <div id={dobId} className="field is-grouped is-grouped-multiline">
-                  <div className="control">
-                    <Dropdown label="Month" items={months} onChange={(indx) => { setMonth(indx); }} />
-                  </div>
-                  <div className="control">
-                    <Dropdown label="Day" items={days} onChange={(indx) => { setDay(indx); }} />
-                  </div>
-                  <div className="control is-grouped-right">
-                    <Dropdown label="Year" items={years} onChange={(indx) => { setYear(indx); }} />
-                  </div>
-                </div>
-              </div>
+              { infoFields }
               <div className="field">
                 <label htmlFor={phoneId} className="label">Phone</label>
                 <div className="field-body">
@@ -108,19 +130,18 @@ function LoginControl() {
                   </button>
                 </div>
               </div>
-              <br />
               <div className="field">
                 <p className="control">
-                  <button type="button" className="button is-primary is-fullwidth" onClick={() => { register(); }}>
-                    Continue
+                  <button type="button" className="button is-primary is-fullwidth" onClick={() => { (newUser ? register : login)(); }}>
+                    { newUser ? 'Continue' : 'Login' }
                   </button>
                 </p>
               </div>
             </div>
           </div>
           <footer className="card-footer">
-            <button type="button" href="#" className="card-footer-item button is-ghost">Login</button>
-            <button type="button" href="#" className="card-footer-item button is-light" disabled>Register</button>
+            <button type="button" href="#" className={`card-footer-item button ${!newUser ? 'is-text' : 'is-ghost'}`} onClick={() => { setNewUser(false); }} disabled={!newUser}>Login</button>
+            <button type="button" href="#" className={`card-footer-item button ${newUser ? 'is-text' : 'is-ghost'}`} onClick={() => { setNewUser(true); }} disabled={newUser}>Register</button>
           </footer>
         </div>
       </div>
