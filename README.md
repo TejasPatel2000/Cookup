@@ -31,5 +31,5 @@ heroku container:release web
 All dependency files are are owned by the node user within their respective containers.
 DO NOT RUN `npm install` OR `npm i` IN BACKEND OR FRONTEND.
 ```bash
-npm run add PACKAGES ...
+npm run add -- PACKAGES ... ARGS ...
 ```
