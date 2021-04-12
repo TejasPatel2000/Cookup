@@ -13,7 +13,7 @@ const months = moment.monthsShort();
 const days = (new Array(31)).fill().map((_, indx) => indx + 1);
 const years = (new Array(101 + (dateYear % 100))).fill().map((_, indx) => dateYear - indx);
 
-function LoginControl() {
+function LoginModal() {
   const [nameId] = useState(_uniqueId());
   const [phoneId] = useState(_uniqueId());
   const [dobId] = useState(_uniqueId());
@@ -101,6 +101,20 @@ function LoginControl() {
     </div>
   ) : null;
 
+  const footer = newUser ? (
+    <span>
+      Already have an account?
+      {' '}
+      <a href="#" onClick={() => { setNewUser(false); }}>Login</a>
+    </span>
+  ) : (
+    <span>
+      Don&apos;t have an account?
+      {' '}
+      <a href="#" onClick={() => { setNewUser(true); }}>Register</a>
+    </span>
+  );
+
   return (
     <div className="grid">
       <div className="column is-4">
@@ -148,8 +162,9 @@ function LoginControl() {
             </div>
           </div>
           <footer className="card-footer">
-            <button type="button" href="#" className={`card-footer-item button ${!newUser ? 'is-text' : 'is-ghost'}`} onClick={() => { setNewUser(false); }} disabled={!newUser}>Login</button>
-            <button type="button" href="#" className={`card-footer-item button ${newUser ? 'is-text' : 'is-ghost'}`} onClick={() => { setNewUser(true); }} disabled={newUser}>Register</button>
+            <p className="card-footer-item">
+              {footer}
+            </p>
           </footer>
         </div>
       </div>
@@ -157,4 +172,4 @@ function LoginControl() {
   );
 }
 
-export default LoginControl;
+export default LoginModal;
