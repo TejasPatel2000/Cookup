@@ -1,3 +1,9 @@
 @import 'bulma/sass/utilities/initial-variables.sass';
 
+$navbar-breakpoint: $tablet;
+
 @import 'bulma/bulma.sass';
+
+.menu .icon {
+    margin-inline-end: 8px;
+}
