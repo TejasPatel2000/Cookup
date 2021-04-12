@@ -6,6 +6,7 @@ const router = new Router({
   prefix: '/api',
 });
 
+// GET /api/profile
 router.get('/profile', async (ctx) => {
   const { session } = ctx;
 
@@ -19,7 +20,8 @@ router.get('/profile', async (ctx) => {
   }
 });
 
-router.get('/logout', async (ctx) => {
+// POST /api/logout
+router.post('/logout', async (ctx) => {
   const { session } = ctx;
 
   ctx.body = {};
