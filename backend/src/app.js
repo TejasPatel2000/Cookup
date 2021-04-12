@@ -4,8 +4,8 @@ const logger = require('koa-logger');
 const koaBody = require('koa-body');
 const mongoose = require('mongoose');
 
-const koaSession = require('koa-generic-session');
-const MongoStore = require('koa-generic-session-mongo');
+const session = require('koa-session');
+const MongoStore = require('koa-session-mongoose');
 
 const routes = require('./routes');
 const { normalizePort } = require('./utils');
@@ -29,9 +29,9 @@ mongoose.connect(
 );
 
 mongoose.connection.once('open', async () => {
-  app.use(koaSession({
-    store: new MongoStore({ db: mongoose.connection.db }),
-  }));
+  app.use(session({
+    store: new MongoStore(),
+  }, app));
 
   app.use(routes);
 

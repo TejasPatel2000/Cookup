@@ -13,7 +13,7 @@ const months = moment.monthsShort();
 const days = (new Array(31)).fill().map((_, indx) => indx + 1);
 const years = (new Array(101 + (dateYear % 100))).fill().map((_, indx) => dateYear - indx);
 
-function LoginControl() {
+function LoginModal() {
   const [nameId] = useState(_uniqueId());
   const [phoneId] = useState(_uniqueId());
   const [dobId] = useState(_uniqueId());
@@ -35,12 +35,13 @@ function LoginControl() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ phone: `+1${phone}` }),
+      credentials: 'include',
     });
   }
 
   async function register() {
     if (name.length && month && day && year && phonePtrn.test(phone) && codePtrn.test(code)) {
-      const res = await fetch('/api/auth/register', {
+      const req = await fetch('/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -51,16 +52,17 @@ function LoginControl() {
           dob: moment(`${months[month]} ${day + 1} ${years[year]}`, 'MMM DD YYYY').unix(),
           token: code,
         }),
+        credentials: 'include',
       });
 
-      const result = await res.json();
-      appContext.setProfile(result.success ? result.user : {});
+      const res = await req.json();
+      appContext.setProfile(res.success ? res.user : {});
     }
   }
 
   async function login() {
     if (phonePtrn.test(phone) && codePtrn.test(code)) {
-      const res = await fetch('/api/auth/login', {
+      const req = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -71,8 +73,8 @@ function LoginControl() {
         }),
       });
 
-      const result = await res.json();
-      appContext.setProfile(result.success ? result.user : {});
+      const res = await req.json();
+      appContext.setProfile(res.success ? res.user : {});
     }
   }
 
@@ -101,60 +103,71 @@ function LoginControl() {
     </div>
   ) : null;
 
+  const footer = newUser ? (
+    <span>
+      Already have an account?
+      {' '}
+      <a href="#" onClick={() => { setNewUser(false); }}>Login</a>
+    </span>
+  ) : (
+    <span>
+      Don&apos;t have an account?
+      {' '}
+      <a href="#" onClick={() => { setNewUser(true); }}>Register</a>
+    </span>
+  );
+
   return (
-    <div className="grid">
-      <div className="column is-4">
-        <div className="card">
-          <header className="card-header">
-            <p className="card-header-title">
-              { newUser ? 'Sign up' : 'Login' }
-            </p>
-          </header>
-          <div className="card-content">
-            <div className="content">
-              { infoFields }
-              <div className="field">
-                <label htmlFor={phoneId} className="label">Phone</label>
-                <div className="field-body">
-                  <div className="field has-addons">
-                    <div className="control">
-                      <button type="button" className="button is-static">
-                        +1
-                      </button>
-                    </div>
-                    <div className="control is-expanded">
-                      <input id={phoneId} maxLength="10" value={phone} onChange={(event) => { setPhone(event.target.value); }} className="input" type="text" placeholder="Phone number" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="field has-addons is-pulled-right">
+    <div className="card" style={{ maxWidth: '512px' }}>
+      <header className="card-header">
+        <p className="card-header-title">
+          { newUser ? 'Sign up' : 'Login' }
+        </p>
+      </header>
+      <div className="card-content">
+        <div className="content">
+          { infoFields }
+          <div className="field">
+            <label htmlFor={phoneId} className="label">Phone</label>
+            <div className="field-body">
+              <div className="field has-addons">
                 <div className="control">
-                  <input className="input" maxLength="6" value={code} onChange={(event) => { setCode(event.target.value); }} type="text" placeholder="Enter 6-digit code" />
-                </div>
-                <div className="control">
-                  <button type="button" className="button" onClick={() => { sms(); }} disabled={!phonePtrn.test(phone)}>
-                    Send code
+                  <button type="button" className="button is-static">
+                    +1
                   </button>
                 </div>
-              </div>
-              <div className="field">
-                <p className="control">
-                  <button type="button" className="button is-primary is-fullwidth" onClick={() => { (newUser ? register : login)(); }}>
-                    { newUser ? 'Continue' : 'Login' }
-                  </button>
-                </p>
+                <div className="control is-expanded">
+                  <input id={phoneId} maxLength="10" value={phone} onChange={(event) => { setPhone(event.target.value); }} className="input" type="text" placeholder="Phone number" />
+                </div>
               </div>
             </div>
           </div>
-          <footer className="card-footer">
-            <button type="button" href="#" className={`card-footer-item button ${!newUser ? 'is-text' : 'is-ghost'}`} onClick={() => { setNewUser(false); }} disabled={!newUser}>Login</button>
-            <button type="button" href="#" className={`card-footer-item button ${newUser ? 'is-text' : 'is-ghost'}`} onClick={() => { setNewUser(true); }} disabled={newUser}>Register</button>
-          </footer>
+          <div className="field has-addons is-pulled-right">
+            <div className="control">
+              <input className="input" maxLength="6" value={code} onChange={(event) => { setCode(event.target.value); }} type="text" placeholder="Enter 6-digit code" />
+            </div>
+            <div className="control">
+              <button type="button" className="button" onClick={() => { sms(); }} disabled={!phonePtrn.test(phone)}>
+                Send code
+              </button>
+            </div>
+          </div>
+          <div className="field">
+            <p className="control">
+              <button type="button" className="button is-primary is-fullwidth" onClick={() => { (newUser ? register : login)(); }}>
+                { newUser ? 'Continue' : 'Login' }
+              </button>
+            </p>
+          </div>
         </div>
       </div>
+      <footer className="card-footer">
+        <p className="card-footer-item">
+          {footer}
+        </p>
+      </footer>
     </div>
   );
 }
 
-export default LoginControl;
+export default LoginModal;
