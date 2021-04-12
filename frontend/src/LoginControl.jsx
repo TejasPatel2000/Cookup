@@ -12,7 +12,6 @@ function LoginControl() {
   const dateYear = date.getFullYear();
   const [nameId] = useState(_uniqueId());
 
-
   return (
     <div className="grid">
       <div className="column is-6">
