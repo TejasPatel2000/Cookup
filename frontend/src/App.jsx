@@ -21,6 +21,18 @@ function App() {
     setProfile(res.user || {});
   }, []);
 
+  async function logout() {
+    const req = await fetch('/api/logout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const res = await req.json();
+    setProfile(res.success ? {} : profile);
+  }
+
   const profileHeader = profile.username ? (
     <div className="has-text-centered">
       <div className="columns is-flex is-centered">
@@ -110,7 +122,7 @@ function App() {
               { profile.username ? (
                 <div className="navbar-item">
                   <div className="buttons">
-                    <a className="button is-danger is-fullwidth">Log out</a>
+                    <a href="#" className="button is-danger is-fullwidth" onClick={() => { logout(); }}>Log out</a>
                   </div>
                 </div>
               ) : null }
