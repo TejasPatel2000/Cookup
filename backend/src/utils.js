@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const { User } = require('./models');
 
 exports.normalizePort = (val) => {
@@ -11,15 +10,6 @@ exports.normalizePort = (val) => {
 };
 
 exports.random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
-
-exports.connectDB = () => {
-  mongoose.connect(
-    process.env.MONGO_URL || 'mongodb://mongo/cookup',
-    { keepAlive: 1, useNewUrlParser: true, useUnifiedTopology: true },
-  );
-
-  return mongoose.connection;
-};
 
 exports.randomUsername = async () => {
   let username = '';

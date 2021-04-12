@@ -1,32 +1,37 @@
 import React, { useState } from 'react';
 import _uniqueId from 'lodash/uniqueId';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
+import './styles/Dropdown.scss';
 
-function Dropdown(props) {
-  const { label, items, onSelect } = props;
+const Dropdown = React.forwardRef((props, ref) => {
+  const {
+    label, items, onChange, value,
+  } = props;
+
+  const [dropDownId] = useState(_uniqueId());
   const [visible, setVisible] = useState(false);
 
   function itemSelected(indx) {
     setVisible(!visible);
-    onSelect(indx);
+    onChange(indx);
   }
 
   return (
     <div className={`dropdown ${visible ? 'is-active' : ''}`} role="menu">
       <div className="dropdown-trigger">
-        <button type="button" className="button" onClick={() => setVisible(!visible)} aria-haspopup="true" aria-controls="dropdown-menu">
-          <span>{label}</span>
+        <button ref={ref} value={value} type="button" className="button" onClick={() => setVisible(!visible)} aria-haspopup="true" aria-controls={dropDownId}>
+          <span>{items[value] ? items[value] : label}</span>
           <span className="icon is-small">
-            <FontAwesomeIcon icon={faAngleDown} />
+            <FontAwesomeIcon icon={visible ? faAngleUp : faAngleDown} />
           </span>
         </button>
       </div>
-      <div className="dropdown-menu" role="menu">
+      <div id={dropDownId} className="dropdown-menu" role="menu">
         <div className="dropdown-content">
           { Object.values(items).map((item, indx) => (
-            <button id={_uniqueId()} type="button" className="dropdown-item button is-white" onClick={() => itemSelected(indx)}>
+            <button key={_uniqueId()} type="button" className="dropdown-item button is-ghost" onClick={() => itemSelected(indx)}>
               {item}
             </button>
           )) }
@@ -34,16 +39,18 @@ function Dropdown(props) {
       </div>
     </div>
   );
-}
+});
 
 Dropdown.propTypes = {
   label: PropTypes.string.isRequired,
   items: (PropTypes.arrayOf(PropTypes.any) || PropTypes.objectOf(PropTypes.any)).isRequired,
-  onSelect: PropTypes.func,
+  onChange: PropTypes.func,
+  value: PropTypes.number,
 };
 
 Dropdown.defaultProps = {
-  onSelect: () => {},
+  onChange: () => {},
+  value: null,
 };
 
 export default Dropdown;
