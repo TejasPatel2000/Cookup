@@ -23,7 +23,7 @@ docker-compose up
 ### Deploying to Heroku
 ```bash
 heroku container:login
-heroku create
+heroku create cookupapp --buildpack heroku/node
 heroku container:push web
 heroku container:release web
 ```
