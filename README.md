@@ -23,7 +23,7 @@ echo "TWILIO_TOKEN=....." > .env
 # Number received from Twilio
 echo "TWILIO_NUMBER=+1.........." > .env
 # Optional, only required for production
-echo "MONGO_URL=........"
+echo "MONGO_URL=........" > .env
 docker-compose up
 ```
 
