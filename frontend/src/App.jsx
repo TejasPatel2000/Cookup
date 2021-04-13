@@ -4,6 +4,7 @@ import { faHome, faClone } from '@fortawesome/free-solid-svg-icons';
 
 import AppContext from './AppContext';
 import LoginModal from './LoginModal';
+import GroupsPage from './GroupsPage';
 
 function App() {
   const [profile, setProfile] = useState({});
@@ -154,6 +155,7 @@ function App() {
         <div className="column">
           {/* Content goes here */}
           <LoginModal />
+          <GroupsPage />
         </div>
       </section>
     </AppContext.Provider>
