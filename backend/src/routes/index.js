@@ -1,11 +1,13 @@
 const Router = require('@koa/router');
 const auth = require('./auth');
+const recipe = require('./recipe');
 const { User } = require('../models');
 
 const router = new Router({
   prefix: '/api',
 });
 
+// GET /api/profile
 router.get('/profile', async (ctx) => {
   const { session } = ctx;
 
@@ -19,7 +21,8 @@ router.get('/profile', async (ctx) => {
   }
 });
 
-router.get('/logout', async (ctx) => {
+// POST /api/logout
+router.post('/logout', async (ctx) => {
   const { session } = ctx;
 
   ctx.body = {};
@@ -34,5 +37,7 @@ router.get('/logout', async (ctx) => {
 });
 
 router.use('/auth', auth);
+
+router.use('/recipe', recipe);
 
 module.exports = router.routes();

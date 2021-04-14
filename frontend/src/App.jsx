@@ -4,7 +4,11 @@ import { faHome, faClone } from '@fortawesome/free-solid-svg-icons';
 
 import AppContext from './AppContext';
 import LoginModal from './LoginModal';
+<<<<<<< HEAD
 import GroupsPage from './GroupsPage';
+=======
+import CreateRecipe from './CreateRecipe';
+>>>>>>> main
 
 function App() {
   const [profile, setProfile] = useState({});
@@ -21,6 +25,18 @@ function App() {
     const res = await req.json();
     setProfile(res.user || {});
   }, []);
+
+  async function logout() {
+    const req = await fetch('/api/logout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const res = await req.json();
+    setProfile(res.success ? {} : profile);
+  }
 
   const profileHeader = profile.username ? (
     <div className="has-text-centered">
@@ -111,7 +127,7 @@ function App() {
               { profile.username ? (
                 <div className="navbar-item">
                   <div className="buttons">
-                    <a className="button is-danger is-fullwidth">Log out</a>
+                    <a href="#" className="button is-danger is-fullwidth" onClick={() => { logout(); }}>Log out</a>
                   </div>
                 </div>
               ) : null }
@@ -155,6 +171,9 @@ function App() {
         <div className="column">
           {/* Content goes here */}
           <LoginModal />
+          <br />
+          <CreateRecipe />
+          <br />
           <GroupsPage />
         </div>
       </section>
