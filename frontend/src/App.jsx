@@ -4,11 +4,8 @@ import { faHome, faClone } from '@fortawesome/free-solid-svg-icons';
 
 import AppContext from './AppContext';
 import LoginModal from './LoginModal';
-<<<<<<< HEAD
 import GroupsPage from './GroupsPage';
-=======
 import CreateRecipe from './CreateRecipe';
->>>>>>> main
 
 function App() {
   const [profile, setProfile] = useState({});
