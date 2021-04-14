@@ -4,9 +4,12 @@ import { faHome, faClone } from '@fortawesome/free-solid-svg-icons';
 
 import AppContext from './AppContext';
 import LoginModal from './LoginModal';
+import Feed from './Feed';
+import CreateRecipe from './CreateRecipe';
 
 function App() {
   const [profile, setProfile] = useState({});
+  const [feedFilter, setFeedFilter] = useState({});
   const [mobileMenu, setMobileMenu] = useState(false);
 
   useEffect(async () => {
@@ -71,7 +74,10 @@ function App() {
   ) : null;
 
   return (
-    <AppContext.Provider value={{ profile, setProfile }}>
+    <AppContext.Provider value={{
+      profile, setProfile, feedFilter, setFeedFilter,
+    }}
+    >
       <nav className="navbar" role="navigation" aria-label="main navigation">
         <div className="navbar-brand">
           <a className="navbar-item" href="https://bulma.io">
@@ -132,7 +138,7 @@ function App() {
       </nav>
       <section className="columns is-fullheight">
         {/* Start of sidebar */}
-        <aside className="column is-3 is-2-widescreen menu is-fullheight section is-hidden-mobile">
+        <aside className="column is-2-widescreen is-3-desktop is-4-tablet menu is-fullheight section is-hidden-mobile">
           {profileHeader}
           <hr className="navbar-divider" />
           <ul className="menu-list">
@@ -165,7 +171,13 @@ function App() {
         {/* End of sidebar */}
         <div className="column">
           {/* Content goes here */}
-          <LoginModal />
+          <div className="container is-max-desktop">
+            <LoginModal />
+            <br />
+            <CreateRecipe />
+            <br />
+            <Feed />
+          </div>
         </div>
       </section>
     </AppContext.Provider>

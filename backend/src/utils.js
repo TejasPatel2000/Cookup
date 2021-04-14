@@ -21,3 +21,16 @@ exports.randomUsername = async () => {
 
   return username;
 };
+
+exports.requireLogin = async (ctx, next) => {
+  const user = await User.findByLogin(ctx.session.user);
+
+  if (!user) {
+    ctx.body = {};
+    ctx.body.success = false;
+    ctx.status = 511;
+    return;
+  }
+
+  next();
+};
