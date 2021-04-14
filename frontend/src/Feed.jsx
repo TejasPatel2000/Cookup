@@ -10,22 +10,24 @@ import AppContext from './AppContext';
 function Feed() {
   const appContext = useContext(AppContext);
   const [recipes, setRecipes] = useState([]);
+  function giveResult(recipeList) {
+    setRecipes(recipeList);
+  }
 
   useEffect(async () => {
-    const { user, tags } = appContext.feedFilter;
-    const req = await fetch(`/api/recipe?${user ? `user=${user}` : ''}${(tags || []).length ? `tags=${tags.join()}` : ''}`, {
+    const { user, tags, searchText } = appContext.feedFilter;
+    const req = await fetch(`/api/recipe?${user ? `user=${user}` : ''}${(tags || []).length ? `tags=${tags.join()}` : ''}${searchText ? `searchText=${searchText}` : ''}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
     });
-
     const res = await req.json();
-    if (res.success) setRecipes(res.recipes);
+    if (res.success) giveResult(res.recipes);
   }, []);
-
   return (
     <div>
+      {console.log(recipes)}
       { recipes.map((recipe) => (
         <div key={_uniqueId()} className="box">
           <article className="media">
@@ -48,11 +50,11 @@ function Feed() {
                   <br />
                   {recipe.description}
                   <br />
-                  Ingredients:
-                  {' '}
+                  <strong>Ingredients:</strong>
+                  <br />
                   {recipe.ingredients.join()}
                   <br />
-                  Instructions:
+                  <strong>Instructions:</strong>
                   <br />
                   {recipe.instructions}
                 </p>
@@ -63,6 +65,7 @@ function Feed() {
                     <span className="icon is-small">
                       <FontAwesomeIcon icon={faHeart || faHeartSolid} />
                     </span>
+                    {recipe.tags}
                   </a>
                 </div>
               </nav>

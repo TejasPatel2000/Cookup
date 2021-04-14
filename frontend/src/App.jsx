@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faClone } from '@fortawesome/free-solid-svg-icons';
 
@@ -11,6 +11,7 @@ function App() {
   const [profile, setProfile] = useState({});
   const [feedFilter, setFeedFilter] = useState({});
   const [mobileMenu, setMobileMenu] = useState(false);
+  const searchText = useRef(null);
 
   useEffect(async () => {
     const req = await fetch('/api/profile', {
@@ -35,7 +36,18 @@ function App() {
     const res = await req.json();
     setProfile(res.success ? {} : profile);
   }
-
+  async function searchDB() {
+    if (searchText) {
+      const req = await fetch(`/api/recipe?${searchText ? `searchText=${searchText.current.value}` : ''}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const res = await req.json();
+      if (res.success) setFeedFilter(res.recipes);
+    }
+  }
   const profileHeader = profile.username ? (
     <div className="has-text-centered">
       <div className="columns is-flex is-centered">
@@ -78,6 +90,7 @@ function App() {
       profile, setProfile, feedFilter, setFeedFilter,
     }}
     >
+      {console.log(feedFilter)}
       <nav className="navbar" role="navigation" aria-label="main navigation">
         <div className="navbar-brand">
           <a className="navbar-item" href="https://bulma.io">
@@ -111,10 +124,10 @@ function App() {
               <div className="navbar-item is-expanded">
                 <div className="field has-addons">
                   <div className="control is-expanded">
-                    <input className="input" type="text" placeholder="What's Cookin?" />
+                    <input ref={searchText} className="input" type="text" placeholder="What's Cookin?" />
                   </div>
                   <div className="control">
-                    <a className="button">Search</a>
+                    <a role="button" href="#" className="button" onClick={() => { searchDB(); }}>CookUp!</a>
                     {/* add button functionality here */}
                   </div>
                 </div>
@@ -163,7 +176,7 @@ function App() {
           <ul className="menu-list">
             <li><a>#Vegan</a></li>
             <li><a>#PlantBased</a></li>
-            <li><a>#GluttenFree</a></li>
+            <li><a>#GlutenFree</a></li>
             <li><a>#ZuccFries</a></li>
           </ul>
           <hr className="navbar-divider" />
