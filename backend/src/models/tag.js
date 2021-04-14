@@ -37,6 +37,6 @@ tagSchema.statics.findByName = function (query) {
   return this.find({ name: query });
 };
 
-const Tag = mongoose.model('Tag', groupSchema);
+const Tag = mongoose.model('Tag', tagSchema);
 
 module.exports = Tag;
