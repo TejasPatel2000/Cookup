@@ -114,11 +114,10 @@ function App() {
                 </div>
               </div>
               <div className="navbar-item">
-                <div className="buttons">
-                  <a className="button is-primary is-fullwidth">
-                    <strong>{profile.username ? 'New Post' : 'Sign up'}</strong>
-                  </a>
-                </div>
+                <a className="button is-primary is-fullwidth">
+                  <strong>{profile.username ? <CreateRecipe /> : <button type="button" className="button is-primary">Sign Up</button>}</strong>
+                </a>
+
               </div>
               { profile.username ? (
                 <div className="navbar-item">
@@ -168,7 +167,6 @@ function App() {
           {/* Content goes here */}
           <LoginModal />
           <br />
-          <CreateRecipe />
         </div>
       </section>
     </AppContext.Provider>
