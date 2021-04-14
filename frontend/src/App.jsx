@@ -111,10 +111,11 @@ function App() {
               <div className="navbar-item is-expanded">
                 <div className="field has-addons">
                   <div className="control is-expanded">
-                    <input className="input" type="text" placeholder="CookUp!" />
+                    <input className="input" type="text" placeholder="What's Cookin?" />
                   </div>
                   <div className="control">
                     <a className="button">Search</a>
+                    {/* add button functionality here */}
                   </div>
                 </div>
               </div>
@@ -136,7 +137,7 @@ function App() {
         </div>
       </nav>
       <section className="columns is-fullheight">
-        {/* Start of sidebar */}
+        {/* Start of sidebar  */}
         <aside className="column is-2-widescreen is-3-desktop is-4-tablet menu is-fullheight section is-hidden-mobile">
           {profileHeader}
           <hr className="navbar-divider" />
@@ -171,9 +172,9 @@ function App() {
         <div className="column">
           {/* Content goes here */}
           <div className="container is-max-desktop">
-            <LoginModal />
-            <br />
-            <CreateRecipe />
+            { !profile.username ? (
+              <LoginModal />
+            ) : null }
             <br />
             <Feed />
           </div>
