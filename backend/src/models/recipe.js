@@ -32,6 +32,7 @@ const recipeSchema = new mongoose.Schema({
   },
   tags: {
     type: [String],
+    lowercase: true,
   },
 });
 

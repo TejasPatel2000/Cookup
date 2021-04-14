@@ -4,16 +4,20 @@ const tagSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    unique: true,
+    lowercase: true,
   },
   description: {
     type: String,
     maxLength: 250,
   },
-  followers_num: {
+  followers: {
     type: Number,
+    default: 0,
   },
-  post_num: {
+  posts: {
     type: Number,
+    default: 0,
   },
 });
 
