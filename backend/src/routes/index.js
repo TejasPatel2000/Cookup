@@ -1,5 +1,6 @@
 const Router = require('@koa/router');
 const auth = require('./auth');
+const recipe = require('./recipe');
 const { User } = require('../models');
 
 const router = new Router({
@@ -36,5 +37,7 @@ router.post('/logout', async (ctx) => {
 });
 
 router.use('/auth', auth);
+
+router.use('/recipe', recipe);
 
 module.exports = router.routes();
