@@ -176,7 +176,9 @@ function App() {
               <LoginModal />
             ) : null }
             <br />
-            <Feed />
+            { profile.username ? (
+              <Feed />
+            ) : null }
           </div>
         </div>
       </section>
