@@ -11,6 +11,7 @@ function CreateRecipe() {
   const cookTime = useRef(null);
   const ingredients = useRef(null);
   const instructions = useRef(null);
+  const tags = useRef(null);
 
   function showModal() {
     setShow(!show);
@@ -31,6 +32,7 @@ function CreateRecipe() {
           cook_time: cookTime.current.value,
           ingredients: ingredients.current.value,
           instructions: instructions.current.value,
+          tags: tags.current.value,
         }),
       });
     }
@@ -58,6 +60,7 @@ function CreateRecipe() {
                 </div>
                 <textarea ref={ingredients} className="textarea is-primary" placeholder="Ingredients... (Separate by comma)" rows="7" />
                 <textarea ref={instructions} className="textarea is-primary" placeholder="Instructions..." rows="7" />
+                <input ref={tags} className="input is-primary" type="text" placeholder="tags (separate by comma)" />
               </div>
             </section>
             <footer className="modal-card-foot">
