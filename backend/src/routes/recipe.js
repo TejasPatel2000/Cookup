@@ -51,23 +51,39 @@ router.post('/post', async (ctx) => {
 
 router.get('/', async (ctx) => {
   ctx.body = {};
-  const { tags, user } = ctx.request.query;
+  const { tags, user, searchText } = ctx.request.query;
 
   const filter = {};
 
   if (tags) filter.tags = { $all: tags };
   if (user) filter.by = await User.findByLogin(user);
-
-  try {
-    const recipes = await Recipe.find(filter, null, { created_at: 'decending' })
-      .populate('by', 'username');
-
-    ctx.body.recipes = recipes;
-    ctx.body.success = true;
-  } catch (err) {
-    ctx.body.success = false;
-    console.log(err);
+  if (searchText) {
+    try{
+      filter.by = await Recipe.findBySearch(searchText);
+      console.log(filter)
+      ctx.body.recipes = filter;
+      ctx.body.success = true;
+    }
+    catch (err) {
+      ctx.body.success = false;
+      console.log(err);
+    }
+    
   }
+  else{
+    try {
+      const recipes = await Recipe.find(filter, null, { created_at: 'decending' })
+        .populate('by', 'username');
+  
+      ctx.body.recipes = recipes;
+      //console.log(recipes)
+      ctx.body.success = true;
+      } catch (err) {
+        ctx.body.success = false;
+        console.log(err);
+      } 
+    }
+
 });
 
 module.exports = router.routes();

@@ -32,7 +32,7 @@ function CreateRecipe() {
           cook_time: cookTime.current.value,
           ingredients: ingredients.current.value,
           instructions: instructions.current.value,
-          tags: tags.current.value,
+          tags: tags.current.value.split,
         }),
       });
     }
