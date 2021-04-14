@@ -10,9 +10,6 @@ import AppContext from './AppContext';
 function Feed() {
   const appContext = useContext(AppContext);
   const [recipes, setRecipes] = useState([]);
-  function giveResult(recipeList) {
-    setRecipes(recipeList);
-  }
 
   useEffect(async () => {
     const { user, tags, searchText } = appContext.feedFilter;
@@ -22,8 +19,9 @@ function Feed() {
         'Content-Type': 'application/json',
       },
     });
+
     const res = await req.json();
-    if (res.success) giveResult(res.recipes);
+    if (res.success) setRecipes(res.recipes);
   }, []);
   return (
     <div>
