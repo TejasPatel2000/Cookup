@@ -11,7 +11,7 @@ router.post('/post', async (ctx) => {
   
   if (user) {
     const {
-      name, description, servings, prep_time, cook_time, ingredients, instructions,
+      name, description, servings, prep_time, cook_time, ingredients, instructions, tags,
     } = ctx.request.body;
     
     const recipe = new Recipe({
@@ -23,7 +23,7 @@ router.post('/post', async (ctx) => {
       cook_time,
       ingredients,
       instructions,
-      tags: "",
+      tags,
     });
 
     try {
