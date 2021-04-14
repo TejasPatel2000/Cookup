@@ -111,7 +111,7 @@ function App() {
               <div className="navbar-item is-expanded">
                 <div className="field has-addons">
                   <div className="control is-expanded">
-                    <input className="input" type="text" placeholder="CookUp!" />
+                    <input className="input" type="text" placeholder="What's Cookin?" />
                   </div>
                   <div className="control">
                     <a className="button">Search</a>
