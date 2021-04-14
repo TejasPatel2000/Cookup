@@ -35,7 +35,6 @@ function LoginModal() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ phone: `+1${phone}` }),
-      credentials: 'include',
     });
   }
 
@@ -52,7 +51,6 @@ function LoginModal() {
           dob: moment(`${months[month]} ${day + 1} ${years[year]}`, 'MMM DD YYYY').unix(),
           token: code,
         }),
-        credentials: 'include',
       });
 
       const res = await req.json();

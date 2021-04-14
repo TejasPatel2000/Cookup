@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./src/app",
+    "start:prod": "node ./src/app",
     "lint": "eslint src --ext .js --fix",
     "add": "docker-compose --env-file ../.env -f ../docker-compose.yml exec -d -u node backend npm i"
   },
