@@ -11,18 +11,7 @@ function App() {
   const [profile, setProfile] = useState({});
   const [feedFilter, setFeedFilter] = useState({});
   const [mobileMenu, setMobileMenu] = useState(false);
-
-  useEffect(async () => {
-    const req = await fetch('/api/profile', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    const res = await req.json();
-    setProfile(res.user || {});
-  }, []);
+  const [recipeFeed, setRecipeFeed] = useState([]);
 
   async function logout() {
     const req = await fetch('/api/logout', {
@@ -35,6 +24,35 @@ function App() {
     const res = await req.json();
     setProfile(res.success ? {} : profile);
   }
+
+  async function fetchRecipes() {
+    const { user, tags, search } = feedFilter;
+    console.log(feedFilter);
+
+    const req = await fetch(`/api/recipe?${user ? `user=${user}` : ''}${(tags || []).length ? `tags=${tags.join()}` : ''}${search ? `search=${search}` : ''}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const res = await req.json();
+
+    setRecipeFeed(res.recipes || []);
+  }
+
+  useEffect(async () => {
+    const req = await fetch('/api/profile', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const res = await req.json();
+    setProfile(res.user || {});
+    fetchRecipes();
+  }, []);
 
   const profileHeader = profile.username ? (
     <div className="has-text-centered">
@@ -75,7 +93,7 @@ function App() {
 
   return (
     <AppContext.Provider value={{
-      profile, setProfile, feedFilter, setFeedFilter,
+      profile, setProfile, setFeedFilter, recipeFeed,
     }}
     >
       <nav className="navbar" role="navigation" aria-label="main navigation">
@@ -111,11 +129,10 @@ function App() {
               <div className="navbar-item is-expanded">
                 <div className="field has-addons">
                   <div className="control is-expanded">
-                    <input className="input" type="text" placeholder="What's Cookin?" />
+                    <input onChange={(event) => { setFeedFilter({ search: event.target.value }); }} className="input" type="text" placeholder="What's Cookin?" />
                   </div>
                   <div className="control">
-                    <a className="button">Search</a>
-                    {/* add button functionality here */}
+                    <a role="button" href="#" className="button" onClick={() => { fetchRecipes(); }}>CookUp!</a>
                   </div>
                 </div>
               </div>
@@ -163,7 +180,7 @@ function App() {
           <ul className="menu-list">
             <li><a>#Vegan</a></li>
             <li><a>#PlantBased</a></li>
-            <li><a>#GluttenFree</a></li>
+            <li><a>#GlutenFree</a></li>
             <li><a>#ZuccFries</a></li>
           </ul>
           <hr className="navbar-divider" />

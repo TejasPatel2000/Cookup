@@ -51,12 +51,13 @@ router.post('/post', async (ctx) => {
 
 router.get('/', async (ctx) => {
   ctx.body = {};
-  const { tags, user } = ctx.request.query;
+  const { tags, user, search } = ctx.request.query;
 
   const filter = {};
 
   if (tags) filter.tags = { $all: tags };
   if (user) filter.by = await User.findByLogin(user);
+  if (search) filter.$text = { $search: search };
 
   try {
     const recipes = await Recipe.find(filter, null, { created_at: 'decending' })
