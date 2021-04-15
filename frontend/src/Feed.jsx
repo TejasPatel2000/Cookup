@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import _uniqueId from 'lodash/uniqueId';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
@@ -8,25 +8,9 @@ import moment from 'moment';
 import AppContext from './AppContext';
 
 function Feed() {
-  const appContext = useContext(AppContext);
-  const [recipes, setRecipes] = useState([]);
-
-  useEffect(async () => {
-    const { user, tags, searchText } = appContext.feedFilter;
-    const req = await fetch(`/api/recipe?${user ? `user=${user}` : ''}${(tags || []).length ? `tags=${tags.join()}` : ''}${searchText ? `searchText=${searchText}` : ''}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    const res = await req.json();
-    if (res.success) setRecipes(res.recipes);
-  }, []);
   return (
-    <div>
-      {console.log(recipes)}
-      { recipes.map((recipe) => (
+    <AppContext.Consumer>
+      { (value) => value.recipeFeed.map((recipe) => (
         <div key={_uniqueId()} className="box">
           <article className="media">
             <div className="media-content">
@@ -48,11 +32,11 @@ function Feed() {
                   <br />
                   {recipe.description}
                   <br />
-                  <strong>Ingredients:</strong>
-                  <br />
+                  Ingredients:
+                  {' '}
                   {recipe.ingredients.join()}
                   <br />
-                  <strong>Instructions:</strong>
+                  Instructions:
                   <br />
                   {recipe.instructions}
                 </p>
@@ -63,7 +47,6 @@ function Feed() {
                     <span className="icon is-small">
                       <FontAwesomeIcon icon={faHeart || faHeartSolid} />
                     </span>
-                    {recipe.tags}
                   </a>
                 </div>
               </nav>
@@ -71,7 +54,7 @@ function Feed() {
           </article>
         </div>
       )) }
-    </div>
+    </AppContext.Consumer>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faClone } from '@fortawesome/free-solid-svg-icons';
 
@@ -11,19 +11,7 @@ function App() {
   const [profile, setProfile] = useState({});
   const [feedFilter, setFeedFilter] = useState({});
   const [mobileMenu, setMobileMenu] = useState(false);
-  const searchText = useRef(null);
-
-  useEffect(async () => {
-    const req = await fetch('/api/profile', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    const res = await req.json();
-    setProfile(res.user || {});
-  }, []);
+  const [recipeFeed, setRecipeFeed] = useState([]);
 
   async function logout() {
     const req = await fetch('/api/logout', {
@@ -36,18 +24,36 @@ function App() {
     const res = await req.json();
     setProfile(res.success ? {} : profile);
   }
-  async function searchDB() {
-    if (searchText) {
-      const req = await fetch(`/api/recipe?${searchText ? `searchText=${searchText.current.value}` : ''}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      const res = await req.json();
-      if (res.success) setFeedFilter(res.recipes);
-    }
+
+  async function fetchRecipes() {
+    const { user, tags, search } = feedFilter;
+    console.log(feedFilter);
+
+    const req = await fetch(`/api/recipe?${user ? `user=${user}` : ''}${(tags || []).length ? `tags=${tags.join()}` : ''}${search ? `search=${search}` : ''}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const res = await req.json();
+
+    setRecipeFeed(res.recipes || []);
   }
+
+  useEffect(async () => {
+    const req = await fetch('/api/profile', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const res = await req.json();
+    setProfile(res.user || {});
+    fetchRecipes();
+  }, []);
+
   const profileHeader = profile.username ? (
     <div className="has-text-centered">
       <div className="columns is-flex is-centered">
@@ -87,10 +93,9 @@ function App() {
 
   return (
     <AppContext.Provider value={{
-      profile, setProfile, feedFilter, setFeedFilter,
+      profile, setProfile, setFeedFilter, recipeFeed,
     }}
     >
-      {console.log(feedFilter)}
       <nav className="navbar" role="navigation" aria-label="main navigation">
         <div className="navbar-brand">
           <a className="navbar-item" href="https://bulma.io">
@@ -124,11 +129,10 @@ function App() {
               <div className="navbar-item is-expanded">
                 <div className="field has-addons">
                   <div className="control is-expanded">
-                    <input ref={searchText} className="input" type="text" placeholder="What's Cookin?" />
+                    <input onChange={(event) => { setFeedFilter({ search: event.target.value }); }} className="input" type="text" placeholder="What's Cookin?" />
                   </div>
                   <div className="control">
-                    <a role="button" href="#" className="button" onClick={() => { searchDB(); }}>CookUp!</a>
-                    {/* add button functionality here */}
+                    <a role="button" href="#" className="button" onClick={() => { fetchRecipes(); }}>CookUp!</a>
                   </div>
                 </div>
               </div>
@@ -189,9 +193,7 @@ function App() {
               <LoginModal />
             ) : null }
             <br />
-            { profile.username ? (
-              <Feed />
-            ) : null }
+            <Feed />
           </div>
         </div>
       </section>
