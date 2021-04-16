@@ -34,7 +34,7 @@ const recipeSchema = new mongoose.Schema({
     type: [String],
     lowercase: true,
   },
-});
+}, { timestamps: { createdAt: 'created_at' } });
 
 recipeSchema.index({
   name: 'text',

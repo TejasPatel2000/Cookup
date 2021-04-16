@@ -5,23 +5,14 @@ import { faHome, faClone } from '@fortawesome/free-solid-svg-icons';
 import AppContext from './AppContext';
 import LoginModal from './LoginModal';
 import CreateTag from './TagPage';
+import Feed from './Feed';
 import CreateRecipe from './CreateRecipe';
 
 function App() {
   const [profile, setProfile] = useState({});
+  const [feedFilter, setFeedFilter] = useState({});
   const [mobileMenu, setMobileMenu] = useState(false);
-
-  useEffect(async () => {
-    const req = await fetch('/api/profile', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    const res = await req.json();
-    setProfile(res.user || {});
-  }, []);
+  const [recipeFeed, setRecipeFeed] = useState([]);
 
   async function logout() {
     const req = await fetch('/api/logout', {
@@ -34,6 +25,34 @@ function App() {
     const res = await req.json();
     setProfile(res.success ? {} : profile);
   }
+
+  async function fetchRecipes() {
+    const { user, tags, search } = feedFilter;
+
+    const req = await fetch(`/api/recipe?${user ? `user=${user}` : ''}${(tags || []).length ? `tags=${tags.join()}` : ''}${search ? `search=${search}` : ''}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const res = await req.json();
+
+    setRecipeFeed(res.recipes || []);
+  }
+
+  useEffect(async () => {
+    const req = await fetch('/api/profile', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const res = await req.json();
+    setProfile(res.user || {});
+    fetchRecipes();
+  }, []);
 
   const profileHeader = profile.username ? (
     <div className="has-text-centered">
@@ -73,7 +92,10 @@ function App() {
   ) : null;
 
   return (
-    <AppContext.Provider value={{ profile, setProfile }}>
+    <AppContext.Provider value={{
+      profile, setProfile, setFeedFilter, recipeFeed,
+    }}
+    >
       <nav className="navbar" role="navigation" aria-label="main navigation">
         <div className="navbar-brand">
           <a className="navbar-item" href="https://bulma.io">
@@ -107,19 +129,18 @@ function App() {
               <div className="navbar-item is-expanded">
                 <div className="field has-addons">
                   <div className="control is-expanded">
-                    <input className="input" type="text" placeholder="CookUp!" />
+                    <input onChange={(event) => { setFeedFilter({ search: event.target.value }); }} className="input" type="text" placeholder="What's Cookin?" />
                   </div>
                   <div className="control">
-                    <a className="button">Search</a>
+                    <a role="button" href="#" className="button" onClick={() => { fetchRecipes(); }}>CookUp!</a>
                   </div>
                 </div>
               </div>
               <div className="navbar-item">
-                <div className="buttons">
-                  <a className="button is-primary is-fullwidth">
-                    <strong>{profile.username ? 'New Post' : 'Sign up'}</strong>
-                  </a>
-                </div>
+                <a className="button is-primary is-fullwidth">
+                  <strong>{profile.username ? <CreateRecipe /> : <button type="button" className="button is-primary">Sign Up</button>}</strong>
+                </a>
+
               </div>
               { profile.username ? (
                 <div className="navbar-item">
@@ -133,8 +154,8 @@ function App() {
         </div>
       </nav>
       <section className="columns is-fullheight">
-        {/* Start of sidebar */}
-        <aside className="column is-3 is-2-widescreen menu is-fullheight section is-hidden-mobile">
+        {/* Start of sidebar  */}
+        <aside className="column is-2-widescreen is-3-desktop is-4-tablet menu is-fullheight section is-hidden-mobile">
           {profileHeader}
           <hr className="navbar-divider" />
           <ul className="menu-list">
@@ -159,7 +180,7 @@ function App() {
           <ul className="menu-list">
             <li><a>#Vegan</a></li>
             <li><a>#PlantBased</a></li>
-            <li><a>#GluttenFree</a></li>
+            <li><a>#GlutenFree</a></li>
             <li><a>#ZuccFries</a></li>
           </ul>
           <hr className="navbar-divider" />
@@ -167,7 +188,13 @@ function App() {
         {/* End of sidebar */}
         <div className="column">
           {/* Content goes here */}
-          <LoginModal />
+          <div className="container is-max-desktop">
+            { !profile.username ? (
+              <LoginModal />
+            ) : null }
+            <br />
+            <Feed />
+          </div>
           <br />
           <CreateRecipe />
           <br />

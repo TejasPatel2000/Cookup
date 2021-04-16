@@ -32,10 +32,11 @@ function CreateRecipe() {
           cook_time: cookTime.current.value,
           ingredients: ingredients.current.value,
           instructions: instructions.current.value,
-          tags: tags.current.value,
+          tags: tags.current.value.split,
         }),
       });
     }
+    setShow(!show);
   }
 
   return (
@@ -55,8 +56,8 @@ function CreateRecipe() {
                 <textarea ref={description} className="textarea is-primary" placeholder="Description of Recipe..." rows="7" />
                 <div className="field is-horizontal">
                   <input ref={servings} className="input is-primary" type="text" placeholder="Servings" />
-                  <input ref={prepTime} className="input is-primary" type="text" placeholder="Prep Time" />
-                  <input ref={cookTime} className="input is-primary" type="text" placeholder="Cook Time" />
+                  <input ref={prepTime} className="input is-primary" type="text" placeholder="Prep Time (in min)" />
+                  <input ref={cookTime} className="input is-primary" type="text" placeholder="Cook Time (in min)" />
                 </div>
                 <textarea ref={ingredients} className="textarea is-primary" placeholder="Ingredients... (Separate by comma)" rows="7" />
                 <textarea ref={instructions} className="textarea is-primary" placeholder="Instructions..." rows="7" />
