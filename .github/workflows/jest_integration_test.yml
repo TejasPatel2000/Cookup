@@ -1,0 +1,19 @@
+name: Test Backend/Frontend
+on: [push, pull_request]
+jobs:
+  test-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+      - run: cd backend
+      - run: npm install
+      - run: npm run test
+  test-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+      - run: cd frontend
+      - run: npm install
+      - run: npm run test
