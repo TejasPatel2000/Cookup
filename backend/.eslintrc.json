@@ -5,6 +5,8 @@
         "node": true
     },
     "extends": [
+        "plugin:jest/recommended",
+        "plugin:jest/style",
         "airbnb-base"
     ],
     "parserOptions": {

@@ -1,6 +1,4 @@
 const Router = require('@koa/router');
-const twilio = require('twilio')(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
-
 const { TOTP, User } = require('../models');
 const { randomUsername } = require('../utils');
 
@@ -13,7 +11,7 @@ router.post('/sms/send', async (ctx) => {
   const totp = await TOTP.findOrCreate(phone);
 
   try {
-    await twilio.messages.create({
+    await ctx.twilio.messages.create({
       to: phone,
       from: process.env.TWILIO_NUMBER,
       body: `[CookUp] Use ${totp.generate()} to verify your identity.`,
