@@ -20,7 +20,6 @@ export default function CreateTag() {
           name: name.current.value,
           description: null,
           followers: 0,
-          posts: 0,
         }),
       });
     }
@@ -30,15 +29,22 @@ export default function CreateTag() {
     <div className="create-tag">
       <button type="button" className="button is-primary" onClick={showForm}>Add New Tag</button>
       {showNew ? (
-        <div className="field">
-          <div className="control">
-            <input ref={name} className="input" type="text" placeholder="Name" />
-          </div>
-          <div className="field">
-            <p className="control">
-              <input type="submit" value="Submit" className="button is-primary" onClick={submitForm} />
-              <button type="button" className="button is-primary" onClick={showForm}>Cancel </button>
-            </p>
+        <div className="modal is-active">
+          <div className="modal-background" />
+          <div className="modal-card">
+            <header className="modal-card-head">
+              <p className="modal-card-title">Add Tag</p>
+              <button type="button" className="delete" aria-label="close" onClick={showForm} />
+            </header>
+            <section className="modal-card-body">
+              <div className="field">
+                <input ref={name} className="input" type="text" placeholder="Name" />
+              </div>
+            </section>
+            <footer className="modal-card-foot">
+              <input type="submit" value="Submit" className="button is-success" onClick={submitForm} />
+              <button type="button" className="button" onClick={showForm}>Cancel</button>
+            </footer>
           </div>
         </div>
       ) : (

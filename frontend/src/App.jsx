@@ -136,11 +136,19 @@ function App() {
                   </div>
                 </div>
               </div>
+              <div>
+                { profile.username ? (
+                  <div className="navbar-item">
+                    <a className="button is-primary is-fullwidth">
+                      <strong><CreateTag /></strong>
+                    </a>
+                  </div>
+                ) : null }
+              </div>
               <div className="navbar-item">
                 <a className="button is-primary is-fullwidth">
                   <strong>{profile.username ? <CreateRecipe /> : <button type="button" className="button is-primary">Sign Up</button>}</strong>
                 </a>
-
               </div>
               { profile.username ? (
                 <div className="navbar-item">
@@ -196,9 +204,6 @@ function App() {
             <Feed />
           </div>
           <br />
-          <CreateRecipe />
-          <br />
-          <CreateTag />
         </div>
       </section>
     </AppContext.Provider>

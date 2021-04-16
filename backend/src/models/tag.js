@@ -15,10 +15,6 @@ const tagSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  posts: {
-    type: Number,
-    default: 0,
-  },
 });
 
 tagSchema.index({

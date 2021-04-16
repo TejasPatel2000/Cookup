@@ -3,8 +3,8 @@ const { Tag, User } = require('../models');
 
 const router = new Router();
 
-// POST /api/tag/post
-router.post('/post', async (ctx) => {
+// POST /api/tag/new
+router.post('/new', async (ctx) => {
   const { session } = ctx;
   ctx.body = {};
 
@@ -12,14 +12,13 @@ router.post('/post', async (ctx) => {
   
   if (user) {
     const {
-      name, description, followers, posts,
+      name, description, followers,
     } = ctx.request.body;
     
     const tag = new Tag({
       name,
       description,
       followers,
-      posts,
     });
 
     try {
