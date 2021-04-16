@@ -6,8 +6,9 @@ const app = require('./app');
 const User = require('../src/models/user');
 const TOTP = require('../src/models/totp');
 
-describe('test user authentication', () => {
+describe('test authentication endpoints', () => {
   let server;
+  let mockUser;
 
   beforeAll(async () => {
     await mongoose.connect(
@@ -23,12 +24,12 @@ describe('test user authentication', () => {
 
   afterAll(async () => {
     await server.close();
+    await mockUser.delete();
     await mongoose.connection.close();
-    fs.unlinkSync(`${process.cwd()}/globalConfig.json`);
   });
 
   it('should find a user by their login', async () => {
-    const mockUser = new User({
+    mockUser = new User({
       phone: '+19999999999',
       fullName: 'Test User',
       username: 'testUser',
@@ -46,18 +47,18 @@ describe('test user authentication', () => {
 
   it('should authenticate a user by phone', async () => {
     const mockTotp = new TOTP({
-      phone: '+19999999999',
+      phone: mockUser.phone,
     });
 
     await mockTotp.save();
 
     const res = await supertest(server)
       .post('/api/auth/login')
-      .send({ login: 'testUser', token: mockTotp.generate() })
+      .send({ login: mockUser.username, token: mockTotp.generate() })
       .set('Accept', 'application/json');
 
     expect(res.status).toEqual(200);
     expect(res.body.success).toEqual(true);
-    expect(res.body.user.username).toEqual('testUser');
+    expect(res.body.user.username).toEqual(mockUser.username);
   });
 });
