@@ -4,7 +4,7 @@ import { faHome, faClone } from '@fortawesome/free-solid-svg-icons';
 
 import AppContext from './AppContext';
 import LoginModal from './LoginModal';
-import GroupsPage from './GroupsPage';
+import CreateTag from './TagPage';
 import CreateRecipe from './CreateRecipe';
 
 function App() {
@@ -171,7 +171,7 @@ function App() {
           <br />
           <CreateRecipe />
           <br />
-          <GroupsPage />
+          <CreateTag />
         </div>
       </section>
     </AppContext.Provider>
