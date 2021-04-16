@@ -200,7 +200,7 @@ function App() {
         <div className="column">
           {/* Content goes here */}
           <div className="container is-max-desktop">
-            { show ? (
+            { show && !(show && profile.username) ? (
               <LoginModal />
             ) : null }
             <br />
