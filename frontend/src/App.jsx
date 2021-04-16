@@ -4,6 +4,7 @@ import { faHome, faClone } from '@fortawesome/free-solid-svg-icons';
 
 import AppContext from './AppContext';
 import LoginModal from './LoginModal';
+import CreateTag from './TagPage';
 import Feed from './Feed';
 import CreateRecipe from './CreateRecipe';
 
@@ -27,7 +28,6 @@ function App() {
 
   async function fetchRecipes() {
     const { user, tags, search } = feedFilter;
-    console.log(feedFilter);
 
     const req = await fetch(`/api/recipe?${user ? `user=${user}` : ''}${(tags || []).length ? `tags=${tags.join()}` : ''}${search ? `search=${search}` : ''}`, {
       method: 'GET',
@@ -136,11 +136,19 @@ function App() {
                   </div>
                 </div>
               </div>
+              <div>
+                { profile.username ? (
+                  <div className="navbar-item">
+                    <a className="button is-primary is-fullwidth">
+                      <strong><CreateTag /></strong>
+                    </a>
+                  </div>
+                ) : null }
+              </div>
               <div className="navbar-item">
                 <a className="button is-primary is-fullwidth">
                   <strong>{profile.username ? <CreateRecipe /> : <button type="button" className="button is-primary">Sign Up</button>}</strong>
                 </a>
-
               </div>
               { profile.username ? (
                 <div className="navbar-item">
@@ -195,6 +203,7 @@ function App() {
             <br />
             <Feed />
           </div>
+          <br />
         </div>
       </section>
     </AppContext.Provider>
