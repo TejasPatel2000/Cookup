@@ -13,7 +13,10 @@ function App() {
   const [feedFilter, setFeedFilter] = useState({});
   const [mobileMenu, setMobileMenu] = useState(false);
   const [recipeFeed, setRecipeFeed] = useState([]);
-
+  const [show, setShow] = useState(false);
+  function showLogin() {
+    setShow(!show);
+  }
   async function logout() {
     const req = await fetch('/api/logout', {
       method: 'POST',
@@ -147,7 +150,7 @@ function App() {
               </div>
               <div className="navbar-item">
                 <a className="button is-primary is-fullwidth">
-                  <strong>{profile.username ? <CreateRecipe /> : <button type="button" className="button is-primary">Sign Up</button>}</strong>
+                  <strong>{profile.username ? <CreateRecipe /> : <button type="button" className="button is-primary" onClick={() => { showLogin(); }}>Sign Up</button>}</strong>
                 </a>
               </div>
               { profile.username ? (
@@ -197,7 +200,7 @@ function App() {
         <div className="column">
           {/* Content goes here */}
           <div className="container is-max-desktop">
-            { !profile.username ? (
+            { show ? (
               <LoginModal />
             ) : null }
             <br />
