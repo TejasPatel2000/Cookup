@@ -3,6 +3,7 @@ const serve = require('koa-static');
 const logger = require('koa-logger');
 const koaBody = require('koa-body');
 const mongoose = require('mongoose');
+const twilio = require('twilio');
 
 const session = require('koa-session');
 const MongoStore = require('koa-session-mongoose');
@@ -17,6 +18,11 @@ const port = normalizePort(process.env.PORT || '3000');
 app.use(logger());
 app.use(serve('public'));
 app.use(koaBody());
+
+app.context.twilio = twilio(
+  process.env.TWILIO_SID,
+  process.env.TWILIO_TOKEN,
+);
 
 mongoose.connect(
   process.env.MONGO_URL || 'mongodb://mongo/cookup',
