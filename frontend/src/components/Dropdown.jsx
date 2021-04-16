@@ -31,9 +31,9 @@ const Dropdown = React.forwardRef((props, ref) => {
       <div id={dropDownId} className="dropdown-menu" role="menu">
         <div className="dropdown-content">
           { Object.values(items).map((item, indx) => (
-            <button key={_uniqueId()} type="button" className="dropdown-item button is-ghost" onClick={() => itemSelected(indx)}>
+            <a href="#" data-testid="dropdown-item" key={_uniqueId()} className="dropdown-item" onClick={() => itemSelected(indx)}>
               {item}
-            </button>
+            </a>
           )) }
         </div>
       </div>
