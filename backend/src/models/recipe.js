@@ -34,7 +34,7 @@ const recipeSchema = new mongoose.Schema({
     type: [String],
     lowercase: true,
   },
-}, { timestamps: { createdAt: 'created_at' } });
+}, { timestamps: true });
 
 recipeSchema.index({
   name: 'text',
@@ -55,11 +55,13 @@ recipeSchema.index({
 recipeSchema.statics.findByUser = function (user) {
   return this.find({
     by: user,
-  });
+  }).sort({ updatedAt: 'desc' });
 };
 
 recipeSchema.statics.findBySearch = function (query) {
-  return this.find({ $text: { $search: query } });
+  return this.find({ 
+    $text: { $search: query }
+  }).sort({ updatedAt: 'desc' });
 };
 
 recipeSchema.statics.findBytag = function (query) {
@@ -67,7 +69,7 @@ recipeSchema.statics.findBytag = function (query) {
     tags: {
       $all: query,
     },
-  });
+  }).sort({ updatedAt: 'desc' });
 };
 
 recipeSchema.pre('save', async function () {
