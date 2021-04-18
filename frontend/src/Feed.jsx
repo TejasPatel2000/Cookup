@@ -42,7 +42,8 @@ function Feed() {
                   <br />
                   Tags:
                   <br />
-                  {recipe.tags}
+                  {recipe.tags.join()}
+                  <br />
                 </p>
               </div>
               <nav className="level is-mobile">
