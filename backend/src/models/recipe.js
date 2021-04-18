@@ -59,8 +59,8 @@ recipeSchema.statics.findByUser = function (user) {
 };
 
 recipeSchema.statics.findBySearch = function (query) {
-  return this.find({ 
-    $text: { $search: query }
+  return this.find({
+    $text: { $search: query },
   }).sort({ updatedAt: 'desc' });
 };
 
