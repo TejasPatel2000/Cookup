@@ -39,6 +39,10 @@ function Feed() {
                   Instructions:
                   <br />
                   {recipe.instructions}
+                  <br />
+                  Tags:
+                  <br />
+                  {recipe.tags}
                 </p>
               </div>
               <nav className="level is-mobile">

@@ -5,7 +5,6 @@ import { faHome, faClone } from '@fortawesome/free-solid-svg-icons';
 import AppContext from './AppContext';
 import LoginModal from './LoginModal';
 import CreateTag from './TagPage';
-import Tags from './Tags';
 import Feed from './Feed';
 import CreateRecipe from './CreateRecipe';
 
@@ -14,15 +13,9 @@ function App() {
   const [feedFilter, setFeedFilter] = useState({});
   const [mobileMenu, setMobileMenu] = useState(false);
   const [recipeFeed, setRecipeFeed] = useState([]);
-<<<<<<< HEAD
-  const [show, setShow] = useState(false);
   function showLogin() {
     setShow(!show);
   }
-=======
-  const [listTag, setTags] = useState([]);
-
->>>>>>> working on GET method for Tag
   async function logout() {
     const req = await fetch('/api/logout', {
       method: 'POST',
@@ -50,19 +43,6 @@ function App() {
     setRecipeFeed(res.recipes || []);
   }
 
-  async function fetchTags() {
-    const req = await fetch('/api/tag', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    const res = await req.json();
-
-    setTags(res.tags || []);
-  }
-
   useEffect(async () => {
     const req = await fetch('/api/profile', {
       method: 'GET',
@@ -74,7 +54,6 @@ function App() {
     const res = await req.json();
     setProfile(res.user || {});
     fetchRecipes();
-    fetchTags();
   }, []);
 
   const profileHeader = profile.username ? (
@@ -116,7 +95,7 @@ function App() {
 
   return (
     <AppContext.Provider value={{
-      profile, setProfile, setFeedFilter, recipeFeed, listTag,
+      profile, setProfile, setFeedFilter, recipeFeed,
     }}
     >
       <nav className="navbar" role="navigation" aria-label="main navigation">
@@ -225,7 +204,6 @@ function App() {
             ) : null }
             <br />
             <Feed />
-            <Tags />
           </div>
           <br />
         </div>
