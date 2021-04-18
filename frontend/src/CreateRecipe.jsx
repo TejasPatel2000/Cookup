@@ -30,9 +30,9 @@ function CreateRecipe() {
           servings: servings.current.value,
           prep_time: prepTime.current.value,
           cook_time: cookTime.current.value,
-          ingredients: ingredients.current.value,
+          ingredients: ingredients.current.value.split(','),
           instructions: instructions.current.value,
-          tags: tags.current.value.split,
+          tags: tags.current.value.split(','),
         }),
       });
     }

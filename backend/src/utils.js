@@ -1,4 +1,5 @@
-const { User } = require('./models');
+const _ = require('lodash');
+const { User, Tag } = require('./models');
 
 exports.normalizePort = (val) => {
   const port = parseInt(val, 10);
@@ -21,6 +22,13 @@ exports.randomUsername = async () => {
 
   return username;
 };
+
+exports.tagResolver = _.memoize(async (tagName) => {
+  const tag = await Tag.findByName(tagName);
+  const res = tag.toJSON();
+  res.postCount = await tag.getPostCount();
+  return res;
+}, (tagName) => `${tagName}_${Math.floor(Date.now() / (60 * 60 * 1000))}`);
 
 exports.requireLogin = async (ctx, next) => {
   const user = await User.findByLogin(ctx.session.user);
