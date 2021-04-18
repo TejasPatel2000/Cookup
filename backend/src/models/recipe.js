@@ -63,8 +63,24 @@ recipeSchema.statics.findBySearch = function (query) {
 };
 
 recipeSchema.statics.findBytag = function (query) {
-  return this.find({ tags: query });
+  return this.find({
+    tags: {
+      $all: query,
+    },
+  });
 };
+
+recipeSchema.pre('save', async function () {
+  await Promise.all(this.tags.map(async (tag) => {
+    await mongoose.model('Tag').updateOne(
+      { name: tag },
+      {
+        $setOnInsert: { name: tag },
+      },
+      { upsert: true },
+    );
+  }));
+});
 
 const Recipe = mongoose.model('Recipe', recipeSchema);
 

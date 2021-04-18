@@ -34,7 +34,12 @@ tagSchema.statics.findBySearch = function (query) {
 };
 
 tagSchema.statics.findByName = function (query) {
-  return this.find({ name: query });
+  return this.findOne({ name: query });
+};
+
+tagSchema.methods.getPostCount = async function () {
+  const res = await mongoose.model('Recipe').countDocuments({ tags: this.name });
+  return res;
 };
 
 const Tag = mongoose.model('Tag', tagSchema);
