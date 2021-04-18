@@ -12,7 +12,7 @@ export default function CreateTag() {
   async function submitForm() {
     if (name) {
       await fetch('/api/tag/new', {
-        methods: 'POST',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -23,6 +23,7 @@ export default function CreateTag() {
         }),
       });
     }
+    setNew(!showNew);
   }
 
   return (
