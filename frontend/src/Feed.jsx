@@ -6,6 +6,7 @@ import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 
 import moment from 'moment';
 import AppContext from './AppContext';
+import SaveTags from './SaveTags';
 
 function Feed() {
   const appContext = useContext(AppContext);
@@ -41,6 +42,8 @@ function Feed() {
                   Instructions:
                   <br />
                   {recipe.instructions}
+                  <br />
+                  <SaveTags />
                 </p>
               </div>
               <nav className="level is-mobile">

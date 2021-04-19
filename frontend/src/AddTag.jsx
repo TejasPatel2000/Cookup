@@ -28,7 +28,7 @@ export default function CreateTag() {
 
   return (
     <div className="create-tag">
-      <button type="button" className="button is-primary" onClick={showForm}>Add New Tag</button>
+      <button type="button" className="button is-primary" onClick={showForm}>New Tag</button>
       {showNew ? (
         <div className="modal is-active">
           <div className="modal-background" />

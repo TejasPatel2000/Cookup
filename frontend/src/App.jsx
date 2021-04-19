@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faClone } from '@fortawesome/free-solid-svg-icons';
+import _uniqueId from 'lodash/uniqueId';
+import cloneDeep from 'lodash.clonedeep';
 
 import AppContext from './AppContext';
 import LoginModal from './LoginModal';
@@ -11,7 +13,6 @@ function App() {
   const [profile, setProfile] = useState({});
   const [feedFilter, setFeedFilter] = useState({});
   const [mobileMenu, setMobileMenu] = useState(false);
-  const [recipeFeed, setRecipeFeed] = useState([]);
   const [authVisible, setAuthVisible] = useState(false);
   const [recipeVisible, setRecipeVisible] = useState(false);
 
@@ -27,19 +28,27 @@ function App() {
     setProfile(res.success ? {} : profile);
   }
 
-  async function fetchRecipes() {
-    const { user, tags, search } = feedFilter;
-
-    const req = await fetch(`/api/recipe?${user ? `user=${user}` : ''}${(tags || []).length ? `tags=${tags.join()}` : ''}${search ? `search=${search}` : ''}`, {
-      method: 'GET',
+  async function followTags(tags) {
+    const req = await fetch('/api/follow/', {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({
+        tags,
+      }),
     });
 
     const res = await req.json();
 
-    setRecipeFeed(res.recipes || []);
+    setProfile((val) => {
+      if (!res.success) return val;
+
+      const following = new Set([...val.following, ...tags]);
+      const newProfile = cloneDeep(val);
+      newProfile.following = [...following];
+      return newProfile;
+    });
   }
 
   useEffect(async () => {
@@ -52,7 +61,6 @@ function App() {
 
     const res = await req.json();
     setProfile(res.user || {});
-    fetchRecipes();
   }, []);
 
   const profileHeader = profile.username ? (
@@ -97,11 +105,12 @@ function App() {
       profile,
       setProfile,
       setFeedFilter,
-      recipeFeed,
+      feedFilter,
       authVisible,
       setAuthVisible,
       recipeVisible,
       setRecipeVisible,
+      followTags,
     }}
     >
       <nav className="navbar is-spaced" role="navigation" aria-label="main navigation">
@@ -123,13 +132,17 @@ function App() {
               <a className="navbar-item">Home</a>
               <a className="navbar-item">Collection</a>
               <div className="navbar-item has-dropdown">
-                <a className="navbar-link">Trending</a>
-                <div className="navbar-dropdown">
-                  <a className="navbar-item">#Vegan</a>
-                  <a className="navbar-item">#PlantBased</a>
-                  <a className="navbar-item">#GluttenFree</a>
-                  <a className="navbar-item">#ZuccFries</a>
-                </div>
+                <a className="navbar-link">Followed Tags</a>
+                {profile.following ? (
+                  <div className="navbar-dropdown">
+                    {profile.following.map((tag) => (
+                      <a href="#" onClick={() => { setFeedFilter({ tags: [tag] }); }} className="navbar-item" key={_uniqueId()}>
+                        #
+                        {tag}
+                      </a>
+                    ))}
+                  </div>
+                ) : null}
               </div>
             </div>
 
@@ -140,7 +153,7 @@ function App() {
                     <input onChange={(event) => { setFeedFilter({ search: event.target.value }); }} className="input" type="text" placeholder="What's Cookin?" />
                   </div>
                   <div className="control">
-                    <a role="button" href="#" className="button" onClick={() => { fetchRecipes(); }}>CookUp!</a>
+                    <a role="button" href="#" className="button">CookUp!</a>
                   </div>
                 </div>
               </div>
@@ -194,13 +207,19 @@ function App() {
                 </a>
               </li>
             </ul>
-            <p className="menu-label">Trending</p>
-            <ul className="menu-list">
-              <li><a>#Vegan</a></li>
-              <li><a>#PlantBased</a></li>
-              <li><a>#GlutenFree</a></li>
-              <li><a>#ZuccFries</a></li>
-            </ul>
+            <p className="menu-label">Followed Tags</p>
+            {profile.following ? (
+              <ul className="menu-list">
+                {profile.following.map((tag) => (
+                  <li key={_uniqueId()}>
+                    <a href="#" onClick={() => { setFeedFilter({ tags: [tag] }); }}>
+                      #
+                      {tag}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
             <hr className="navbar-divider" />
           </aside>
           {/* End of sidebar */}
