@@ -4,7 +4,6 @@ import { faHome, faClone } from '@fortawesome/free-solid-svg-icons';
 
 import AppContext from './AppContext';
 import LoginModal from './LoginModal';
-import CreateTag from './TagPage';
 import Feed from './Feed';
 import CreateRecipe from './CreateRecipe';
 
@@ -13,10 +12,9 @@ function App() {
   const [feedFilter, setFeedFilter] = useState({});
   const [mobileMenu, setMobileMenu] = useState(false);
   const [recipeFeed, setRecipeFeed] = useState([]);
-  const [show, setShow] = useState(false);
-  function showLogin() {
-    setShow(!show);
-  }
+  const [authVisible, setAuthVisible] = useState(false);
+  const [recipeVisible, setRecipeVisible] = useState(false);
+
   async function logout() {
     const req = await fetch('/api/logout', {
       method: 'POST',
@@ -96,13 +94,20 @@ function App() {
 
   return (
     <AppContext.Provider value={{
-      profile, setProfile, setFeedFilter, recipeFeed,
+      profile,
+      setProfile,
+      setFeedFilter,
+      recipeFeed,
+      authVisible,
+      setAuthVisible,
+      recipeVisible,
+      setRecipeVisible,
     }}
     >
-      <nav className="navbar" role="navigation" aria-label="main navigation">
+      <nav className="navbar is-spaced" role="navigation" aria-label="main navigation">
         <div className="navbar-brand">
-          <a className="navbar-item" href="https://bulma.io">
-            <img src="https://bulma.io/images/bulma-logo.png" alt="logo" width="112" height="28" />
+          <a className="navbar-item" href="/">
+            CookUp!
           </a>
 
           <a role="button" href="#" className="navbar-burger" aria-label="menu" onClick={() => { setMobileMenu(!mobileMenu); }} aria-expanded={mobileMenu}>
@@ -139,76 +144,77 @@ function App() {
                   </div>
                 </div>
               </div>
-              <div>
-                { profile.username ? (
-                  <div className="navbar-item">
-                    <a className="button is-primary is-fullwidth">
-                      <strong><CreateTag /></strong>
+              {profile.username ? (
+                <div className="navbar-item">
+                  <div className="buttons">
+                    <a href="#" className="button is-primary is-fullwidth" onClick={() => { setRecipeVisible(true); }}>
+                      Create Recipe
                     </a>
                   </div>
-                ) : null }
-              </div>
-              <div className="navbar-item">
-                <a className="button is-primary is-fullwidth">
-                  <strong>{profile.username ? <CreateRecipe /> : <button type="button" className="button is-primary" onClick={() => { showLogin(); }}>Sign Up</button>}</strong>
-                </a>
-              </div>
+                </div>
+              ) : null}
               { profile.username ? (
                 <div className="navbar-item">
                   <div className="buttons">
                     <a href="#" className="button is-danger is-fullwidth" onClick={() => { logout(); }}>Log out</a>
                   </div>
                 </div>
-              ) : null }
+              ) : (
+                <div className="navbar-item">
+                  <div className="buttons">
+                    <a href="#" className="button is-primary is-fullwidth" onClick={() => { setAuthVisible(true); }}>Sign Up</a>
+                  </div>
+                </div>
+              ) }
             </div>
           </div>
         </div>
       </nav>
-      <section className="columns is-fullheight">
-        {/* Start of sidebar  */}
-        <aside className="column is-2-widescreen is-3-desktop is-4-tablet menu is-fullheight section is-hidden-mobile">
-          {profileHeader}
-          <hr className="navbar-divider" />
-          <ul className="menu-list">
-            <li>
-              <a className="is-active">
-                <span className="icon">
-                  <FontAwesomeIcon icon={faHome} />
-                </span>
-                <span>Home</span>
-              </a>
-            </li>
-            <li>
-              <a>
-                <span className="icon">
-                  <FontAwesomeIcon icon={faClone} />
-                </span>
-                <span>Collection</span>
-              </a>
-            </li>
-          </ul>
-          <p className="menu-label">Trending</p>
-          <ul className="menu-list">
-            <li><a>#Vegan</a></li>
-            <li><a>#PlantBased</a></li>
-            <li><a>#GlutenFree</a></li>
-            <li><a>#ZuccFries</a></li>
-          </ul>
-          <hr className="navbar-divider" />
-        </aside>
-        {/* End of sidebar */}
-        <div className="column">
-          {/* Content goes here */}
-          <div className="container is-max-desktop">
-            { show && !(show && profile.username) ? (
-              <LoginModal />
-            ) : null }
+      <section className="container is-fullheight is-fluid">
+        <div className="columns">
+          {/* Start of sidebar  */}
+          <aside className="column is-3-desktop is-4-tablet menu is-fullheight section is-hidden-mobile">
+            {profileHeader}
+            <hr className="navbar-divider" />
+            <ul className="menu-list">
+              <li>
+                <a className="is-active">
+                  <span className="icon">
+                    <FontAwesomeIcon icon={faHome} />
+                  </span>
+                  <span>Home</span>
+                </a>
+              </li>
+              <li>
+                <a>
+                  <span className="icon">
+                    <FontAwesomeIcon icon={faClone} />
+                  </span>
+                  <span>Collection</span>
+                </a>
+              </li>
+            </ul>
+            <p className="menu-label">Trending</p>
+            <ul className="menu-list">
+              <li><a>#Vegan</a></li>
+              <li><a>#PlantBased</a></li>
+              <li><a>#GlutenFree</a></li>
+              <li><a>#ZuccFries</a></li>
+            </ul>
+            <hr className="navbar-divider" />
+          </aside>
+          {/* End of sidebar */}
+          <div className="column">
+            {/* Content goes here */}
+            <div className="container is-max-desktop">
+              <Feed />
+            </div>
             <br />
-            <Feed />
           </div>
-          <br />
         </div>
       </section>
+      <CreateRecipe />
+      <LoginModal />
     </AppContext.Provider>
   );
 }

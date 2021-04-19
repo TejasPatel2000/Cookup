@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import _uniqueId from 'lodash/uniqueId';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
@@ -8,9 +8,11 @@ import moment from 'moment';
 import AppContext from './AppContext';
 
 function Feed() {
+  const appContext = useContext(AppContext);
+
   return (
-    <AppContext.Consumer>
-      { (value) => value.recipeFeed.map((recipe) => (
+    <div>
+      { appContext.recipeFeed.map((recipe) => (
         <div key={_uniqueId()} className="box">
           <article className="media">
             <div className="media-content">
@@ -54,7 +56,7 @@ function Feed() {
           </article>
         </div>
       )) }
-    </AppContext.Consumer>
+    </div>
   );
 }
 
