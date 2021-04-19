@@ -6,10 +6,11 @@ const mongoose = require('mongoose');
 const twilio = require('twilio');
 
 const session = require('koa-session');
+const schedule = require('node-schedule');
 const MongoStore = require('koa-session-mongoose');
 
 const routes = require('./routes');
-const { normalizePort } = require('./utils');
+const { normalizePort, tagResolver } = require('./utils');
 
 const app = new Koa();
 app.keys = [process.env.SESSION_KEY || 'secret'];
@@ -23,6 +24,17 @@ app.context.twilio = twilio(
   process.env.TWILIO_SID,
   process.env.TWILIO_TOKEN,
 );
+
+app.context.memoized = {
+  tagResolver,
+};
+
+// Scheduled for the start of the hour
+schedule.scheduleJob('0 * * * *', () => {
+  Object.values(app.context.memoized).forEach((f) => {
+    f.cache.clear();
+  });
+});
 
 mongoose.connect(
   process.env.MONGO_URL || 'mongodb://mongo/cookup',

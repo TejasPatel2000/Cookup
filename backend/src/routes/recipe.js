@@ -60,7 +60,8 @@ router.get('/', async (ctx) => {
   if (search) filter.$text = { $search: search };
 
   try {
-    const recipes = await Recipe.find(filter, null, { created_at: 'decending' })
+    const recipes = await Recipe.find(filter)
+      .sort({ updatedAt: 'desc' })
       .populate('by', 'username');
 
     ctx.body.recipes = recipes;
