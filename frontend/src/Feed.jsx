@@ -6,6 +6,9 @@ import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 
 import moment from 'moment';
 import AppContext from './AppContext';
+import SaveTags from './SaveTags';
+
+// MAKE SURE TO COMPARE TES' CODE TO SEE .MAP WORKS
 
 function Feed() {
   return (
@@ -40,11 +43,10 @@ function Feed() {
                   <br />
                   {recipe.instructions}
                   <br />
-                  Tags:
-                  <br />
-                  {recipe.tags.join()}
-                  <br />
                 </p>
+                <div>
+                  <SaveTags />
+                </div>
               </div>
               <nav className="level is-mobile">
                 <div className="level-left">
