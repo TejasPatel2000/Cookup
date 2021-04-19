@@ -15,7 +15,7 @@ const tagSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-});
+}, { timestamps: { createdAt: 'created_at' } });
 
 tagSchema.index({
   name: 'text',

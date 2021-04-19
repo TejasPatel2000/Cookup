@@ -4,7 +4,7 @@ import { faHome, faClone } from '@fortawesome/free-solid-svg-icons';
 
 import AppContext from './AppContext';
 import LoginModal from './LoginModal';
-import CreateTag from './TagPage';
+import CreateTag from './AddTag';
 import Feed from './Feed';
 import CreateRecipe from './CreateRecipe';
 
@@ -40,7 +40,6 @@ function App() {
     });
 
     const res = await req.json();
-
     setRecipeFeed(res.recipes || []);
   }
 
@@ -187,12 +186,11 @@ function App() {
               </a>
             </li>
           </ul>
-          <p className="menu-label">Trending</p>
+          <p className="menu-label">Following Tags</p>
           <ul className="menu-list">
-            <li><a>#Vegan</a></li>
-            <li><a>#PlantBased</a></li>
-            <li><a>#GlutenFree</a></li>
-            <li><a>#ZuccFries</a></li>
+            <div className="following-list">
+              <li><a>{profile.following}</a></li>
+            </div>
           </ul>
           <hr className="navbar-divider" />
         </aside>
