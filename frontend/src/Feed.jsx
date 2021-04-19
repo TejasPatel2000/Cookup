@@ -8,8 +8,6 @@ import moment from 'moment';
 import AppContext from './AppContext';
 import SaveTags from './SaveTags';
 
-// MAKE SURE TO COMPARE TES' CODE TO SEE .MAP WORKS
-
 function Feed() {
   return (
     <AppContext.Consumer>
@@ -43,10 +41,8 @@ function Feed() {
                   <br />
                   {recipe.instructions}
                   <br />
-                </p>
-                <div>
                   <SaveTags />
-                </div>
+                </p>
               </div>
               <nav className="level is-mobile">
                 <div className="level-left">

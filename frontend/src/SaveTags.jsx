@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 function SaveTags() {
-  const [savedTags, setTags] = useState(['#Vegan', '#plantBased']);
+  const tags = ['Vegan', 'Vege'];
 
   async function onAdd(newTag) {
     if (newTag) {
@@ -15,14 +15,12 @@ function SaveTags() {
         }),
       });
     }
-
-    setTags(['#Vegetarian', '#AroundTheWorld']);
   }
 
   return (
     <div>
       <div className="adding_tag">
-        {savedTags.map((tag) => (
+        { tags.map((tag) => (
           <button type="button" className="button is-primary is-rounded is-small m-1" onClick={() => { onAdd({ tag }); }}>
             {tag}
             <a className="is-size-5 m-1">+</a>
