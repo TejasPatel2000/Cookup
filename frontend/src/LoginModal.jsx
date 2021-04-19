@@ -55,6 +55,7 @@ function LoginModal() {
 
       const res = await req.json();
       appContext.setProfile(res.success ? res.user : {});
+      appContext.setAuthVisible(false);
     }
   }
 
@@ -73,6 +74,7 @@ function LoginModal() {
 
       const res = await req.json();
       appContext.setProfile(res.success ? res.user : {});
+      appContext.setAuthVisible(false);
     }
   }
 
