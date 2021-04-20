@@ -50,31 +50,6 @@ function App() {
       return newProfile;
     });
   }
-  
-  async function fetchRecipes() {
-    const { user, tags, search } = feedFilter;
-
-    const req = await fetch(`/api/recipe?${user ? `user=${user}` : ''}${(tags || []).length ? `tags=${tags.join}` : ''}${search ? `search=${search}` : ''}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        tags,
-      }),
-    });
-
-    const res = await req.json();
-
-    setProfile((val) => {
-      if (!res.success) return val;
-
-      const following = new Set([...val.following, ...tags]);
-      const newProfile = cloneDeep(val);
-      newProfile.following = [...following];
-      return newProfile;
-    });
-  }
 
   useEffect(async () => {
     const req = await fetch('/api/profile', {
@@ -87,10 +62,6 @@ function App() {
     const res = await req.json();
     setProfile(res.user || {});
   }, []);
-
-  useEffect(async () => {
-    fetchRecipes();
-  }, [feedFilter]);
 
   const profileHeader = profile.username ? (
     <div className="has-text-centered">

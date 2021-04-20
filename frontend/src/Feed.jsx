@@ -23,23 +23,15 @@ function Feed() {
         'Content-Type': 'application/json',
       },
     });
+
     const res = await req.json();
     setFeed(res.recipes || []);
   }
 
-  async function onAdd(newTag) {
-    if (newTag) {
-      await fetch('/api/follow/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          following: newTag,
-        }),
-      });
-    }
-  }
+  useEffect(() => {
+    fetchRecipes();
+  }, [feedFilter]);
+
   return (
     <div>
       { feed.map((recipe) => (
