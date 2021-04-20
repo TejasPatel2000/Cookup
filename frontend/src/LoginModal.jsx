@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useState, useContext } from 'react';
 import moment from 'moment';
 import _uniqueId from 'lodash/uniqueId';
@@ -39,7 +40,7 @@ function LoginModal() {
   }
 
   async function register() {
-    if (name.length && month && day && year && phonePtrn.test(phone) && codePtrn.test(code)) {
+    if (name.length && month !== null && day && year && phonePtrn.test(phone) && codePtrn.test(code)) {
       const req = await fetch('/api/auth/register', {
         method: 'POST',
         headers: {
