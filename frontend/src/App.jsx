@@ -187,7 +187,7 @@ function App() {
             {profileHeader}
             <hr className="navbar-divider" />
             <ul className="menu-list">
-              <li>
+              <li href="#" role="menuitem" tabIndex={0} onClick={() => { setFeedFilter({}); }} onKeyDown={() => { setFeedFilter({}); }}>
                 <a className="is-active">
                   <span className="icon">
                     <FontAwesomeIcon icon={faHome} />
