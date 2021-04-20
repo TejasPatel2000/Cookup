@@ -6,32 +6,19 @@ import AppContext from './AppContext';
 
 function EditProfile(props) {
   const DisplayName = useRef(null);
-  const description = useRef(null);
-  const servings = useRef(null);
-  const prepTime = useRef(null);
-  const cookTime = useRef(null);
-  const ingredients = useRef(null);
-  const instructions = useRef(null);
-  const tags = useRef(null);
 
   const appContext = useContext(AppContext);
   const username = props.user;
   async function submitForm() {
-    if (DisplayName && description) {
-      await fetch('/api/recipe/post', {
+    if (DisplayName) {
+      // shouldnt be this route but thats is for later
+      await fetch('/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           name: DisplayName.current.value,
-          description: description.current.value,
-          servings: servings.current.value,
-          prep_time: prepTime.current.value,
-          cook_time: cookTime.current.value,
-          ingredients: ingredients.current.value.split(','),
-          instructions: instructions.current.value,
-          tags: tags.current.value.split(','),
         }),
       });
     }
