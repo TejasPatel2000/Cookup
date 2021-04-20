@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faClone } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faClone, faUser } from '@fortawesome/free-solid-svg-icons';
 import _uniqueId from 'lodash/uniqueId';
 import cloneDeep from 'lodash.clonedeep';
 
@@ -8,6 +8,7 @@ import AppContext from './AppContext';
 import LoginModal from './LoginModal';
 import Feed from './Feed';
 import CreateRecipe from './CreateRecipe';
+import EditProfile from './UserModal';
 
 function App() {
   const [profile, setProfile] = useState({});
@@ -15,6 +16,7 @@ function App() {
   const [mobileMenu, setMobileMenu] = useState(false);
   const [authVisible, setAuthVisible] = useState(false);
   const [recipeVisible, setRecipeVisible] = useState(false);
+  const [userVisible, setUserVisible] = useState(false);
 
   async function logout() {
     const req = await fetch('/api/logout', {
@@ -108,6 +110,8 @@ function App() {
       feedFilter,
       authVisible,
       setAuthVisible,
+      userVisible,
+      setUserVisible,
       recipeVisible,
       setRecipeVisible,
       followTags,
@@ -150,10 +154,7 @@ function App() {
               <div className="navbar-item is-expanded">
                 <div className="field has-addons">
                   <div className="control is-expanded">
-                    <input onChange={(event) => { setFeedFilter({ search: event.target.value }); }} className="input" type="text" placeholder="What's Cookin?" />
-                  </div>
-                  <div className="control">
-                    <a role="button" href="#" className="button">CookUp!</a>
+                    <input onChange={(event) => { setFeedFilter({ search: event.target.value }); }} className="input" type="text" placeholder="Search" />
                   </div>
                 </div>
               </div>
@@ -190,7 +191,7 @@ function App() {
             {profileHeader}
             <hr className="navbar-divider" />
             <ul className="menu-list">
-              <li>
+              <li href="#" role="menuitem" tabIndex={0} onClick={() => { setFeedFilter({}); }} onKeyDown={() => { setFeedFilter({}); }}>
                 <a className="is-active">
                   <span className="icon">
                     <FontAwesomeIcon icon={faHome} />
@@ -204,6 +205,14 @@ function App() {
                     <FontAwesomeIcon icon={faClone} />
                   </span>
                   <span>Collection</span>
+                </a>
+              </li>
+              <li>
+                <a href="#" onClick={() => { setUserVisible(true); }}>
+                  <span className="icon">
+                    <FontAwesomeIcon icon={faUser} />
+                  </span>
+                  <span>Profile</span>
                 </a>
               </li>
             </ul>
@@ -234,6 +243,7 @@ function App() {
       </section>
       <CreateRecipe />
       <LoginModal />
+      <EditProfile user={profile.username} />
     </AppContext.Provider>
   );
 }
