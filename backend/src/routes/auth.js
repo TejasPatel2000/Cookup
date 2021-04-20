@@ -1,6 +1,6 @@
 const Router = require('@koa/router');
 const { TOTP, User } = require('../models');
-const { randomUsername } = require('../utils');
+const { randomUsername, checkUsername } = require('../utils');
 
 const router = new Router();
 
@@ -70,11 +70,15 @@ router.post('/register', async (ctx) => {
       dob: dob * 1000,
       username: await randomUsername(),
     });
-
-    try {
-      await user.save();
-      session.user = user.phone;
-    } catch (err) {
+    if(checkUsername(user.username)){
+      try {
+        await user.save();
+        session.user = user.phone;
+      } catch (err) {
+        ctx.body.success = false;
+        return;
+      }
+    }else{
       ctx.body.success = false;
       return;
     }

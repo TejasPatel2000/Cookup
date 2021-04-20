@@ -50,3 +50,11 @@ exports.checkRequired = (recipeName, recipeDescription) => {
     return false;
   }
 }
+
+exports.checkUsername = (username) => {
+  if(username.substring(0, 4)==='user' && username.length === 15 ){
+    return true;
+  }else{
+    return false; 
+  }
+}
