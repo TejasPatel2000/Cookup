@@ -55,9 +55,8 @@ function Feed() {
                   <br />
                   <div className="adding_tag">
                     { recipe.tags.map((tag) => (
-                      <button type="button" className="button is-primary is-rounded is-small m-1" onClick={() => { onAdd({ tag }); }}>
+                      <button type="button" className="button is-small is-rounded is-primary m-1" onClick={() => { onAdd({ tag }); }}>
                         {tag}
-                        <a className="is-size-5 m-1">+</a>
                       </button>
                     ))}
                   </div>

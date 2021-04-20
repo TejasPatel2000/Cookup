@@ -32,7 +32,7 @@ function App() {
   async function fetchRecipes() {
     const { user, tags, search } = feedFilter;
 
-    const req = await fetch(`/api/recipe?${user ? `user=${user}` : ''}${(tags || []).length ? `tags=${tags.join()}` : ''}${search ? `search=${search}` : ''}`, {
+    const req = await fetch(`/api/recipe?${user ? `user=${user}` : ''}${(tags || []).length ? `tags=${tags}` : ''}${search ? `search=${search}` : ''}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -55,6 +55,10 @@ function App() {
     setProfile(res.user || {});
     fetchRecipes();
   }, []);
+
+  useEffect(async () => {
+    fetchRecipes();
+  }, [feedFilter]);
 
   const profileHeader = profile.username ? (
     <div className="has-text-centered">
@@ -131,10 +135,7 @@ function App() {
               <div className="navbar-item is-expanded">
                 <div className="field has-addons">
                   <div className="control is-expanded">
-                    <input onChange={(event) => { setFeedFilter({ search: event.target.value }); }} className="input" type="text" placeholder="What's Cookin?" />
-                  </div>
-                  <div className="control">
-                    <a role="button" href="#" className="button" onClick={() => { fetchRecipes(); }}>CookUp!</a>
+                    <input onChange={(event) => { setFeedFilter({ search: event.target.value }); }} className="input" type="text" placeholder="Search" />
                   </div>
                 </div>
               </div>
@@ -192,7 +193,9 @@ function App() {
               <div>
                 { profile.following.map((tag) => (
                   <li>
-                    <a>{tag}</a>
+                    <a href="#" role="button" onClick={() => { setFeedFilter({ tags: tag }); }}>
+                      {tag}
+                    </a>
                   </li>
                 ))}
               </div>
