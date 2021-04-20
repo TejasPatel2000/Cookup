@@ -53,7 +53,7 @@ describe('test recipe endpoints', () => {
 });
 
 // Unmocked test
-describe('test required recipe fields are not empty', () => {
+test('test required recipe fields are not empty', () => {
   var name = "test Name";
   var description = "test description";
   
