@@ -27,10 +27,19 @@ function Feed() {
     setFeed(res.recipes || []);
   }
 
-  useEffect(() => {
-    fetchRecipes();
-  }, [feedFilter]);
-
+  async function onAdd(newTag) {
+    if (newTag) {
+      await fetch('/api/follow/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          following: newTag,
+        }),
+      });
+    }
+  }
   return (
     <div>
       { feed.map((recipe) => (
