@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const app = require('./app');
 
 const User = require('../src/models/user');
+const { checkRequired } = require('../src/utils');
+
 
 describe('test recipe endpoints', () => {
   let server;
@@ -48,4 +50,13 @@ describe('test recipe endpoints', () => {
 
     expect(res.body.success).toEqual(true);
   });
+});
+
+// Unmocked test
+describe('test required recipe fields are not empty', () => {
+  var name = "test Name";
+  var description = "test description";
+  
+  expect(checkRequired(name, description)).toEqual(true);
+  expect(checkRequired('', '')).toEqual(false);
 });
