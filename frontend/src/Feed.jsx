@@ -6,12 +6,13 @@ import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 
 import moment from 'moment';
 import AppContext from './AppContext';
+import EditProfile from './UserModal';
 
 function Feed() {
   const [feed, setFeed] = useState([]);
 
   const {
-    feedFilter, setFeedFilter, followTags, profile,
+    feedFilter, setFeedFilter, followTags, profile, setUserVisible,
   } = useContext(AppContext);
 
   async function fetchRecipes() {
@@ -43,10 +44,13 @@ function Feed() {
                 <figure className="image is-32x32">
                   <img className="is-rounded" src="https://bulma.io/images/placeholders/128x128.png" alt="pofile" />
                 </figure>
-                <strong style={{ marginLeft: '5px' }}>
-                  @
-                  {recipe.by.username}
-                </strong>
+                <a href="#" onClick={() => { setUserVisible(true); }}>
+                  <EditProfile FeedUser={recipe.by.username} />
+                  <strong style={{ marginLeft: '5px' }}>
+                    @
+                    {recipe.by.username}
+                  </strong>
+                </a>
               </div>
               <div className="content">
                 <p>

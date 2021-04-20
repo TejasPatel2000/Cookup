@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faClone } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faClone, faUser } from '@fortawesome/free-solid-svg-icons';
 import _uniqueId from 'lodash/uniqueId';
 import cloneDeep from 'lodash.clonedeep';
 
@@ -8,6 +8,7 @@ import AppContext from './AppContext';
 import LoginModal from './LoginModal';
 import Feed from './Feed';
 import CreateRecipe from './CreateRecipe';
+import EditProfile from './UserModal';
 
 function App() {
   const [profile, setProfile] = useState({});
@@ -15,6 +16,7 @@ function App() {
   const [mobileMenu, setMobileMenu] = useState(false);
   const [authVisible, setAuthVisible] = useState(false);
   const [recipeVisible, setRecipeVisible] = useState(false);
+  const [userVisible, setUserVisible] = useState(false);
 
   async function logout() {
     const req = await fetch('/api/logout', {
@@ -108,6 +110,8 @@ function App() {
       feedFilter,
       authVisible,
       setAuthVisible,
+      userVisible,
+      setUserVisible,
       recipeVisible,
       setRecipeVisible,
       followTags,
@@ -206,6 +210,14 @@ function App() {
                   <span>Collection</span>
                 </a>
               </li>
+              <li>
+                <a href="#" onClick={() => { setUserVisible(true); }}>
+                  <span className="icon">
+                    <FontAwesomeIcon icon={faUser} />
+                  </span>
+                  <span>Profile</span>
+                </a>
+              </li>
             </ul>
             <p className="menu-label">Followed Tags</p>
             {profile.following ? (
@@ -234,6 +246,7 @@ function App() {
       </section>
       <CreateRecipe />
       <LoginModal />
+      <EditProfile user={profile.username} />
     </AppContext.Provider>
   );
 }
