@@ -23,7 +23,6 @@ function Feed() {
         'Content-Type': 'application/json',
       },
     });
-
     const res = await req.json();
     setFeed(res.recipes || []);
   }
