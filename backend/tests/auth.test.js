@@ -63,7 +63,7 @@ describe('test authentication endpoints', () => {
   });
 });
 // unmocked tst
-describe('ensure username is valid', () => {
+test('ensure username is valid', () => {
   var username = 'user99999999999';
   expect(checkUsername(username)).toEqual(true);
   expect(checkUsername('notValid')).toEqual(false);
