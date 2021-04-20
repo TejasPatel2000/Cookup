@@ -42,3 +42,19 @@ exports.requireLogin = async (ctx, next) => {
 
   next();
 };
+
+exports.checkRequired = (recipeName, recipeDescription) => {
+  if(recipeName.length > 0 && recipeDescription.length){
+    return true;
+  }else{
+    return false;
+  }
+}
+
+exports.checkUsername = (username) => {
+  if(username.substring(0, 4)==='user' && username.length === 15 ){
+    return true;
+  }else{
+    return false; 
+  }
+}

@@ -4,6 +4,7 @@ const app = require('./app');
 
 const User = require('../src/models/user');
 const TOTP = require('../src/models/totp');
+const { checkUsername } = require('../src/utils');
 
 describe('test authentication endpoints', () => {
   let server;
@@ -60,4 +61,10 @@ describe('test authentication endpoints', () => {
     expect(res.body.success).toEqual(true);
     expect(res.body.user.username).toEqual(mockUser.username);
   });
+});
+// unmocked tst
+describe('ensure username is valid', () => {
+  var username = 'user99999999999';
+  expect(checkUsername(username)).toEqual(true);
+  expect(checkUsername('notValid')).toEqual(false);
 });

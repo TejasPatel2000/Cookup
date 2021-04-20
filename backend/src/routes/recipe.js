@@ -1,6 +1,6 @@
 const Router = require('@koa/router');
 const { Recipe, User } = require('../models');
-
+const { checkRequired } = require('../utils');
 const router = new Router();
 
 router.post('/post', async (ctx) => {
@@ -20,30 +20,34 @@ router.post('/post', async (ctx) => {
       instructions,
       tags,
     } = ctx.request.body;
-
-    const recipe = new Recipe({
-      by: user,
-      name,
-      description,
-      servings,
-      prep_time: prepTime,
-      cook_time: cookTime,
-      ingredients,
-      instructions,
-      tags,
-    });
-
-    try {
-      await recipe.save();
-    } catch (err) {
+    if(checkRequired(name, description)){
+      const recipe = new Recipe({
+        by: user,
+        name,
+        description,
+        servings,
+        prep_time: prepTime,
+        cook_time: cookTime,
+        ingredients,
+        instructions,
+        tags,
+      });
+  
+      try {
+        await recipe.save();
+      } catch (err) {
+        ctx.body.success = false;
+        console.log(err);
+        return;
+      }
+  
+      ctx.body.success = true;
+      ctx.body.recipe = JSON.stringify(recipe);
+      return;
+    }else{
       ctx.body.success = false;
-      console.log(err);
       return;
     }
-
-    ctx.body.success = true;
-    ctx.body.recipe = JSON.stringify(recipe);
-    return;
   }
 
   ctx.body.success = false;

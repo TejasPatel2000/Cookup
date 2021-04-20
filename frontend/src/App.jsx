@@ -154,10 +154,7 @@ function App() {
               <div className="navbar-item is-expanded">
                 <div className="field has-addons">
                   <div className="control is-expanded">
-                    <input onChange={(event) => { setFeedFilter({ search: event.target.value }); }} className="input" type="text" placeholder="What's Cookin?" />
-                  </div>
-                  <div className="control">
-                    <a role="button" href="#" className="button">CookUp!</a>
+                    <input onChange={(event) => { setFeedFilter({ search: event.target.value }); }} className="input" type="text" placeholder="Search" />
                   </div>
                 </div>
               </div>
@@ -194,7 +191,7 @@ function App() {
             {profileHeader}
             <hr className="navbar-divider" />
             <ul className="menu-list">
-              <li>
+              <li href="#" role="menuitem" tabIndex={0} onClick={() => { setFeedFilter({}); }} onKeyDown={() => { setFeedFilter({}); }}>
                 <a className="is-active">
                   <span className="icon">
                     <FontAwesomeIcon icon={faHome} />
