@@ -5,7 +5,7 @@ const router = new Router();
 
 router.post('/', async (ctx) => {
   const { session } = ctx;
-  const { following: newTag } = ctx.request.body;
+  const { tags } = ctx.request.body;
   ctx.body = {};
 
   const user = await User.findByLogin(session.user);
@@ -17,10 +17,13 @@ router.post('/', async (ctx) => {
 
 // find the user by name and update push new tag to 'following' array
   try {
-    await User.update(
-    { _id: user._id },
-    { '$push': { following: newTag.tag } },
-    );
+    await user.updateOne({
+      $addToSet:{
+        following: {
+          $each: tags
+        }
+      }
+    });
   } catch (err) {
     console.log(err);
     ctx.body.success = false;

@@ -1,9 +1,7 @@
-import React, { useState, useRef } from 'react';
-import './CreateRecipe.css';
+import React, { useRef, useContext } from 'react';
+import AppContext from './AppContext';
 
 function CreateRecipe() {
-  const [show, setShow] = useState(false);
-
   const recipeName = useRef(null);
   const description = useRef(null);
   const servings = useRef(null);
@@ -13,9 +11,7 @@ function CreateRecipe() {
   const instructions = useRef(null);
   const tags = useRef(null);
 
-  function showModal() {
-    setShow(!show);
-  }
+  const appContext = useContext(AppContext);
 
   async function submitForm() {
     if (recipeName && description) {
@@ -36,43 +32,36 @@ function CreateRecipe() {
         }),
       });
     }
-    setShow(!show);
+    appContext.setRecipeVisible(false);
   }
 
   return (
-    <div className="create-recipe">
-      <button type="button" className="button is-primary" onClick={showModal}>Create Recipe!</button>
-      {show ? (
-        <div className="modal is-active">
-          <div className="modal-background" />
-          <div className="modal-card">
-            <header className="modal-card-head">
-              <p className="modal-card-title">Create Recipe!</p>
-              <button type="button" className="delete" aria-label="close" onClick={showModal} />
-            </header>
-            <section className="modal-card-body">
-              <div className="recipe-form">
-                <input ref={recipeName} className="input is-primary" type="text" placeholder="Recipe Name" />
-                <textarea ref={description} className="textarea is-primary" placeholder="Description of Recipe..." rows="7" />
-                <div className="field is-horizontal">
-                  <input ref={servings} className="input is-primary" type="text" placeholder="Servings" />
-                  <input ref={prepTime} className="input is-primary" type="text" placeholder="Prep Time (in min)" />
-                  <input ref={cookTime} className="input is-primary" type="text" placeholder="Cook Time (in min)" />
-                </div>
-                <textarea ref={ingredients} className="textarea is-primary" placeholder="Ingredients... (Separate by comma)" rows="7" />
-                <textarea ref={instructions} className="textarea is-primary" placeholder="Instructions..." rows="7" />
-                <input ref={tags} className="input is-primary" type="text" placeholder="tags (separate by comma)" />
-              </div>
-            </section>
-            <footer className="modal-card-foot">
-              <input type="submit" value="Submit" className="button is-success" onClick={submitForm} />
-              <button type="button" className="button" onClick={showModal}>Cancel</button>
-            </footer>
+    <div className={`modal ${appContext.recipeVisible ? 'is-active' : ''}`}>
+      <div className="modal-background" />
+      <div className="modal-card">
+        <header className="modal-card-head">
+          <p className="modal-card-title">Create Recipe!</p>
+          <button type="button" className="delete" aria-label="close" onClick={() => { appContext.setRecipeVisible(false); }} />
+        </header>
+        <section className="modal-card-body">
+          <div className="recipe-form">
+            <input ref={recipeName} className="input is-primary" type="text" placeholder="Recipe Name" />
+            <textarea ref={description} className="textarea is-primary" placeholder="Description of Recipe..." rows="7" />
+            <div className="field is-horizontal">
+              <input ref={servings} className="input is-primary" type="text" placeholder="Servings" />
+              <input ref={prepTime} className="input is-primary" type="text" placeholder="Prep Time (in min)" />
+              <input ref={cookTime} className="input is-primary" type="text" placeholder="Cook Time (in min)" />
+            </div>
+            <textarea ref={ingredients} className="textarea is-primary" placeholder="Ingredients... (Separate by comma)" rows="7" />
+            <textarea ref={instructions} className="textarea is-primary" placeholder="Instructions..." rows="7" />
+            <input ref={tags} className="input is-primary" type="text" placeholder="tags (separate by comma)" />
           </div>
-        </div>
-      ) : (
-        <br />
-      )}
+        </section>
+        <footer className="modal-card-foot">
+          <input type="submit" value="Submit" className="button is-success" onClick={submitForm} />
+          <button type="button" className="button" onClick={() => { appContext.setRecipeVisible(false); }}>Cancel</button>
+        </footer>
+      </div>
     </div>
   );
 }

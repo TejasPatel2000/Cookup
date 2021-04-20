@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import _uniqueId from 'lodash/uniqueId';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
@@ -6,12 +6,35 @@ import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 
 import moment from 'moment';
 import AppContext from './AppContext';
-import SaveTags from './SaveTags';
 
 function Feed() {
+  const [feed, setFeed] = useState([]);
+
+  const {
+    feedFilter, setFeedFilter, followTags, profile,
+  } = useContext(AppContext);
+
+  async function fetchRecipes() {
+    const { user, tags, search } = feedFilter;
+
+    const req = await fetch(`/api/recipe?${user ? `user=${user}` : ''}${(tags || []).length ? `tags=${tags.join()}` : ''}${search ? `search=${search}` : ''}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const res = await req.json();
+    setFeed(res.recipes || []);
+  }
+
+  useEffect(() => {
+    fetchRecipes();
+  }, [feedFilter]);
+
   return (
-    <AppContext.Consumer>
-      { (value) => value.recipeFeed.map((recipe) => (
+    <div>
+      { feed.map((recipe) => (
         <div key={_uniqueId()} className="box">
           <article className="media">
             <div className="media-content">
@@ -41,12 +64,21 @@ function Feed() {
                   <br />
                   {recipe.instructions}
                   <br />
-                  <SaveTags />
                 </p>
+                <div className="field is-grouped is-grouped-multiline">
+                  { recipe.tags.map((tag) => (
+                    <div className="control" key={_uniqueId()}>
+                      <div className="tags has-addons">
+                        <a href="#" className="tag is-rounded is-link" onClick={() => { setFeedFilter({ tags: [tag] }); }}>{tag}</a>
+                        {profile.username ? <a href="#" className="tag is-rounded is-info" onClick={() => { followTags([tag]); }}>+</a> : null}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
               <nav className="level is-mobile">
                 <div className="level-left">
-                  <a className="level-item" aria-label="reply">
+                  <a className="level-item" aria-label="like">
                     <span className="icon is-small">
                       <FontAwesomeIcon icon={faHeart || faHeartSolid} />
                     </span>
@@ -57,7 +89,7 @@ function Feed() {
           </article>
         </div>
       )) }
-    </AppContext.Consumer>
+    </div>
   );
 }
 

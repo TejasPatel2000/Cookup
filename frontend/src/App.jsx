@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faClone } from '@fortawesome/free-solid-svg-icons';
+import _uniqueId from 'lodash/uniqueId';
+import cloneDeep from 'lodash.clonedeep';
 
 import AppContext from './AppContext';
 import LoginModal from './LoginModal';
-import CreateTag from './AddTag';
 import Feed from './Feed';
 import CreateRecipe from './CreateRecipe';
 
@@ -12,11 +13,9 @@ function App() {
   const [profile, setProfile] = useState({});
   const [feedFilter, setFeedFilter] = useState({});
   const [mobileMenu, setMobileMenu] = useState(false);
-  const [recipeFeed, setRecipeFeed] = useState([]);
-  const [show, setShow] = useState(false);
-  function showLogin() {
-    setShow(!show);
-  }
+  const [authVisible, setAuthVisible] = useState(false);
+  const [recipeVisible, setRecipeVisible] = useState(false);
+
   async function logout() {
     const req = await fetch('/api/logout', {
       method: 'POST',
@@ -29,18 +28,27 @@ function App() {
     setProfile(res.success ? {} : profile);
   }
 
-  async function fetchRecipes() {
-    const { user, tags, search } = feedFilter;
-
-    const req = await fetch(`/api/recipe?${user ? `user=${user}` : ''}${(tags || []).length ? `tags=${tags.join()}` : ''}${search ? `search=${search}` : ''}`, {
-      method: 'GET',
+  async function followTags(tags) {
+    const req = await fetch('/api/follow/', {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({
+        tags,
+      }),
     });
 
     const res = await req.json();
-    setRecipeFeed(res.recipes || []);
+
+    setProfile((val) => {
+      if (!res.success) return val;
+
+      const following = new Set([...val.following, ...tags]);
+      const newProfile = cloneDeep(val);
+      newProfile.following = [...following];
+      return newProfile;
+    });
   }
 
   useEffect(async () => {
@@ -53,7 +61,6 @@ function App() {
 
     const res = await req.json();
     setProfile(res.user || {});
-    fetchRecipes();
   }, []);
 
   const profileHeader = profile.username ? (
@@ -95,13 +102,21 @@ function App() {
 
   return (
     <AppContext.Provider value={{
-      profile, setProfile, setFeedFilter, recipeFeed,
+      profile,
+      setProfile,
+      setFeedFilter,
+      feedFilter,
+      authVisible,
+      setAuthVisible,
+      recipeVisible,
+      setRecipeVisible,
+      followTags,
     }}
     >
-      <nav className="navbar" role="navigation" aria-label="main navigation">
+      <nav className="navbar is-spaced" role="navigation" aria-label="main navigation">
         <div className="navbar-brand">
-          <a className="navbar-item" href="https://bulma.io">
-            <img src="https://bulma.io/images/bulma-logo.png" alt="logo" width="112" height="28" />
+          <a className="navbar-item" href="/">
+            CookUp!
           </a>
 
           <a role="button" href="#" className="navbar-burger" aria-label="menu" onClick={() => { setMobileMenu(!mobileMenu); }} aria-expanded={mobileMenu}>
@@ -117,13 +132,17 @@ function App() {
               <a className="navbar-item">Home</a>
               <a className="navbar-item">Collection</a>
               <div className="navbar-item has-dropdown">
-                <a className="navbar-link">Trending</a>
-                <div className="navbar-dropdown">
-                  <a className="navbar-item">#Vegan</a>
-                  <a className="navbar-item">#PlantBased</a>
-                  <a className="navbar-item">#GluttenFree</a>
-                  <a className="navbar-item">#ZuccFries</a>
-                </div>
+                <a className="navbar-link">Followed Tags</a>
+                {profile.following ? (
+                  <div className="navbar-dropdown">
+                    {profile.following.map((tag) => (
+                      <a href="#" onClick={() => { setFeedFilter({ tags: [tag] }); }} className="navbar-item" key={_uniqueId()}>
+                        #
+                        {tag}
+                      </a>
+                    ))}
+                  </div>
+                ) : null}
               </div>
             </div>
 
@@ -134,79 +153,87 @@ function App() {
                     <input onChange={(event) => { setFeedFilter({ search: event.target.value }); }} className="input" type="text" placeholder="What's Cookin?" />
                   </div>
                   <div className="control">
-                    <a role="button" href="#" className="button" onClick={() => { fetchRecipes(); }}>CookUp!</a>
+                    <a role="button" href="#" className="button">CookUp!</a>
                   </div>
                 </div>
               </div>
-              <div>
-                { profile.username ? (
-                  <div className="navbar-item">
-                    <a className="button is-primary is-fullwidth">
-                      <strong><CreateTag /></strong>
+              {profile.username ? (
+                <div className="navbar-item">
+                  <div className="buttons">
+                    <a href="#" className="button is-primary is-fullwidth" onClick={() => { setRecipeVisible(true); }}>
+                      Create Recipe
                     </a>
                   </div>
-                ) : null }
-              </div>
-              <div className="navbar-item">
-                <a className="button is-primary is-fullwidth">
-                  <strong>{profile.username ? <CreateRecipe /> : <button type="button" className="button is-primary" onClick={() => { showLogin(); }}>Sign Up</button>}</strong>
-                </a>
-              </div>
+                </div>
+              ) : null}
               { profile.username ? (
                 <div className="navbar-item">
                   <div className="buttons">
                     <a href="#" className="button is-danger is-fullwidth" onClick={() => { logout(); }}>Log out</a>
                   </div>
                 </div>
-              ) : null }
+              ) : (
+                <div className="navbar-item">
+                  <div className="buttons">
+                    <a href="#" className="button is-primary is-fullwidth" onClick={() => { setAuthVisible(true); }}>Sign Up</a>
+                  </div>
+                </div>
+              ) }
             </div>
           </div>
         </div>
       </nav>
-      <section className="columns is-fullheight">
-        {/* Start of sidebar  */}
-        <aside className="column is-2-widescreen is-3-desktop is-4-tablet menu is-fullheight section is-hidden-mobile">
-          {profileHeader}
-          <hr className="navbar-divider" />
-          <ul className="menu-list">
-            <li>
-              <a className="is-active">
-                <span className="icon">
-                  <FontAwesomeIcon icon={faHome} />
-                </span>
-                <span>Home</span>
-              </a>
-            </li>
-            <li>
-              <a>
-                <span className="icon">
-                  <FontAwesomeIcon icon={faClone} />
-                </span>
-                <span>Collection</span>
-              </a>
-            </li>
-          </ul>
-          <p className="menu-label">Following Tags</p>
-          <ul className="menu-list">
-            <div className="following-list">
-              <li><a>{profile.following}</a></li>
+      <section className="container is-fullheight is-fluid">
+        <div className="columns">
+          {/* Start of sidebar  */}
+          <aside className="column is-3-desktop is-4-tablet menu is-fullheight section is-hidden-mobile">
+            {profileHeader}
+            <hr className="navbar-divider" />
+            <ul className="menu-list">
+              <li>
+                <a className="is-active">
+                  <span className="icon">
+                    <FontAwesomeIcon icon={faHome} />
+                  </span>
+                  <span>Home</span>
+                </a>
+              </li>
+              <li>
+                <a>
+                  <span className="icon">
+                    <FontAwesomeIcon icon={faClone} />
+                  </span>
+                  <span>Collection</span>
+                </a>
+              </li>
+            </ul>
+            <p className="menu-label">Followed Tags</p>
+            {profile.following ? (
+              <ul className="menu-list">
+                {profile.following.map((tag) => (
+                  <li key={_uniqueId()}>
+                    <a href="#" onClick={() => { setFeedFilter({ tags: [tag] }); }}>
+                      #
+                      {tag}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+            <hr className="navbar-divider" />
+          </aside>
+          {/* End of sidebar */}
+          <div className="column">
+            {/* Content goes here */}
+            <div className="container is-max-desktop">
+              <Feed />
             </div>
-          </ul>
-          <hr className="navbar-divider" />
-        </aside>
-        {/* End of sidebar */}
-        <div className="column">
-          {/* Content goes here */}
-          <div className="container is-max-desktop">
-            { show && !(show && profile.username) ? (
-              <LoginModal />
-            ) : null }
             <br />
-            <Feed />
           </div>
-          <br />
         </div>
       </section>
+      <CreateRecipe />
+      <LoginModal />
     </AppContext.Provider>
   );
 }

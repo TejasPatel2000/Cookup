@@ -55,6 +55,7 @@ function LoginModal() {
 
       const res = await req.json();
       appContext.setProfile(res.success ? res.user : {});
+      appContext.setAuthVisible(false);
     }
   }
 
@@ -73,6 +74,7 @@ function LoginModal() {
 
       const res = await req.json();
       appContext.setProfile(res.success ? res.user : {});
+      appContext.setAuthVisible(false);
     }
   }
 
@@ -116,54 +118,60 @@ function LoginModal() {
   );
 
   return (
-    <div className="card" style={{ maxWidth: '512px' }}>
-      <header className="card-header">
-        <p className="card-header-title">
-          { newUser ? 'Sign up' : 'Login' }
-        </p>
-      </header>
-      <div className="card-content">
-        <div className="content">
-          { infoFields }
-          <div className="field">
-            <label htmlFor={phoneId} className="label">Phone</label>
-            <div className="field-body">
-              <div className="field has-addons">
+    <div className={`modal ${appContext.authVisible ? 'is-active' : ''}`}>
+      <div className="modal-background" />
+      <div className="modal-content">
+        <div className="modal-card" style={{ maxWidth: '512px' }}>
+          <header className="modal-card-head">
+            <p className="modal-card-title">
+              { newUser ? 'Sign up' : 'Login' }
+            </p>
+            <button type="button" className="delete" aria-label="close" onClick={() => { appContext.setAuthVisible(false); }} />
+          </header>
+          <div className="modal-card-body">
+            <div className="content">
+              { infoFields }
+              <div className="field">
+                <label htmlFor={phoneId} className="label">Phone</label>
+                <div className="field-body">
+                  <div className="field has-addons">
+                    <div className="control">
+                      <button type="button" className="button is-static">
+                        +1
+                      </button>
+                    </div>
+                    <div className="control is-expanded">
+                      <input id={phoneId} maxLength="10" value={phone} onChange={(event) => { setPhone(event.target.value); }} className="input" type="text" placeholder="Phone number" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="field has-addons is-pulled-right">
                 <div className="control">
-                  <button type="button" className="button is-static">
-                    +1
+                  <input className="input" maxLength="6" value={code} onChange={(event) => { setCode(event.target.value); }} type="text" placeholder="Enter 6-digit code" />
+                </div>
+                <div className="control">
+                  <button type="button" className="button" onClick={() => { sms(); }} disabled={!phonePtrn.test(phone)}>
+                    Send code
                   </button>
                 </div>
-                <div className="control is-expanded">
-                  <input id={phoneId} maxLength="10" value={phone} onChange={(event) => { setPhone(event.target.value); }} className="input" type="text" placeholder="Phone number" />
-                </div>
+              </div>
+              <div className="field">
+                <p className="control">
+                  <button type="button" className="button is-primary is-fullwidth" onClick={() => { (newUser ? register : login)(); }}>
+                    { newUser ? 'Continue' : 'Login' }
+                  </button>
+                </p>
               </div>
             </div>
           </div>
-          <div className="field has-addons is-pulled-right">
-            <div className="control">
-              <input className="input" maxLength="6" value={code} onChange={(event) => { setCode(event.target.value); }} type="text" placeholder="Enter 6-digit code" />
-            </div>
-            <div className="control">
-              <button type="button" className="button" onClick={() => { sms(); }} disabled={!phonePtrn.test(phone)}>
-                Send code
-              </button>
-            </div>
-          </div>
-          <div className="field">
-            <p className="control">
-              <button type="button" className="button is-primary is-fullwidth" onClick={() => { (newUser ? register : login)(); }}>
-                { newUser ? 'Continue' : 'Login' }
-              </button>
+          <footer className="modal-card-foot">
+            <p className="card-footer-item">
+              {footer}
             </p>
-          </div>
+          </footer>
         </div>
       </div>
-      <footer className="card-footer">
-        <p className="card-footer-item">
-          {footer}
-        </p>
-      </footer>
     </div>
   );
 }
