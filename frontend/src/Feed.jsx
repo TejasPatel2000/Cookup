@@ -6,9 +6,21 @@ import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 
 import moment from 'moment';
 import AppContext from './AppContext';
-import SaveTags from './SaveTags';
 
 function Feed() {
+  async function onAdd(newTag) {
+    if (newTag) {
+      await fetch('/api/follow/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          following: newTag,
+        }),
+      });
+    }
+  }
   return (
     <AppContext.Consumer>
       { (value) => value.recipeFeed.map((recipe) => (
@@ -41,7 +53,14 @@ function Feed() {
                   <br />
                   {recipe.instructions}
                   <br />
-                  <SaveTags />
+                  <div className="adding_tag">
+                    { recipe.tags.map((tag) => (
+                      <button type="button" className="button is-primary is-rounded is-small m-1" onClick={() => { onAdd({ tag }); }}>
+                        {tag}
+                        <a className="is-size-5 m-1">+</a>
+                      </button>
+                    ))}
+                  </div>
                 </p>
               </div>
               <nav className="level is-mobile">

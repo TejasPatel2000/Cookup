@@ -188,9 +188,15 @@ function App() {
           </ul>
           <p className="menu-label">Following Tags</p>
           <ul className="menu-list">
-            <div className="following-list">
-              <li><a>{profile.following}</a></li>
-            </div>
+            { profile.following ? (
+              <div>
+                { profile.following.map((tag) => (
+                  <li>
+                    <a>{tag}</a>
+                  </li>
+                ))}
+              </div>
+            ) : null }
           </ul>
           <hr className="navbar-divider" />
         </aside>
