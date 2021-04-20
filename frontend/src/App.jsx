@@ -183,6 +183,7 @@ function App() {
           </div>
         </div>
       </nav>
+<<<<<<< HEAD
       <section className="container is-fullheight is-fluid">
         <div className="columns">
           {/* Start of sidebar  */}
@@ -228,6 +229,52 @@ function App() {
             <div className="container is-max-desktop">
               <Feed />
             </div>
+=======
+      <section className="columns is-fullheight">
+        {/* Start of sidebar  */}
+        <aside className="column is-2-widescreen is-3-desktop is-4-tablet menu is-fullheight section is-hidden-mobile">
+          {profileHeader}
+          <hr className="navbar-divider" />
+          <ul className="menu-list">
+            <li>
+              <a className="is-active">
+                <span className="icon">
+                  <FontAwesomeIcon icon={faHome} />
+                </span>
+                <span>Home</span>
+              </a>
+            </li>
+            <li>
+              <a>
+                <span className="icon">
+                  <FontAwesomeIcon icon={faClone} />
+                </span>
+                <span>Collection</span>
+              </a>
+            </li>
+          </ul>
+          <p className="menu-label">Following Tags</p>
+          <ul className="menu-list">
+            { profile.following ? (
+              <div>
+                { profile.following.map((tag) => (
+                  <li>
+                    <a>{tag}</a>
+                  </li>
+                ))}
+              </div>
+            ) : null }
+          </ul>
+          <hr className="navbar-divider" />
+        </aside>
+        {/* End of sidebar */}
+        <div className="column">
+          {/* Content goes here */}
+          <div className="container is-max-desktop">
+            { show && !(show && profile.username) ? (
+              <LoginModal />
+            ) : null }
+>>>>>>> User's following tags are fetched from DB and listed nicely on the sidebar menu
             <br />
           </div>
         </div>

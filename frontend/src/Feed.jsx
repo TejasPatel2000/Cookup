@@ -8,6 +8,7 @@ import moment from 'moment';
 import AppContext from './AppContext';
 
 function Feed() {
+<<<<<<< HEAD
   const [feed, setFeed] = useState([]);
 
   const {
@@ -32,6 +33,21 @@ function Feed() {
     fetchRecipes();
   }, [feedFilter]);
 
+=======
+  async function onAdd(newTag) {
+    if (newTag) {
+      await fetch('/api/follow/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          following: newTag,
+        }),
+      });
+    }
+  }
+>>>>>>> User's following tags are fetched from DB and listed nicely on the sidebar menu
   return (
     <div>
       { feed.map((recipe) => (
@@ -64,6 +80,17 @@ function Feed() {
                   <br />
                   {recipe.instructions}
                   <br />
+<<<<<<< HEAD
+=======
+                  <div className="adding_tag">
+                    { recipe.tags.map((tag) => (
+                      <button type="button" className="button is-primary is-rounded is-small m-1" onClick={() => { onAdd({ tag }); }}>
+                        {tag}
+                        <a className="is-size-5 m-1">+</a>
+                      </button>
+                    ))}
+                  </div>
+>>>>>>> User's following tags are fetched from DB and listed nicely on the sidebar menu
                 </p>
                 <div className="field is-grouped is-grouped-multiline">
                   { recipe.tags.map((tag) => (
