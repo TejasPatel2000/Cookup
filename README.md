@@ -30,7 +30,7 @@ docker-compose up
 ### Deploying to Heroku
 ```bash
 heroku container:login
-heroku create cookupapp --buildpack heroku/node
+heroku create --buildpack heroku/nodejs
 heroku container:push web
 heroku container:release web
 ```
@@ -42,3 +42,8 @@ DO NOT RUN `npm install` OR `npm i` IN BACKEND OR FRONTEND.
 ```bash
 npm run add -- PACKAGES ... ARGS ...
 ```
+
+### Linting
+1. `jsx-a11y/label-has-associated-control` was set to `"assert": "either"` since our forms had mixed label locations for styling.
+2. `jsx-a11y/anchor-is-valid` was set to `off` since out css framework had a heavy use of anchor buttons
+3. `func-names` was set to off as we needed functions with a contextual this in our database schema
