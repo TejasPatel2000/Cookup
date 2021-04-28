@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faClone, faUser } from '@fortawesome/free-solid-svg-icons';
+import {
+  faHome, faClone, faUser, faInfoCircle,
+} from '@fortawesome/free-solid-svg-icons';
 import _uniqueId from 'lodash/uniqueId';
 import cloneDeep from 'lodash.clonedeep';
 
@@ -9,6 +11,7 @@ import LoginModal from './LoginModal';
 import Feed from './Feed';
 import CreateRecipe from './CreateRecipe';
 import EditProfile from './UserModal';
+import AboutModal from './AboutModal';
 
 function App() {
   const [profile, setProfile] = useState({});
@@ -17,6 +20,7 @@ function App() {
   const [authVisible, setAuthVisible] = useState(false);
   const [recipeVisible, setRecipeVisible] = useState(false);
   const [userVisible, setUserVisible] = useState(false);
+  const [aboutVisible, setAboutVisible] = useState(false);
 
   async function logout() {
     const req = await fetch('/api/logout', {
@@ -115,6 +119,8 @@ function App() {
       recipeVisible,
       setRecipeVisible,
       followTags,
+      aboutVisible,
+      setAboutVisible,
     }}
     >
       <nav className="navbar is-spaced" role="navigation" aria-label="main navigation">
@@ -135,6 +141,7 @@ function App() {
               {profileHeader}
               <a className="navbar-item">Home</a>
               <a className="navbar-item">Collection</a>
+              <a className="navbar-item">About</a>
               <div className="navbar-item has-dropdown">
                 <a className="navbar-link">Followed Tags</a>
                 {profile.following ? (
@@ -215,6 +222,14 @@ function App() {
                   <span>Profile</span>
                 </a>
               </li>
+              <li>
+                <a href="#" onClick={() => { setAboutVisible(true); }}>
+                  <span className="icon">
+                    <FontAwesomeIcon icon={faInfoCircle} />
+                  </span>
+                  <span>About</span>
+                </a>
+              </li>
             </ul>
             <p className="menu-label">Followed Tags</p>
             {profile.following ? (
@@ -244,6 +259,7 @@ function App() {
       <CreateRecipe />
       <LoginModal />
       <EditProfile user={profile.username} />
+      <AboutModal />
     </AppContext.Provider>
   );
 }

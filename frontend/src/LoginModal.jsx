@@ -159,7 +159,7 @@ function LoginModal() {
               </div>
               <div className="field">
                 <p className="control">
-                  <button type="button" className="button is-primary is-fullwidth" onClick={() => { (newUser ? register : login)(); }}>
+                  <button type="button" className="button is-primary is-fullwidth" onClick={() => { (newUser ? register : login)(); appContext.setAboutVisible(true); }}>
                     { newUser ? 'Continue' : 'Login' }
                   </button>
                 </p>
