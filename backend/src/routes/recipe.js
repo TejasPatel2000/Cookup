@@ -1,6 +1,7 @@
 const Router = require('@koa/router');
-const { Recipe, User } = require('../models');
+const { Recipe, User, Like } = require('../models');
 const { checkRequired } = require('../utils');
+
 const router = new Router();
 
 router.post('/post', async (ctx) => {
@@ -20,7 +21,7 @@ router.post('/post', async (ctx) => {
       instructions,
       tags,
     } = ctx.request.body;
-    if(checkRequired(name, description)){
+    if (checkRequired(name, description)) {
       const recipe = new Recipe({
         by: user,
         name,
@@ -32,7 +33,7 @@ router.post('/post', async (ctx) => {
         instructions,
         tags,
       });
-  
+
       try {
         await recipe.save();
       } catch (err) {
@@ -40,13 +41,36 @@ router.post('/post', async (ctx) => {
         console.log(err);
         return;
       }
-  
+
       ctx.body.success = true;
       ctx.body.recipe = JSON.stringify(recipe);
       return;
-    }else{
-      ctx.body.success = false;
-      return;
+    }
+    ctx.body.success = false;
+    return;
+  }
+
+  ctx.body.success = false;
+});
+
+router.post('/like', async (ctx) => {
+  ctx.body = {};
+  const { session } = ctx;
+  const { recipeId } = ctx.body.query;
+
+  const user = await User.findByLogin(session.user);
+  const recipe = await Recipe.findById(recipeId);
+
+  if (user && recipe) {
+    try {
+      const like = new Like({
+        user,
+        recipe,
+      });
+
+      like.save();
+    } catch (err) {
+      console.log(err);
     }
   }
 
