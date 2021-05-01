@@ -12,6 +12,7 @@ import Feed from './Feed';
 import CreateRecipe from './CreateRecipe';
 import EditProfile from './UserModal';
 import AboutModal from './AboutModal';
+import companyLogo from './cookup.png';
 
 function App() {
   const [profile, setProfile] = useState({});
@@ -123,10 +124,10 @@ function App() {
       setAboutVisible,
     }}
     >
-      <nav className="navbar is-spaced" role="navigation" aria-label="main navigation">
+      <nav className="navbar is-spaced has-shadow has-navbar-fixed-top" role="navigation" aria-label="main navigation">
         <div className="navbar-brand">
-          <a className="navbar-item" href="/">
-            CookUp!
+          <a href="/">
+            <img src={companyLogo} alt="logo" />
           </a>
 
           <a role="button" href="#" className="navbar-burger" aria-label="menu" onClick={() => { setMobileMenu(!mobileMenu); }} aria-expanded={mobileMenu}>

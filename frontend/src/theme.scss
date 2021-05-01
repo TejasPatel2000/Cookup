@@ -7,3 +7,51 @@ $navbar-breakpoint: $tablet;
 .menu .icon {
     margin-inline-end: 8px;
 }
+
+@charset "utf-8";
+
+@import url('https://fonts.googleapis.com/css?family=Nunito:400,700');
+
+$purple: #8A4D76;
+$pink: #FA7C91;
+$brown: #757763;
+$beige-light: #D0D1CD;
+$beige-lighter: #EFF0EB;
+
+$family-sans-serif: "Nunito", sans-serif;
+$grey-dark: $brown;
+$grey-light: $beige-light;
+$primary: $purple;
+$link: $pink;
+$widescreen-enabled: false;
+$fullhd-enabled: false;
+
+$body-background-color: $beige-lighter;
+$control-border-width: 2px;
+$input-border-color: transparent;
+$input-shadow: none;
+
+// Import only what you need from Bulma
+@import "../node_modules/bulma/sass/utilities/_all.sass";
+@import "../node_modules/bulma/sass/base/_all.sass";
+@import "../node_modules/bulma/sass/elements/button.sass";
+@import "../node_modules/bulma/sass/elements/container.sass";
+@import "../node_modules/bulma/sass/elements/title.sass";
+@import "../node_modules/bulma/sass/form/_all.sass";
+@import "../node_modules/bulma/sass/components/navbar.sass";
+@import "../node_modules/bulma/sass/layout/hero.sass";
+@import "../node_modules/bulma/sass/layout/section.sass";
+
+.navbar {
+    background: #C7CAB9;
+    color: white;
+    font-size: 30px;
+}
+
+.username {
+    color: #00d1b2;
+}
+
+img {
+    width: 100px;
+}
