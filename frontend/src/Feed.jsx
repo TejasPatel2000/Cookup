@@ -46,7 +46,7 @@ function Feed() {
                 </figure>
                 <a href="#" onClick={() => { setUserVisible(true); }}>
                   <EditProfile FeedUser={recipe.by.username} />
-                  <strong style={{ marginLeft: '5px' }}>
+                  <strong className="username" style={{ marginLeft: '5px' }}>
                     @
                     {recipe.by.username}
                   </strong>
