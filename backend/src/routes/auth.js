@@ -70,7 +70,7 @@ router.post('/register', async (ctx) => {
       dob: dob * 1000,
       username: await randomUsername(),
     });
-    if(checkUsername(user.username)){
+    if (checkUsername(user.username)) {
       try {
         await user.save();
         session.user = user.phone;
@@ -78,7 +78,7 @@ router.post('/register', async (ctx) => {
         ctx.body.success = false;
         return;
       }
-    }else{
+    } else {
       ctx.body.success = false;
       return;
     }

@@ -9,27 +9,27 @@ router.post('/', async (ctx) => {
   ctx.body = {};
 
   const user = await User.findByLogin(session.user);
-// if user not found
-  if(!user) {
+  // if user not found
+  if (!user) {
     ctx.body.success = false;
     return;
   }
 
-// find the user by name and update push new tag to 'following' array
+  // find the user by name and update push new tag to 'following' array
   try {
     await user.updateOne({
-      $addToSet:{
+      $addToSet: {
         following: {
-          $each: tags
-        }
-      }
+          $each: tags,
+        },
+      },
     });
   } catch (err) {
     console.log(err);
     ctx.body.success = false;
     return;
   }
-  
+
   ctx.body.success = true;
 });
 

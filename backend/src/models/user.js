@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
   following: {
     type: [String],
     default: [],
-  }
+  },
 });
 
 userSchema.statics.findByLogin = async function (login) {

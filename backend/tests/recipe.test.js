@@ -5,7 +5,6 @@ const app = require('./app');
 const User = require('../src/models/user');
 const { checkRequired } = require('../src/utils');
 
-
 describe('test recipe endpoints', () => {
   let server;
   let mockUser;
@@ -53,10 +52,10 @@ describe('test recipe endpoints', () => {
 });
 
 // Unmocked test
-test('test required recipe fields are not empty', () => {
-  var name = "test Name";
-  var description = "test description";
-  
+test('required recipe fields are not empty', () => {
+  const name = 'test Name';
+  const description = 'test description';
+
   expect(checkRequired(name, description)).toEqual(true);
   expect(checkRequired('', '')).toEqual(false);
 });
