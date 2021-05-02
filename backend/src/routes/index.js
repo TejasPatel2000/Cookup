@@ -2,7 +2,6 @@ const Router = require('@koa/router');
 const auth = require('./auth');
 const recipe = require('./recipe');
 const tag = require('./tag');
-const follow = require('./follow');
 const { User } = require('../models');
 
 const router = new Router({
@@ -43,7 +42,5 @@ router.use('/auth', auth);
 router.use('/recipe', recipe);
 
 router.use('/tag', tag);
-
-router.use('/follow', follow);
 
 module.exports = router.routes();

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faHome, faClone, faUser, faInfoCircle,
+  faHome, faHeart, faUser, faInfoCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import _uniqueId from 'lodash/uniqueId';
 import cloneDeep from 'lodash.clonedeep';
@@ -36,7 +36,7 @@ function App() {
   }
 
   async function followTags(tags) {
-    const req = await fetch('/api/follow/', {
+    const req = await fetch('/api/tag/follow/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -54,6 +54,29 @@ function App() {
       const following = new Set([...val.following, ...tags]);
       const newProfile = cloneDeep(val);
       newProfile.following = [...following];
+      return newProfile;
+    });
+  }
+
+  async function unFollowTags(tags) {
+    const req = await fetch('/api/tag/unfollow/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        tags,
+      }),
+    });
+
+    const res = await req.json();
+
+    setProfile((val) => {
+      if (!res.success) return val;
+
+      const unfollowed = new Set([...tags]);
+      const newProfile = cloneDeep(val);
+      newProfile.following = val.following.filter((v) => !unfollowed.has(v));
       return newProfile;
     });
   }
@@ -148,10 +171,13 @@ function App() {
                 {profile.following ? (
                   <div className="navbar-dropdown">
                     {profile.following.map((tag) => (
-                      <a href="#" onClick={() => { setFeedFilter({ tags: [tag] }); }} className="navbar-item" key={_uniqueId()}>
-                        #
-                        {tag}
-                      </a>
+                      <div className="navbar-item is-flex is-align-items-center">
+                        <a href="#" onClick={() => { setFeedFilter({ tags: [tag] }); }} className="navbar-item is-flex-grow-1" key={_uniqueId()}>
+                          #
+                          {tag}
+                        </a>
+                        <button type="button" className="delete" aria-label="close" onClick={() => { unFollowTags([tag]); }} />
+                      </div>
                     ))}
                   </div>
                 ) : null}
@@ -210,9 +236,9 @@ function App() {
               <li>
                 <a>
                   <span className="icon">
-                    <FontAwesomeIcon icon={faClone} />
+                    <FontAwesomeIcon icon={faHeart} />
                   </span>
-                  <span>Collection</span>
+                  <span>Liked</span>
                 </a>
               </li>
               <li>
@@ -236,11 +262,12 @@ function App() {
             {profile.following ? (
               <ul className="menu-list">
                 {profile.following.map((tag) => (
-                  <li key={_uniqueId()}>
-                    <a href="#" onClick={() => { setFeedFilter({ tags: [tag] }); }}>
+                  <li className="is-flex is-align-items-center" key={_uniqueId()}>
+                    <a className="is-flex-grow-1" href="#" onClick={() => { setFeedFilter({ tags: [tag] }); }}>
                       #
                       {tag}
                     </a>
+                    <button type="button" className="delete" aria-label="close" onClick={() => { unFollowTags([tag]); }} />
                   </li>
                 ))}
               </ul>
