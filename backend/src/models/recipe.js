@@ -34,7 +34,12 @@ const recipeSchema = new mongoose.Schema({
     type: [String],
     lowercase: true,
   },
-}, { timestamps: true });
+}, {
+  timestamps: true,
+  // So `res.json()` and other `JSON.stringify()` functions include virtuals
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true },
+});
 
 recipeSchema.index({
   name: 'text',
@@ -50,6 +55,12 @@ recipeSchema.index({
     instructions: 2,
   },
   name: 'recipe_text',
+});
+
+recipeSchema.virtual('likes', {
+  ref: 'Like',
+  localField: '_id',
+  foreignField: 'recipe',
 });
 
 recipeSchema.statics.findByUser = function (user) {
@@ -70,6 +81,11 @@ recipeSchema.statics.findBytag = function (query) {
       $all: query,
     },
   }).sort({ updatedAt: 'desc' });
+};
+
+recipeSchema.methods.getLikes = async function () {
+  const res = await mongoose.model('Like').find({ recipe: this });
+  return res.map((like) => like.user);
 };
 
 recipeSchema.pre('save', async function () {

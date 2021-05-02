@@ -26,7 +26,28 @@ function Feed() {
     });
 
     const res = await req.json();
-    setFeed(res.recipes || []);
+    const recipes = res.recipes.map((recipe) => ({ ...recipe, likes: new Set(recipe.likes) }));
+    setFeed(recipes || []);
+  }
+
+  async function likeRecipe(recipe, indx) {
+    const { _id: id } = recipe;
+
+    const req = await fetch('/api/recipe/like',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          recipeId: id,
+        }),
+      });
+
+    const res = await req.json();
+    const updated = [...feed];
+    updated[indx].likes = new Set(res.likes);
+    setFeed(updated);
   }
 
   useEffect(() => {
@@ -35,7 +56,7 @@ function Feed() {
 
   return (
     <div>
-      { feed.map((recipe) => (
+      { feed.map((recipe, indx) => (
         <div key={_uniqueId()} className="box">
           <article className="media">
             <div className="media-content">
@@ -82,11 +103,21 @@ function Feed() {
               </div>
               <nav className="level is-mobile">
                 <div className="level-left">
-                  <a className="level-item" aria-label="like">
+                  <a
+                    href="#"
+                    className="level-item"
+                    aria-label="like"
+                    onClick={() => {
+                      likeRecipe(recipe, indx);
+                    }}
+                  >
                     <span className="icon is-small">
-                      <FontAwesomeIcon icon={faHeart || faHeartSolid} />
+                      <FontAwesomeIcon
+                        icon={recipe.likes.has(profile.id) ? faHeartSolid : faHeart}
+                      />
                     </span>
                   </a>
+                  <p className="level-item"><strong>{recipe.likes.size}</strong></p>
                 </div>
               </nav>
             </div>

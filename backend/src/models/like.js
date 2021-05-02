@@ -15,6 +15,11 @@ const likeSchema = new mongoose.Schema({
   },
 });
 
+likeSchema.index({
+  user: 1,
+  recipe: 1,
+}, { unique: true });
+
 const Like = mongoose.model('Like', likeSchema);
 
 module.exports = Like;

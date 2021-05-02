@@ -28,6 +28,16 @@ const userSchema = new mongoose.Schema({
     type: [String],
     default: [],
   },
+}, {
+  // So `res.json()` and other `JSON.stringify()` functions include virtuals
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true },
+});
+
+userSchema.virtual('likes', {
+  ref: 'Like',
+  localField: '_id',
+  foreignField: 'user',
 });
 
 userSchema.statics.findByLogin = async function (login) {

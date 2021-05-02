@@ -56,22 +56,35 @@ router.post('/post', async (ctx) => {
 router.post('/like', async (ctx) => {
   ctx.body = {};
   const { session } = ctx;
-  const { recipeId } = ctx.body.query;
+  const { recipeId } = ctx.request.body;
 
   const user = await User.findByLogin(session.user);
   const recipe = await Recipe.findById(recipeId);
 
   if (user && recipe) {
-    try {
-      const like = new Like({
-        user,
-        recipe,
-      });
+    let like = await Like.findOne({ user, recipe });
 
-      like.save();
-    } catch (err) {
-      console.log(err);
+    if (like) {
+      await like.delete();
+      ctx.body.success = true;
+    } else {
+      try {
+        like = new Like({
+          user,
+          recipe,
+        });
+
+        await like.save();
+        
+        ctx.body.success = true;
+      } catch (err) {
+        ctx.body.success = false;
+        console.log(err);
+      }
     }
+
+    ctx.body.likes = await recipe.getLikes();
+    return;
   }
 
   ctx.body.success = false;
@@ -90,9 +103,14 @@ router.get('/', async (ctx) => {
   try {
     const recipes = await Recipe.find(filter)
       .sort({ updatedAt: 'desc' })
-      .populate('by', 'username');
+      .populate('by', 'username')
+      .populate('likes');
 
-    ctx.body.recipes = recipes;
+    ctx.body.recipes = recipes.map((recipe) => {
+      const userLikes = recipe.likes.map((like) => like.user);
+      return ({ ...recipe.toObject(), likes: userLikes });
+    });
+
     ctx.body.success = true;
   } catch (err) {
     ctx.body.success = false;
