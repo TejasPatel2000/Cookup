@@ -216,7 +216,7 @@ function App() {
                 </a>
               </li>
               <li>
-                <a href="#" onClick={() => { setUserVisible(true); }}>
+                <a href="#" onClick={() => { setFeedFilter({ user: profile.username }); }}>
                   <span className="icon">
                     <FontAwesomeIcon icon={faUser} />
                   </span>
