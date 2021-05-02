@@ -6,13 +6,12 @@ import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 
 import moment from 'moment';
 import AppContext from './AppContext';
-import EditProfile from './UserModal';
 
 function Feed() {
   const [feed, setFeed] = useState([]);
 
   const {
-    feedFilter, setFeedFilter, followTags, profile, setUserVisible,
+    feedFilter, setFeedFilter, followTags, profile,
   } = useContext(AppContext);
 
   async function fetchRecipes() {
@@ -65,8 +64,7 @@ function Feed() {
                 <figure className="image is-32x32">
                   <img className="is-rounded" src="https://bulma.io/images/placeholders/128x128.png" alt="pofile" />
                 </figure>
-                <a href="#" onClick={() => { setUserVisible(true); }}>
-                  <EditProfile FeedUser={recipe.by.username} />
+                <a href="#" onClick={() => { setFeedFilter({ user: recipe.by.username }); }}>
                   <strong className="username" style={{ marginLeft: '5px' }}>
                     @
                     {recipe.by.username}
@@ -89,17 +87,17 @@ function Feed() {
                   <br />
                   {recipe.instructions}
                   <br />
-                  <div className="field is-grouped is-grouped-multiline">
-                    { recipe.tags.map((tag) => (
-                      <div className="control" key={_uniqueId()}>
-                        <div className="tags has-addons">
-                          <a href="#" className="tag is-rounded is-link" onClick={() => { setFeedFilter({ tags: [tag] }); }}>{tag}</a>
-                          {profile.username ? <a href="#" className="tag is-rounded is-info" onClick={() => { followTags([tag]); }}>+</a> : null}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
                 </p>
+                <div className="field is-grouped is-grouped-multiline">
+                  { recipe.tags.map((tag) => (
+                    <div className="control" key={_uniqueId()}>
+                      <div className="tags has-addons">
+                        <a href="#" className="tag is-rounded is-link" onClick={() => { setFeedFilter({ tags: [tag] }); }}>{tag}</a>
+                        {(profile.username && !profile.following.includes(tag)) ? <a href="#" className="tag is-rounded is-info" onClick={() => { followTags([tag]); }}>+</a> : null}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
               <nav className="level is-mobile">
                 <div className="level-left">
