@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 
+// import _ from 'lodash';
 import moment from 'moment';
 import AppContext from './AppContext';
 import EditProfile from './UserModal';
@@ -69,14 +70,18 @@ function Feed() {
                   {recipe.instructions}
                   <br />
                   <div className="field is-grouped is-grouped-multiline">
-                    { recipe.tags.map((tag) => (
-                      <div className="control" key={_uniqueId()}>
-                        <div className="tags has-addons">
-                          <a href="#" className="tag is-rounded is-link" onClick={() => { setFeedFilter({ tags: [tag] }); }}>{tag}</a>
-                          {profile.username ? <a href="#" className="tag is-rounded is-info" onClick={() => { followTags([tag]); }}>+</a> : null}
-                        </div>
+                    { recipe.tags[0] !== '' && (
+                      <div className="practice">
+                        { recipe.tags.map((tag) => (
+                          <div className="control" key={_uniqueId()}>
+                            <div className="tags has-addons">
+                              <a href="#" className="tag is-rounded is-link" onClick={() => { setFeedFilter({ tags: [tag] }); }}>{tag}</a>
+                              {profile.username ? <a href="#" className="tag is-rounded is-info" onClick={() => { followTags([tag]); }}>+</a> : null}
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    )}
                   </div>
                 </p>
               </div>
