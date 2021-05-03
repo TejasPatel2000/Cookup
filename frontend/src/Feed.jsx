@@ -98,7 +98,6 @@ function Feed() {
                   </a>
                 </div>
                 <a href="#" onClick={() => { setRecipeID(recipe._id.toString()); setEditRecipe(true); setRecipeVisible(true); }}>
-                  {recipeID}
                   <span className="icon is-pulled-right">
                     <FontAwesomeIcon icon={faEdit} />
                   </span>
