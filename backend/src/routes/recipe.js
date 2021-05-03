@@ -1,5 +1,5 @@
 const Router = require('@koa/router');
-const { Recipe, User, Like } = require('../models');
+const { Recipe, User, Like, Comment } = require('../models');
 const { checkRequired } = require('../utils');
 
 const router = new Router();
@@ -75,7 +75,7 @@ router.post('/like', async (ctx) => {
         });
 
         await like.save();
-        
+
         ctx.body.success = true;
       } catch (err) {
         ctx.body.success = false;
@@ -88,6 +88,35 @@ router.post('/like', async (ctx) => {
   }
 
   ctx.body.success = false;
+});
+
+router.post('/comment', async (ctx) => {
+  ctx.body = {};
+  const { session } = ctx;
+  const { recipeId, text } = ctx.request.body;
+
+  const user = await User.findByLogin(session.user);
+  const recipe = await Recipe.findById(recipeId);
+
+  if (user && recipe) {
+    try {
+      const comment = new Comment({
+        by: user,
+        recipe: recipe,
+        text: text
+      });
+
+      comment.save();
+    } catch (err) {
+      console.log(err);
+      body.success = false;
+    }
+
+    body.success = true;
+    return;
+  }
+
+  body.success = false;
 });
 
 router.get('/', async (ctx) => {

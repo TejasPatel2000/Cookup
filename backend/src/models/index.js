@@ -3,6 +3,7 @@ const User = require('./user');
 const Recipe = require('./recipe');
 const Tag = require('./tag');
 const Like = require('./like');
+const Comment = require('./comment');
 
 module.exports = {
   TOTP,
@@ -10,4 +11,5 @@ module.exports = {
   Recipe,
   Tag,
   Like,
+  Comment,
 };
