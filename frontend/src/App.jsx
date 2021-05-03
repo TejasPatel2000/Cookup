@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faHome, faClone, faUser, faInfoCircle,
+  faHome, faClone, faUser, faInfoCircle, faUserAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import _uniqueId from 'lodash/uniqueId';
 import cloneDeep from 'lodash.clonedeep';
@@ -22,6 +22,8 @@ function App() {
   const [recipeVisible, setRecipeVisible] = useState(false);
   const [userVisible, setUserVisible] = useState(false);
   const [aboutVisible, setAboutVisible] = useState(false);
+  const [editRecipe, setEditRecipe] = useState(false);
+  const [recipeID, setRecipeID] = useState('');
 
   async function logout() {
     const req = await fetch('/api/logout', {
@@ -72,10 +74,8 @@ function App() {
 
   const profileHeader = profile.username ? (
     <div className="has-text-centered">
-      <div className="columns is-flex is-centered">
-        <figure className="image is-128x128">
-          <img className="is-rounded" alt="profile" src="https://bulma.io/images/placeholders/128x128.png" />
-        </figure>
+      <div className="icon2">
+        <FontAwesomeIcon icon={faUserAlt} size="4x" />
       </div>
       <p className="menu-label">
         {profile.fullName}
@@ -84,26 +84,6 @@ function App() {
         @
         {profile.username}
       </p>
-      <nav className="level">
-        <div className="level-item">
-          <div>
-            <p className="heading">Posts</p>
-            <p className="subtitle">3,456</p>
-          </div>
-        </div>
-        <div className="level-item">
-          <div>
-            <p className="heading">Following</p>
-            <p className="subtitle">123</p>
-          </div>
-        </div>
-        <div className="level-item">
-          <div>
-            <p className="heading">Followers</p>
-            <p className="subtitle">456K</p>
-          </div>
-        </div>
-      </nav>
     </div>
   ) : null;
 
@@ -122,6 +102,10 @@ function App() {
       followTags,
       aboutVisible,
       setAboutVisible,
+      editRecipe,
+      setEditRecipe,
+      recipeID,
+      setRecipeID,
     }}
     >
       <nav className="navbar is-spaced has-shadow has-navbar-fixed-top" role="navigation" aria-label="main navigation">
