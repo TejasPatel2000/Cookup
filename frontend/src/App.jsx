@@ -22,6 +22,8 @@ function App() {
   const [recipeVisible, setRecipeVisible] = useState(false);
   const [userVisible, setUserVisible] = useState(false);
   const [aboutVisible, setAboutVisible] = useState(false);
+  const [editRecipe, setEditRecipe] = useState(false);
+  const [recipeID, setRecipeID] = useState('');
 
   async function logout() {
     const req = await fetch('/api/logout', {
@@ -100,6 +102,10 @@ function App() {
       followTags,
       aboutVisible,
       setAboutVisible,
+      editRecipe,
+      setEditRecipe,
+      recipeID,
+      setRecipeID,
     }}
     >
       <nav className="navbar is-spaced has-shadow has-navbar-fixed-top" role="navigation" aria-label="main navigation">

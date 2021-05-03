@@ -56,7 +56,7 @@ router.post('/post', async (ctx) => {
 router.post('/like', async (ctx) => {
   ctx.body = {};
   const { session } = ctx;
-  const { recipeId } = ctx.body.query;
+  const { recipeId } = ctx.request.body;
 
   const user = await User.findByLogin(session.user);
   const recipe = await Recipe.findById(recipeId);
@@ -76,6 +76,49 @@ router.post('/like', async (ctx) => {
 
   ctx.body.success = false;
 });
+
+router.post('/update', async (ctx) => {
+  ctx.body = {};
+  const { session } = ctx;
+  const {
+    id,
+    name,
+    description,
+    servings,
+    prep_time: prepTime,
+    cook_time: cookTime,
+    ingredients,
+    instructions,
+    tags,
+  } = ctx.request.body;
+
+  const user = await User.findByLogin(session.user);
+  const recipe = await Recipe.findById(id);
+
+  if (user && recipe) {
+    try {
+      recipe.name = name;
+      recipe.description = description;
+      recipe.servings = servings;
+      recipe.prep_time = prepTime;
+      recipe.cook_time = cookTime;
+      recipe.ingredients = ingredients;
+      recipe.instructions = instructions;
+      recipe.tags = tags;
+
+      await recipe.save();
+    } catch (err) {
+      console.log(err);
+      ctx.body.success = false;
+      return;
+    }
+    ctx.body.success = true;
+    return;
+  }
+  ctx.body.success = false;
+
+});
+
 
 router.get('/', async (ctx) => {
   ctx.body = {};
