@@ -16,9 +16,11 @@ function Feed() {
   } = useContext(AppContext);
 
   async function fetchRecipes() {
-    const { user, tags, search } = feedFilter;
+    const {
+      user, tags, search, liked,
+    } = feedFilter;
 
-    const req = await fetch(`/api/recipe?${user ? `user=${user}` : ''}${(tags || []).length ? `tags=${tags.join()}` : ''}${search ? `search=${search}` : ''}`, {
+    const req = await fetch(`/api/recipe?${user ? `user=${user}` : ''}${liked ? `liked=${liked}` : ''}${(tags || []).length ? `tags=${tags.join()}` : ''}${search ? `search=${search}` : ''}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -147,10 +149,12 @@ function Feed() {
                   </p>
                 </div>
               ))}
-              <div className="control">
-                <textarea style={{ minHeight: '3em' }} onChange={(event) => { inputMap[recipe.id] = event.target.value; }} className="textarea has-fixed-size" placeholder="Leave a comment..." />
-                <button type="button" className="button is-white is-pulled-right" onClick={() => { postComment(recipe); }}>Send</button>
-              </div>
+              {profile.username ? (
+                <div className="control">
+                  <textarea style={{ minHeight: '3em' }} onChange={(event) => { inputMap[recipe.id] = event.target.value; }} className="textarea has-fixed-size" placeholder="Leave a comment..." />
+                  <button type="button" className="button is-white is-pulled-right" onClick={() => { postComment(recipe); }}>Send</button>
+                </div>
+              ) : null}
             </div>
           </article>
         </div>

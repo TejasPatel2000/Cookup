@@ -233,22 +233,26 @@ function App() {
                   <span>Home</span>
                 </a>
               </li>
-              <li>
-                <a>
-                  <span className="icon">
-                    <FontAwesomeIcon icon={faHeart} />
-                  </span>
-                  <span>Liked</span>
-                </a>
-              </li>
-              <li>
-                <a href="#" onClick={() => { setUserVisible(true); }}>
-                  <span className="icon">
-                    <FontAwesomeIcon icon={faUser} />
-                  </span>
-                  <span>Profile</span>
-                </a>
-              </li>
+              {profile.username ? (
+                <li>
+                  <a href="#" onClick={() => { setFeedFilter({ liked: true }); }}>
+                    <span className="icon">
+                      <FontAwesomeIcon icon={faHeart} />
+                    </span>
+                    <span>Liked</span>
+                  </a>
+                </li>
+              ) : null }
+              {profile.username ? (
+                <li>
+                  <a href="#" onClick={() => { setUserVisible(true); }}>
+                    <span className="icon">
+                      <FontAwesomeIcon icon={faUser} />
+                    </span>
+                    <span>Profile</span>
+                  </a>
+                </li>
+              ) : null }
               <li>
                 <a href="#" onClick={() => { setAboutVisible(true); }}>
                   <span className="icon">
