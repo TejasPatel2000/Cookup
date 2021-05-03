@@ -13,8 +13,33 @@ function CreateRecipe() {
 
   const appContext = useContext(AppContext);
 
-  async function submitForm() {
+  async function editRecipe() {
     if (recipeName && description) {
+      await fetch('/api/recipe/update', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: recipeName.current.value,
+          description: description.current.value,
+          servings: servings.current.value,
+          prep_time: prepTime.current.value,
+          cook_time: cookTime.current.value,
+          ingredients: ingredients.current.value.split(','),
+          instructions: instructions.current.value,
+          tags: tags.current.value.split(','),
+        }),
+      });
+    }
+    appContext.setRecipeVisible(false);
+  }
+
+  async function submitForm() {
+    if (appContext.editRecipe) {
+      editRecipe();
+    }
+    if (recipeName && description && !appContext.editRecipe) {
       await fetch('/api/recipe/post', {
         method: 'POST',
         headers: {
