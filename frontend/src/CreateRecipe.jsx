@@ -21,6 +21,7 @@ function CreateRecipe() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          id: appContext.recipeID,
           name: recipeName.current.value,
           description: description.current.value,
           servings: servings.current.value,

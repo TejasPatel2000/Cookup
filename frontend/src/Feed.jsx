@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign, no-underscore-dangle */
 import React, { useContext, useEffect, useState } from 'react';
 import _uniqueId from 'lodash/uniqueId';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,7 +13,15 @@ function Feed() {
   const [feed, setFeed] = useState([]);
 
   const {
-    feedFilter, setFeedFilter, followTags, profile, setUserVisible, setEditRecipe, setRecipeVisible,
+    feedFilter,
+    setFeedFilter,
+    followTags,
+    profile,
+    setUserVisible,
+    setEditRecipe,
+    setRecipeVisible,
+    setRecipeID,
+    recipeID,
   } = useContext(AppContext);
 
   async function fetchRecipes() {
@@ -88,7 +97,8 @@ function Feed() {
                     </span>
                   </a>
                 </div>
-                <a href="#" onClick={() => { setEditRecipe(true); setRecipeVisible(true); }}>
+                <a href="#" onClick={() => { setRecipeID(recipe._id.toString()); setEditRecipe(true); setRecipeVisible(true); }}>
+                  {recipeID}
                   <span className="icon is-pulled-right">
                     <FontAwesomeIcon icon={faEdit} />
                   </span>
