@@ -9,6 +9,7 @@ import AppContext from './AppContext';
 
 function Feed() {
   const [feed, setFeed] = useState([]);
+  const [inputMap] = useState({});
 
   const {
     feedFilter, setFeedFilter, followTags, profile,
@@ -30,7 +31,7 @@ function Feed() {
   }
 
   async function likeRecipe(recipe, indx) {
-    const { _id: id } = recipe;
+    const { id } = recipe;
 
     const req = await fetch('/api/recipe/like',
       {
@@ -47,6 +48,25 @@ function Feed() {
     const updated = [...feed];
     updated[indx].likes = new Set(res.likes);
     setFeed(updated);
+  }
+
+  async function postComment(recipe) {
+    const { id } = recipe;
+
+    const req = await fetch('/api/recipe/comment',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          recipeId: id,
+          text: inputMap[id],
+        }),
+      });
+
+    const res = await req.json();
+    console.log(res);
   }
 
   useEffect(() => {
@@ -118,6 +138,19 @@ function Feed() {
                   <p className="level-item"><strong>{recipe.likes.size}</strong></p>
                 </div>
               </nav>
+              {recipe.comments.map((comment) => (
+                <div>
+                  <p>
+                    <strong>{comment.by.username}</strong>
+                    {' '}
+                    {comment.text}
+                  </p>
+                </div>
+              ))}
+              <div className="control">
+                <textarea style={{ minHeight: '3em' }} onChange={(event) => { inputMap[recipe.id] = event.target.value; }} className="textarea has-fixed-size" placeholder="Leave a comment..." />
+                <button type="button" className="button is-white is-pulled-right" onClick={() => { postComment(recipe); }}>Send</button>
+              </div>
             </div>
           </article>
         </div>

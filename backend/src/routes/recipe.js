@@ -98,7 +98,7 @@ router.post('/comment', async (ctx) => {
   const user = await User.findByLogin(session.user);
   const recipe = await Recipe.findById(recipeId);
 
-  if (user && recipe) {
+  if (user && recipe && text) {
     try {
       const comment = new Comment({
         by: user,
@@ -112,11 +112,11 @@ router.post('/comment', async (ctx) => {
       body.success = false;
     }
 
-    body.success = true;
+    ctx.body.success = true;
     return;
   }
 
-  body.success = false;
+  ctx.body.success = false;
 });
 
 router.get('/', async (ctx) => {
@@ -133,6 +133,15 @@ router.get('/', async (ctx) => {
     const recipes = await Recipe.find(filter)
       .sort({ updatedAt: 'desc' })
       .populate('by', 'username')
+      .populate({
+        path: 'comments',
+        populate: [
+          {
+            path: 'by',
+            model: 'User'
+          }
+        ]
+      })
       .populate('likes');
 
     ctx.body.recipes = recipes.map((recipe) => {

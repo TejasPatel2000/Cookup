@@ -63,6 +63,12 @@ recipeSchema.virtual('likes', {
   foreignField: 'recipe',
 });
 
+recipeSchema.virtual('comments', {
+  ref: 'Comment',
+  localField: '_id',
+  foreignField: 'recipe',
+});
+
 recipeSchema.statics.findByUser = function (user) {
   return this.find({
     by: user,
