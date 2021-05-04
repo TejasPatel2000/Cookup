@@ -18,7 +18,9 @@ const port = normalizePort(process.env.PORT || '3000');
 
 app.use(logger());
 app.use(serve('public'));
-app.use(koaBody());
+app.use(koaBody({
+  multipart: true
+}));
 
 app.context.twilio = twilio(
   process.env.TWILIO_SID,

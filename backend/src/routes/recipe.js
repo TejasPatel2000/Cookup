@@ -1,4 +1,8 @@
 const Router = require('@koa/router');
+const { mongo, connection } = (require('mongoose'));
+var fs = require('fs');
+const { reject } = require('lodash');
+
 const {
   Recipe, User, Like, Comment,
 } = require('../models');
@@ -159,6 +163,51 @@ router.post('/update', async (ctx) => {
     ctx.body.success = true;
     return;
   }
+  ctx.body.success = false;
+});
+
+function pipeStream(src, dest) {
+  return new Promise((resolve, reject) => {
+    dest.on('error', () => reject('Failed to pip to destination'));
+    src.on('error', () => reject('Failed to pip from source'));
+    src.on('open', () => src.pipe(dest));
+    dest.on('finish', () => resolve());
+  });
+}
+
+router.post('/images', async (ctx) => {
+  ctx.body = {};
+  const { session } = ctx;
+  const { files } = ctx.request;
+
+  const user = User.findByLogin(session.user);
+
+  if (user) {
+    let uploads = [];
+
+    try {
+      let bucket = new mongo.GridFSBucket(connection.db, {
+        bucketName: 'photos'
+      });
+
+      await Promise.all(Object.values(files).map(async (file) => {
+        const readStream = fs.createReadStream(file.path);
+        const fileName = `${file.path.split('/').pop()}.${file.name.split('.').pop()}`;
+        const upStream = bucket.openUploadStream(fileName);
+        await pipeStream(readStream, upStream);
+        uploads.push(fileName);
+      }));
+    } catch (err) {
+      console.log(err);
+      ctx.body.success = false;
+      return;
+    }
+
+    ctx.body.uploads = uploads;
+    ctx.body.success = true;
+    return;
+  }
+
   ctx.body.success = false;
 });
 

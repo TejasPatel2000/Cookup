@@ -35,6 +35,24 @@ function CreateRecipe() {
     }
   }
 
+  async function uploadFiles(files) {
+    const formData = new FormData();
+
+    console.log(files);
+
+    Array.from(files).forEach((file) => {
+      formData.append(file.name, file);
+    });
+
+    const req = await fetch('/api/recipe/images', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const res = await req.json();
+    console.log(res);
+  }
+
   async function submitForm() {
     if (appContext.editRecipe) {
       await editRecipe();
@@ -81,7 +99,7 @@ function CreateRecipe() {
             { !appContext.editRecipe ? (
               <div className="file has-name is-fullwidth">
                 <label className="file-label">
-                  <input className="file-input" type="file" name="photo" />
+                  <input className="file-input" type="file" name="photo" onChange={(e) => { uploadFiles(e.target.files); }} />
                   <span className="file-cta">
                     <span className="file-icon">
                       <i className="fas fa-upload" />
