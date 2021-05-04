@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faHome, faHeart, faUser, faInfoCircle,
+  faHome, faHeart, faUserAlt, faInfoCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import _uniqueId from 'lodash/uniqueId';
 import cloneDeep from 'lodash.clonedeep';
@@ -167,7 +167,6 @@ function App() {
                 ) : null}
               </div>
             </div>
-
             <div className="navbar-end">
               <div className="navbar-item is-expanded">
                 <div className="field has-addons">
@@ -231,7 +230,7 @@ function App() {
                 <li>
                   <a href="#" onClick={() => { setFeedFilter({ user: profile.username }); }}>
                     <span className="icon">
-                      <FontAwesomeIcon icon={faUser} />
+                      <FontAwesomeIcon icon={faUserAlt} />
                     </span>
                     <span>Profile</span>
                   </a>
