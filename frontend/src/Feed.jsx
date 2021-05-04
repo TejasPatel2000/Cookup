@@ -82,6 +82,7 @@ function Feed() {
 
   return (
     <div>
+      <br />
       { feed.map((recipe, indx) => (
         <div key={_uniqueId()} className="box">
           <article className="media">
@@ -178,9 +179,11 @@ function Feed() {
                 </div>
               ))}
               {profile.username ? (
-                <div className="control">
-                  <textarea style={{ minHeight: '3em' }} onChange={(event) => { inputMap[recipe.id] = event.target.value; }} className="textarea has-fixed-size" placeholder="Leave a comment..." />
-                  <button type="button" className="button is-white is-pulled-right" onClick={() => { postComment(recipe); }}>Send</button>
+                <div className="field is-grouped">
+                  <div className="control is-expanded">
+                    <textarea style={{ minHeight: '3em' }} onChange={(event) => { inputMap[recipe.id] = event.target.value; }} className="textarea has-fixed-size" placeholder="Leave a comment..." />
+                  </div>
+                  <button type="button" className="button is-info is-right" onClick={() => { postComment(recipe); }}>Send</button>
                 </div>
               ) : null}
             </div>

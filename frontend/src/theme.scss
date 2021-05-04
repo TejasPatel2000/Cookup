@@ -13,11 +13,13 @@ $pink: #FA7C91;
 $brown: #757763;
 $beige-light: #D0D1CD;
 $beige-lighter: #EFF0EB;
+$blue: #209CEE;
 
 $family-sans-serif: "Nunito", sans-serif;
 $grey-dark: $brown;
 $grey-light: $beige-light;
-$primary: $purple;
+$primary: $blue;
+$danger: $pink;
 $link: $pink;
 $widescreen-enabled: false;
 $fullhd-enabled: false;
@@ -29,13 +31,13 @@ $input-shadow: none;
 @import 'bulma/bulma.sass';
 
 .navbar {
-    background: #C7CAB9;
+    background: #EFF0EB;
     color: white;
     font-size: 30px;
 }
 
 .username {
-    color: #00d1b2;
+    color: $blue;
 }
 
 img {

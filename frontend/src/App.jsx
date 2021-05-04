@@ -168,7 +168,7 @@ function App() {
               </div>
             </div>
             <div className="navbar-end">
-              <div className="navbar-item is-expanded">
+              <div className="navbar-item">
                 <div className="field has-addons">
                   <div className="control is-expanded">
                     <input onChange={(event) => { setFeedFilter({ search: event.target.value }); }} className="input" type="text" placeholder="Search" />
