@@ -1,7 +1,6 @@
 const Router = require('@koa/router');
 const { mongo, connection } = (require('mongoose'));
-var fs = require('fs');
-const { reject } = require('lodash');
+const fs = require('fs');
 
 const {
   Recipe, User, Like, Comment,
@@ -168,12 +167,23 @@ router.post('/update', async (ctx) => {
 
 function pipeStream(src, dest) {
   return new Promise((resolve, reject) => {
-    dest.on('error', () => reject('Failed to pip to destination'));
-    src.on('error', () => reject('Failed to pip from source'));
+    dest.on('error', () => reject(new Error('Failed to pipe to destination')));
+    src.on('error', () => reject(new Error('Failed to pipe from source')));
     src.on('open', () => src.pipe(dest));
     dest.on('finish', () => resolve());
   });
 }
+
+router.get('/image/:fileName', async (ctx) => {
+  const { fileName } = ctx.params;
+
+  const bucket = new mongo.GridFSBucket(connection.db, {
+    bucketName: 'photos',
+  });
+
+  const downStream = bucket.openDownloadStreamByName(fileName);
+  ctx.body = downStream;
+});
 
 router.post('/images', async (ctx) => {
   ctx.body = {};
@@ -183,11 +193,11 @@ router.post('/images', async (ctx) => {
   const user = User.findByLogin(session.user);
 
   if (user) {
-    let uploads = [];
+    const uploads = [];
 
     try {
-      let bucket = new mongo.GridFSBucket(connection.db, {
-        bucketName: 'photos'
+      const bucket = new mongo.GridFSBucket(connection.db, {
+        bucketName: 'photos',
       });
 
       await Promise.all(Object.values(files).map(async (file) => {
@@ -226,6 +236,7 @@ router.get('/', async (ctx) => {
   if (liked) {
     const user = await User.findByLogin(session.user);
     const likes = await Like.find({ user });
+    // eslint-disable-next-line no-underscore-dangle
     filter._id = likes.map((like) => like.recipe);
   }
 
