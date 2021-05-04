@@ -1,9 +1,11 @@
+/* eslint-disable no-param-reassign, no-underscore-dangle */
 import React, { useContext, useEffect, useState } from 'react';
 import _uniqueId from 'lodash/uniqueId';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
-import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as faHeartSolid, faEdit } from '@fortawesome/free-solid-svg-icons';
 
+// import _ from 'lodash';
 import moment from 'moment';
 import AppContext from './AppContext';
 
@@ -12,7 +14,13 @@ function Feed() {
   const [inputMap] = useState({});
 
   const {
-    feedFilter, setFeedFilter, followTags, profile,
+    feedFilter,
+    setFeedFilter,
+    followTags,
+    profile,
+    setEditRecipe,
+    setRecipeVisible,
+    setRecipeID,
   } = useContext(AppContext);
 
   async function fetchRecipes() {
@@ -109,6 +117,20 @@ function Feed() {
                   <br />
                   {recipe.instructions}
                   <br />
+                  <div className="field is-grouped is-grouped-multiline">
+                    { recipe.tags[0] !== '' && (
+                      <div className="practice">
+                        { recipe.tags.map((tag) => (
+                          <div className="control" key={_uniqueId()}>
+                            <div className="tags has-addons">
+                              <a href="#" className="tag is-rounded is-link" onClick={() => { setFeedFilter({ tags: [tag] }); }}>{tag}</a>
+                              {profile.username ? <a href="#" className="tag is-rounded is-info" onClick={() => { followTags([tag]); }}>+</a> : null}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </p>
                 <div className="field is-grouped is-grouped-multiline">
                   { recipe.tags.map((tag) => (
@@ -139,6 +161,13 @@ function Feed() {
                   </a>
                   <p className="level-item"><strong>{recipe.likes.size}</strong></p>
                 </div>
+                {(profile.username === recipe.by.username) && (
+                  <a href="#" onClick={() => { setRecipeID(recipe._id.toString()); setEditRecipe(true); setRecipeVisible(true); }}>
+                    <span className="icon is-pulled-right">
+                      <FontAwesomeIcon icon={faEdit} />
+                    </span>
+                  </a>
+                )}
               </nav>
               {recipe.comments.map((comment) => (
                 <div>
