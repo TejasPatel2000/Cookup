@@ -164,13 +164,21 @@ router.post('/update', async (ctx) => {
 
 router.get('/', async (ctx) => {
   ctx.body = {};
-  const { tags, user, search } = ctx.request.query;
+  const { session } = ctx;
+  const {
+    tags, user: poster, search, liked,
+  } = ctx.request.query;
 
   const filter = {};
 
   if (tags) filter.tags = { $all: tags };
-  if (user) filter.by = await User.findByLogin(user);
+  if (poster) filter.by = await User.findByLogin(poster);
   if (search) filter.$text = { $search: search };
+  if (liked) {
+    const user = await User.findByLogin(session.user);
+    const likes = await Like.find({ user });
+    filter._id = likes.map((like) => like.recipe);
+  }
 
   try {
     const recipes = await Recipe.find(filter)
