@@ -17,11 +17,9 @@ function Feed() {
     setFeedFilter,
     followTags,
     profile,
-    setUserVisible,
     setEditRecipe,
     setRecipeVisible,
     setRecipeID,
-    recipeID,
   } = useContext(AppContext);
 
   async function fetchRecipes() {
