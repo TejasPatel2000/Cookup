@@ -85,7 +85,7 @@ function Feed() {
       { feed.map((recipe, indx) => (
         <div key={_uniqueId()} className="box">
           <article className="media">
-            <div className="media-content">
+            <div className="media-content" style={{ overflowX: 'auto' }}>
               <small className="is-pulled-right">{moment(recipe.updatedAt).fromNow()}</small>
               <div className="is-flex is-flex-direction-row is-align-items-center">
                 <figure className="image is-32x32">
@@ -97,6 +97,21 @@ function Feed() {
                     {recipe.by.username}
                   </strong>
                 </a>
+              </div>
+              <div className="is-flex is-flex-wrap-nowrap is-flex-direction-row" style={{ overflowX: 'auto' }}>
+                {recipe.images.map((thumb) => (
+                  <div
+                    key={_uniqueId()}
+                    className="is-flex-grow-1 is-flex-shrink-0"
+                    style={{
+                      maxWidth: '100%', flexBasis: 'auto', margin: '8px', minWidth: '100%',
+                    }}
+                  >
+                    <figure className="image is-3by2">
+                      <img src={`/api/recipe/image/${thumb}`} alt="recipe preview" />
+                    </figure>
+                  </div>
+                ))}
               </div>
               <div className="content">
                 <p>
@@ -154,7 +169,7 @@ function Feed() {
                 )}
               </nav>
               {recipe.comments.map((comment) => (
-                <div>
+                <div key={_uniqueId()}>
                   <p>
                     <strong>{comment.by.username}</strong>
                     {' '}

@@ -34,6 +34,9 @@ const recipeSchema = new mongoose.Schema({
     type: [String],
     lowercase: true,
   },
+  images: {
+    type: [String],
+  },
 }, {
   timestamps: true,
   // So `res.json()` and other `JSON.stringify()` functions include virtuals

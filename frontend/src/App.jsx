@@ -147,9 +147,9 @@ function App() {
           <div className={`navbar-menu ${mobileMenu ? 'is-active' : ''}`}>
             <div className="navbar-start is-hidden-tablet">
               {profileHeader}
-              <a className="navbar-item">Home</a>
-              <a className="navbar-item">Collection</a>
-              <a className="navbar-item">About</a>
+              <a href="#" onClick={() => { setFeedFilter({}); }} className="navbar-item">Home</a>
+              <a href="#" onClick={() => { setFeedFilter({ liked: true }); }} className="navbar-item">Liked</a>
+              <a href="#" onClick={() => { setAboutVisible(true); }} className="navbar-item">About</a>
               <div className="navbar-item has-dropdown">
                 <a className="navbar-link">Followed Tags</a>
                 {profile.following ? (
