@@ -33,12 +33,11 @@ function CreateRecipe() {
         }),
       });
     }
-    appContext.setRecipeVisible(false);
   }
 
   async function submitForm() {
     if (appContext.editRecipe) {
-      editRecipe();
+      await editRecipe();
     }
     if (recipeName && description && !appContext.editRecipe) {
       await fetch('/api/recipe/post', {
@@ -58,6 +57,7 @@ function CreateRecipe() {
         }),
       });
     }
+    appContext.setEditRecipe(false);
     appContext.setRecipeVisible(false);
   }
 
@@ -67,7 +67,7 @@ function CreateRecipe() {
       <div className="modal-card">
         <header className="modal-card-head">
           <p className="modal-card-title">Create Recipe!</p>
-          <button type="button" className="delete" aria-label="close" onClick={() => { appContext.setRecipeVisible(false); }} />
+          <button type="button" className="delete" aria-label="close" onClick={() => { appContext.setEditRecipe(false); appContext.setRecipeVisible(false); }} />
         </header>
         <section className="modal-card-body">
           <div className="recipe-form">
@@ -78,22 +78,24 @@ function CreateRecipe() {
               <input ref={prepTime} className="input is-primary" type="text" placeholder="Prep Time (in min)" />
               <input ref={cookTime} className="input is-primary" type="text" placeholder="Cook Time (in min)" />
             </div>
-            <div className="file has-name is-fullwidth">
-              <label className="file-label">
-                <input className="file-input" type="file" name="resume" />
-                <span className="file-cta">
-                  <span className="file-icon">
-                    <i className="fas fa-upload" />
+            { !appContext.editRecipe ? (
+              <div className="file has-name is-fullwidth">
+                <label className="file-label">
+                  <input className="file-input" type="file" name="photo" />
+                  <span className="file-cta">
+                    <span className="file-icon">
+                      <i className="fas fa-upload" />
+                    </span>
+                    <span className="file-label">
+                      Upload…
+                    </span>
                   </span>
-                  <span className="file-label">
-                    Upload…
+                  <span className="file-name">
+                    Select an image from your device (jpg, jpeg, png, gif)
                   </span>
-                </span>
-                <span className="file-name">
-                  Select an image from your device (jpg, jpeg, png, gif)
-                </span>
-              </label>
-            </div>
+                </label>
+              </div>
+            ) : null }
             <textarea ref={ingredients} className="textarea is-primary" placeholder="Ingredients... (Separate by comma)" rows="7" />
             <textarea ref={instructions} className="textarea is-primary" placeholder="Instructions..." rows="7" />
             <input ref={tags} className="input is-primary" type="text" placeholder="tags (separate by comma)" />
@@ -101,7 +103,7 @@ function CreateRecipe() {
         </section>
         <footer className="modal-card-foot">
           <input type="submit" value="Submit" className="button is-success" onClick={submitForm} />
-          <button type="button" className="button" onClick={() => { appContext.setRecipeVisible(false); }}>Cancel</button>
+          <button type="button" className="button" onClick={() => { appContext.setEditRecipe(false); appContext.setRecipeVisible(false); }}>Cancel</button>
         </footer>
       </div>
     </div>
