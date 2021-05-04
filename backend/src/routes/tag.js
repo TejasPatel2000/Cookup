@@ -51,4 +51,62 @@ router.get('/:tagName', async (ctx) => {
   ctx.body.success = false;
 });
 
+router.post('/unfollow', async (ctx) => {
+  const { session } = ctx;
+  const { tags } = ctx.request.body;
+  ctx.body = {};
+
+  const user = await User.findByLogin(session.user);
+  // if user not found
+  if (!user) {
+    ctx.body.success = false;
+    return;
+  }
+
+  // find the user by name and update push new tag to 'following' array
+  try {
+    await user.updateOne({
+      $pullAll: {
+        following: tags,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    ctx.body.success = false;
+    return;
+  }
+
+  ctx.body.success = true;
+});
+
+router.post('/follow', async (ctx) => {
+  const { session } = ctx;
+  const { tags } = ctx.request.body;
+  ctx.body = {};
+
+  const user = await User.findByLogin(session.user);
+  // if user not found
+  if (!user) {
+    ctx.body.success = false;
+    return;
+  }
+
+  // find the user by name and update push new tag to 'following' array
+  try {
+    await user.updateOne({
+      $addToSet: {
+        following: {
+          $each: tags,
+        },
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    ctx.body.success = false;
+    return;
+  }
+
+  ctx.body.success = true;
+});
+
 module.exports = router.routes();
