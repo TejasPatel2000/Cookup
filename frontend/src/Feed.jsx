@@ -4,7 +4,6 @@ import _uniqueId from 'lodash/uniqueId';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as faHeartSolid, faEdit } from '@fortawesome/free-solid-svg-icons';
-import bulmaCarousel from 'bulma-carousel/dist/js/bulma-carousel';
 
 // import _ from 'lodash';
 import moment from 'moment';
@@ -79,7 +78,6 @@ function Feed() {
 
   useEffect(() => {
     fetchRecipes();
-    bulmaCarousel.attach('.carousel');
   }, [feedFilter]);
 
   return (
