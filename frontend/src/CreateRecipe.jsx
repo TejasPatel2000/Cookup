@@ -1,4 +1,5 @@
-import React, { useRef, useContext } from 'react';
+import React, { useRef, useContext, useState } from 'react';
+import _uniqueId from 'lodash/uniqueId';
 import AppContext from './AppContext';
 
 function CreateRecipe() {
@@ -10,6 +11,8 @@ function CreateRecipe() {
   const ingredients = useRef(null);
   const instructions = useRef(null);
   const tags = useRef(null);
+
+  const [thumbs, setThumbs] = useState([]);
 
   const appContext = useContext(AppContext);
 
@@ -38,8 +41,6 @@ function CreateRecipe() {
   async function uploadFiles(files) {
     const formData = new FormData();
 
-    console.log(files);
-
     Array.from(files).forEach((file) => {
       formData.append(file.name, file);
     });
@@ -50,7 +51,7 @@ function CreateRecipe() {
     });
 
     const res = await req.json();
-    console.log(res);
+    setThumbs(res.uploads);
   }
 
   async function submitForm() {
@@ -72,6 +73,7 @@ function CreateRecipe() {
           ingredients: ingredients.current.value.split(','),
           instructions: instructions.current.value,
           tags: tags.current.value.split(','),
+          images: thumbs,
         }),
       });
     }
@@ -96,10 +98,25 @@ function CreateRecipe() {
               <input ref={prepTime} className="input is-primary" type="text" placeholder="Prep Time (in min)" />
               <input ref={cookTime} className="input is-primary" type="text" placeholder="Cook Time (in min)" />
             </div>
+            <div className="is-flex is-flex-wrap-nowrap is-flex-direction-row" style={{ overflowX: 'auto' }}>
+              {thumbs.map((thumb) => (
+                <div
+                  key={_uniqueId()}
+                  className="is-flex-grow-1 is-flex-shrink-0"
+                  style={{
+                    maxWidth: '256px', flexBasis: 'auto', margin: '8px', minWidth: '256px',
+                  }}
+                >
+                  <figure className="image is-3by2">
+                    <img src={`/api/recipe/image/${thumb}`} alt="recipe preview" />
+                  </figure>
+                </div>
+              ))}
+            </div>
             { !appContext.editRecipe ? (
               <div className="file has-name is-fullwidth">
                 <label className="file-label">
-                  <input className="file-input" type="file" name="photo" onChange={(e) => { uploadFiles(e.target.files); }} />
+                  <input className="file-input" type="file" multiple="multiple" accept="image/*" name="photo" onChange={(e) => { uploadFiles(e.target.files); }} />
                   <span className="file-cta">
                     <span className="file-icon">
                       <i className="fas fa-upload" />

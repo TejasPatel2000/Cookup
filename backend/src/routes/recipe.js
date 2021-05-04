@@ -25,6 +25,7 @@ router.post('/post', async (ctx) => {
       ingredients,
       instructions,
       tags,
+      images,
     } = ctx.request.body;
     if (checkRequired(name, description)) {
       const recipe = new Recipe({
@@ -37,6 +38,7 @@ router.post('/post', async (ctx) => {
         ingredients,
         instructions,
         tags,
+        images,
       });
 
       try {

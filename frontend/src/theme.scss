@@ -27,6 +27,7 @@ $control-border-width: 2px;
 $input-shadow: none;
 
 @import 'bulma/bulma.sass';
+@import '~bulma-carousel/src/sass/index.sass';
 
 .navbar {
     background: #C7CAB9;
