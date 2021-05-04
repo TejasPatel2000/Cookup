@@ -1,5 +1,7 @@
 const Router = require('@koa/router');
-const { Recipe, User, Like, Comment } = require('../models');
+const {
+  Recipe, User, Like, Comment,
+} = require('../models');
 const { checkRequired } = require('../utils');
 
 const router = new Router();
@@ -102,14 +104,14 @@ router.post('/comment', async (ctx) => {
     try {
       const comment = new Comment({
         by: user,
-        recipe: recipe,
-        text: text
+        recipe,
+        text,
       });
 
       comment.save();
     } catch (err) {
       console.log(err);
-      body.success = false;
+      ctx.body.success = false;
     }
 
     ctx.body.success = true;
@@ -158,9 +160,7 @@ router.post('/update', async (ctx) => {
     return;
   }
   ctx.body.success = false;
-
 });
-
 
 router.get('/', async (ctx) => {
   ctx.body = {};
@@ -181,9 +181,9 @@ router.get('/', async (ctx) => {
         populate: [
           {
             path: 'by',
-            model: 'User'
-          }
-        ]
+            model: 'User',
+          },
+        ],
       })
       .populate('likes');
 
