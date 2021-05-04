@@ -78,6 +78,22 @@ function CreateRecipe() {
               <input ref={prepTime} className="input is-primary" type="text" placeholder="Prep Time (in min)" />
               <input ref={cookTime} className="input is-primary" type="text" placeholder="Cook Time (in min)" />
             </div>
+            <div className="file has-name is-fullwidth">
+              <label className="file-label">
+                <input className="file-input" type="file" name="resume" />
+                <span className="file-cta">
+                  <span className="file-icon">
+                    <i className="fas fa-upload" />
+                  </span>
+                  <span className="file-label">
+                    Upload…
+                  </span>
+                </span>
+                <span className="file-name">
+                  Select an image from your device (jpg, jpeg, png, gif)
+                </span>
+              </label>
+            </div>
             <textarea ref={ingredients} className="textarea is-primary" placeholder="Ingredients... (Separate by comma)" rows="7" />
             <textarea ref={instructions} className="textarea is-primary" placeholder="Instructions..." rows="7" />
             <input ref={tags} className="input is-primary" type="text" placeholder="tags (separate by comma)" />
