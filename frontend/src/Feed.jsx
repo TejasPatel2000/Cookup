@@ -17,11 +17,9 @@ function Feed() {
     setFeedFilter,
     followTags,
     profile,
-    setUserVisible,
     setEditRecipe,
     setRecipeVisible,
     setRecipeID,
-    recipeID,
   } = useContext(AppContext);
 
   async function fetchRecipes() {
@@ -100,11 +98,13 @@ function Feed() {
                     </span>
                   </a>
                 </div>
-                <a href="#" onClick={() => { setRecipeID(recipe._id.toString()); setEditRecipe(true); setRecipeVisible(true); }}>
-                  <span className="icon is-pulled-right">
-                    <FontAwesomeIcon icon={faEdit} />
-                  </span>
-                </a>
+                {(profile.username === recipe.by.username) && (
+                  <a href="#" onClick={() => { setRecipeID(recipe._id.toString()); setEditRecipe(true); setRecipeVisible(true); }}>
+                    <span className="icon is-pulled-right">
+                      <FontAwesomeIcon icon={faEdit} />
+                    </span>
+                  </a>
+                )}
               </nav>
             </div>
           </article>
