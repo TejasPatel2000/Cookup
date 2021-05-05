@@ -84,15 +84,13 @@ function AboutModal() {
               social aspect.
             </p>
             <h3 className="title">Who is it made by?</h3>
-            <p>
-              This app was created by:
-              <ul>
-                <li>Soojin Ahn</li>
-                <li>Teslim Olunlade</li>
-                <li>Tejas Patel</li>
-                <li>Nicholas Stewart</li>
-              </ul>
-            </p>
+            <p>This app was created by:</p>
+            <ul>
+              <li>Soojin Ahn</li>
+              <li>Teslim Olunlade</li>
+              <li>Tejas Patel</li>
+              <li>Nicholas Stewart</li>
+            </ul>
           </div>
         </section>
         <footer className="modal-card-foot">

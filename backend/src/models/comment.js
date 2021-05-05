@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-const likeSchema = new mongoose.Schema({
-  user: {
+const commentSchema = new mongoose.Schema({
+  by: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
@@ -13,13 +13,14 @@ const likeSchema = new mongoose.Schema({
     required: true,
     index: true,
   },
+  text: {
+    type: String,
+    required: true,
+  },
+}, {
+  timestamps: true,
 });
 
-likeSchema.index({
-  user: 1,
-  recipe: 1,
-}, { unique: true });
+const Comment = mongoose.model('Comment', commentSchema);
 
-const Like = mongoose.model('Like', likeSchema);
-
-module.exports = Like;
+module.exports = Comment;
