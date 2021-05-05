@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import _uniqueId from 'lodash/uniqueId';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
-import { faHeart as faHeartSolid, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as faHeartSolid, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 // import _ from 'lodash';
 import moment from 'moment';
@@ -60,6 +60,21 @@ function Feed() {
     setFeed(updated);
   }
 
+  async function deleteRecipe(recipe) {
+    const { id } = recipe;
+
+    await fetch('/api/recipe/delete',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          recipeId: id,
+        }),
+      });
+  }
+
   async function postComment(recipe) {
     const { id } = recipe;
 
@@ -70,7 +85,7 @@ function Feed() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          recipeId: id,
+          RecipeId: id,
           text: inputMap[id],
         }),
       });
@@ -161,13 +176,20 @@ function Feed() {
                   </a>
                   <p className="level-item"><strong>{recipe.likes.size}</strong></p>
                 </div>
-                {(profile.username === recipe.by.username) && (
-                  <a href="#" onClick={() => { setRecipeID(recipe._id.toString()); setEditRecipe(true); setRecipeVisible(true); }}>
+                <div>
+                  <a href="#" onClick={() => { deleteRecipe(recipe); }}>
                     <span className="icon is-pulled-right">
-                      <FontAwesomeIcon icon={faEdit} />
+                      <FontAwesomeIcon icon={faTrash} />
                     </span>
                   </a>
-                )}
+                  {(profile.username === recipe.by.username) && (
+                    <a href="#" onClick={() => { setRecipeID(recipe._id.toString()); setEditRecipe(true); setRecipeVisible(true); }}>
+                      <span className="icon is-pulled-right">
+                        <FontAwesomeIcon icon={faEdit} />
+                      </span>
+                    </a>
+                  )}
+                </div>
               </nav>
               {recipe.comments.map((comment) => (
                 <div key={_uniqueId()}>

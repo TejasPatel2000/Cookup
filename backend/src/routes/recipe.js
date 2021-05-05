@@ -269,4 +269,25 @@ router.get('/', async (ctx) => {
   }
 });
 
+router.post('/delete', async (ctx) => {
+  ctx.body = {};
+  const { session } = ctx;
+  const { recipeId } = ctx.request.body;
+
+  const user = await User.findByLogin(session.user);
+  const recipe = await Recipe.findById(recipeId);
+
+  if (user && recipe) {
+    try {
+      await recipe.remove();
+      ctx.body.success = true;
+    } catch (err) {
+      ctx.body.success = false;
+      console.log(err);
+    }
+  }
+
+  ctx.body.success - false;
+});
+
 module.exports = router.routes();
