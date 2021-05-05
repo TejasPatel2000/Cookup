@@ -21,6 +21,7 @@ function Feed() {
     setEditRecipe,
     setRecipeVisible,
     setRecipeID,
+    setRecipeContent,
   } = useContext(AppContext);
 
   async function fetchRecipes() {
@@ -74,7 +75,12 @@ function Feed() {
         }),
       });
   }
-
+  async function editRecipe(recipe) {
+    setRecipeID(recipe._id.toString());
+    setEditRecipe(true);
+    setRecipeVisible(true);
+    setRecipeContent(recipe);
+  }
   async function postComment(recipe) {
     const { id } = recipe;
 
@@ -184,7 +190,7 @@ function Feed() {
                           <FontAwesomeIcon icon={faTrash} />
                         </span>
                       </a>
-                      <a href="#" onClick={() => { setRecipeID(recipe._id.toString()); setEditRecipe(true); setRecipeVisible(true); }}>
+                      <a href="#" onClick={() => { editRecipe(recipe); }}>
                         <span className="icon is-pulled-right">
                           <FontAwesomeIcon icon={faEdit} />
                         </span>

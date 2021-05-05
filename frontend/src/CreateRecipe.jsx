@@ -15,6 +15,10 @@ function CreateRecipe() {
   const [thumbs, setThumbs] = useState([]);
 
   const appContext = useContext(AppContext);
+  let contentDict = {};
+  if (appContext.editRecipe) {
+    contentDict = appContext.recipeContent;
+  }
 
   async function editRecipe() {
     if (recipeName && description) {
@@ -33,6 +37,7 @@ function CreateRecipe() {
           ingredients: ingredients.current.value.split(','),
           instructions: instructions.current.value,
           tags: tags.current.value.split(','),
+          images: thumbs,
         }),
       });
     }
@@ -80,7 +85,6 @@ function CreateRecipe() {
     appContext.setEditRecipe(false);
     appContext.setRecipeVisible(false);
   }
-
   return (
     <div className={`modal ${appContext.recipeVisible ? 'is-active' : ''}`}>
       <div className="modal-background" />
@@ -91,13 +95,27 @@ function CreateRecipe() {
         </header>
         <section className="modal-card-body">
           <div className="recipe-form">
-            <input ref={recipeName} className="input is-primary" type="text" placeholder="Recipe Name" />
-            <textarea ref={description} className="textarea is-primary" placeholder="Description of Recipe..." rows="7" />
-            <div className="field is-horizontal">
-              <input ref={servings} className="input is-primary" type="text" placeholder="Servings" />
-              <input ref={prepTime} className="input is-primary" type="text" placeholder="Prep Time (in min)" />
-              <input ref={cookTime} className="input is-primary" type="text" placeholder="Cook Time (in min)" />
-            </div>
+            { appContext.editRecipe ? (
+              <div>
+                <input ref={recipeName} className="input is-primary" type="text" placeholder="Recipe Name" defaultValue={contentDict.name} />
+                <textarea ref={description} className="textarea is-primary" placeholder="Description of Recipe..." rows="7" defaultValue={contentDict.description} />
+                <div className="field is-horizontal">
+                  <input ref={servings} className="input is-primary" type="text" placeholder="Servings" defaultValue={contentDict.servings} />
+                  <input ref={prepTime} className="input is-primary" type="text" placeholder="Prep Time (in min)" defaultValue={contentDict.prep_time} />
+                  <input ref={cookTime} className="input is-primary" type="text" placeholder="Cook Time (in min)" defaultValue={contentDict.cook_time} />
+                </div>
+              </div>
+            ) : (
+              <div>
+                <input ref={recipeName} className="input is-primary" type="text" placeholder="Recipe Name" defaultValue="" />
+                <textarea ref={description} className="textarea is-primary" placeholder="Description of Recipe..." rows="7" defaultValue="" />
+                <div className="field is-horizontal">
+                  <input ref={servings} className="input is-primary" type="text" placeholder="Servings" defaultValue="" />
+                  <input ref={prepTime} className="input is-primary" type="text" placeholder="Prep Time (in min)" defaultValue="" />
+                  <input ref={cookTime} className="input is-primary" type="text" placeholder="Cook Time (in min)" defaultValue="" />
+                </div>
+              </div>
+            )}
             <div className="is-flex is-flex-wrap-nowrap is-flex-direction-row" style={{ overflowX: 'auto' }}>
               {thumbs.map((thumb) => (
                 <div
@@ -113,27 +131,35 @@ function CreateRecipe() {
                 </div>
               ))}
             </div>
-            { !appContext.editRecipe ? (
-              <div className="file has-name is-fullwidth">
-                <label className="file-label">
-                  <input className="file-input" type="file" multiple="multiple" accept="image/*" name="photo" onChange={(e) => { uploadFiles(e.target.files); }} />
-                  <span className="file-cta">
-                    <span className="file-icon">
-                      <i className="fas fa-upload" />
-                    </span>
-                    <span className="file-label">
-                      Upload…
-                    </span>
+            <div className="file has-name is-fullwidth">
+              <label className="file-label">
+                <input className="file-input" type="file" multiple="multiple" accept="image/*" name="photo" onChange={(e) => { uploadFiles(e.target.files); }} />
+                <span className="file-cta">
+                  <span className="file-icon">
+                    <i className="fas fa-upload" />
                   </span>
-                  <span className="file-name">
-                    Select an image from your device (jpg, jpeg, png, gif)
+                  <span className="file-label">
+                    Upload…
                   </span>
-                </label>
+                </span>
+                <span className="file-name">
+                  Select an image from your device (jpg, jpeg, png, gif)
+                </span>
+              </label>
+            </div>
+            { appContext.editRecipe ? (
+              <div>
+                <textarea ref={ingredients} className="textarea is-primary" placeholder="Ingredients... (Separate by comma)" rows="7" defaultValue={contentDict.ingredients} />
+                <textarea ref={instructions} className="textarea is-primary" placeholder="Instructions..." rows="7" defaultValue={contentDict.instructions} />
+                <input ref={tags} className="input is-primary" type="text" placeholder="tags (separate by comma)" defaultValue={contentDict.tags} />
               </div>
-            ) : null }
-            <textarea ref={ingredients} className="textarea is-primary" placeholder="Ingredients... (Separate by comma)" rows="7" />
-            <textarea ref={instructions} className="textarea is-primary" placeholder="Instructions..." rows="7" />
-            <input ref={tags} className="input is-primary" type="text" placeholder="tags (separate by comma)" />
+            ) : (
+              <div>
+                <textarea ref={ingredients} className="textarea is-primary" placeholder="Ingredients... (Separate by comma)" rows="7" defaultValue="" />
+                <textarea ref={instructions} className="textarea is-primary" placeholder="Instructions..." rows="7" defaultValue="" />
+                <input ref={tags} className="input is-primary" type="text" placeholder="tags (separate by comma)" defaultValue="" />
+              </div>
+            )}
           </div>
         </section>
         <footer className="modal-card-foot">
