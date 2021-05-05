@@ -177,17 +177,19 @@ function Feed() {
                   <p className="level-item"><strong>{recipe.likes.size}</strong></p>
                 </div>
                 <div>
-                  <a href="#" onClick={() => { deleteRecipe(recipe); }}>
-                    <span className="icon is-pulled-right">
-                      <FontAwesomeIcon icon={faTrash} />
-                    </span>
-                  </a>
                   {(profile.username === recipe.by.username) && (
-                    <a href="#" onClick={() => { setRecipeID(recipe._id.toString()); setEditRecipe(true); setRecipeVisible(true); }}>
-                      <span className="icon is-pulled-right">
-                        <FontAwesomeIcon icon={faEdit} />
-                      </span>
-                    </a>
+                    <div>
+                      <a href="#" onClick={() => { deleteRecipe(recipe); }}>
+                        <span className="icon is-pulled-right">
+                          <FontAwesomeIcon icon={faTrash} />
+                        </span>
+                      </a>
+                      <a href="#" onClick={() => { setRecipeID(recipe._id.toString()); setEditRecipe(true); setRecipeVisible(true); }}>
+                        <span className="icon is-pulled-right">
+                          <FontAwesomeIcon icon={faEdit} />
+                        </span>
+                      </a>
+                    </div>
                   )}
                 </div>
               </nav>
