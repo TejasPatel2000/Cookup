@@ -37,6 +37,7 @@ function CreateRecipe() {
           ingredients: ingredients.current.value.split(','),
           instructions: instructions.current.value,
           tags: tags.current.value.split(','),
+          images: thumbs,
         }),
       });
     }
@@ -84,8 +85,6 @@ function CreateRecipe() {
     appContext.setEditRecipe(false);
     appContext.setRecipeVisible(false);
   }
-  console.log(appContext.recipeID);
-  console.log(appContext.recipeContent);
   return (
     <div className={`modal ${appContext.recipeVisible ? 'is-active' : ''}`}>
       <div className="modal-background" />

@@ -139,6 +139,7 @@ router.post('/update', async (ctx) => {
     ingredients,
     instructions,
     tags,
+    images,
   } = ctx.request.body;
 
   const user = await User.findByLogin(session.user);
@@ -154,6 +155,7 @@ router.post('/update', async (ctx) => {
       recipe.ingredients = ingredients;
       recipe.instructions = instructions;
       recipe.tags = tags;
+      recipe.images = images;
 
       await recipe.save();
     } catch (err) {
