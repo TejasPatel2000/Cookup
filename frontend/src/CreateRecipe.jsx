@@ -137,7 +137,7 @@ function CreateRecipe() {
           </div>
         </section>
         <footer className="modal-card-foot">
-          <input type="submit" value="Submit" className="button is-success" onClick={submitForm} />
+          <input type="submit" value="Submit" className="button is-info" onClick={submitForm} />
           <button type="button" className="button" onClick={() => { appContext.setEditRecipe(false); appContext.setRecipeVisible(false); }}>Cancel</button>
         </footer>
       </div>

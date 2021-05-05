@@ -168,9 +168,9 @@ function App() {
               </div>
             </div>
             <div className="navbar-end">
-              <div className="navbar-item is-expanded">
-                <div className="field has-addons">
-                  <div className="control is-expanded">
+              <div className="navbar-item">
+                <div className="field">
+                  <div className="control is-expanded is-fullwidth">
                     <input onChange={(event) => { setFeedFilter({ search: event.target.value }); }} className="input" type="text" placeholder="Search" />
                   </div>
                 </div>
@@ -178,7 +178,7 @@ function App() {
               {profile.username ? (
                 <div className="navbar-item">
                   <div className="buttons">
-                    <a href="#" className="button is-primary is-fullwidth" onClick={() => { setRecipeVisible(true); }}>
+                    <a href="#" className="button is-primary" onClick={() => { setRecipeVisible(true); }}>
                       Create Recipe
                     </a>
                   </div>
@@ -187,13 +187,13 @@ function App() {
               { profile.username ? (
                 <div className="navbar-item">
                   <div className="buttons">
-                    <a href="#" className="button is-danger is-fullwidth" onClick={() => { logout(); }}>Log out</a>
+                    <a href="#" className="button is-danger" onClick={() => { logout(); }}>Log out</a>
                   </div>
                 </div>
               ) : (
                 <div className="navbar-item">
                   <div className="buttons">
-                    <a href="#" className="button is-primary is-fullwidth" onClick={() => { setAuthVisible(true); }}>Sign Up</a>
+                    <a href="#" className="button is-primary" onClick={() => { setAuthVisible(true); }}>Sign Up</a>
                   </div>
                 </div>
               ) }
