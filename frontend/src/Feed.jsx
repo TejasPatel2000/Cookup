@@ -120,6 +120,14 @@ function Feed() {
                   </strong>
                 </a>
               </div>
+              <div className="Title">
+                <p>
+                  <br />
+                  <strong>{recipe.name}</strong>
+                  {' '}
+                  <br />
+                </p>
+              </div>
               <div className="is-flex is-flex-wrap-nowrap is-flex-direction-row" style={{ overflowX: 'auto' }}>
                 {recipe.images.map((thumb) => (
                   <div
@@ -137,17 +145,14 @@ function Feed() {
               </div>
               <div className="content">
                 <p>
-                  <br />
-                  <strong>{recipe.name}</strong>
-                  {' '}
-                  <br />
                   {recipe.description}
                   <br />
-                  Ingredients:
+                  <strong> Ingrediants: </strong>
+                  <br />
                   {' '}
                   {recipe.ingredients.join()}
                   <br />
-                  Instructions:
+                  <strong> Instructions: </strong>
                   <br />
                   {recipe.instructions}
                   <br />
