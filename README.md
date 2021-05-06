@@ -1,4 +1,4 @@
-# [CookUp](https://cookupapp-sprint1.herokuapp.com/)
+# [CookUp](https://cookupapp.herokuapp.com/)
 A web app designed to share and find recipes.
 ### Getting Started
 1. Install Docker from [here](https://docs.docker.com/get-docker/).
