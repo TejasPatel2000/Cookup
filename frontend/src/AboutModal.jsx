@@ -41,9 +41,10 @@ function AboutModal() {
                 The next big functionality is being able to create a recipe. This option becomes
                 available once you login. There is a &#39;Create Recipe&#39; button at the top
                 of the page that will appear. Once you click on that button, there will be a
-                modal window pop up where there are a bunch of different input fields, however
-                the only required is the name and description. Once you have filled out everything
-                you can click the submit button. Once you submit, to see your recipe, you will need
+                pop up with different input fields, however the only required fields are
+                the name and description.
+                Once you have filled out everything you can click the submit button.
+                Once you submit, to see your recipe, you will need
                 to refresh the page, and your recipe will appear at the top.
               </dd>
               <dt>Search Functionality</dt>
@@ -79,8 +80,8 @@ function AboutModal() {
               recipe (vegetarian, gluten-free, etc...)
               CookUp was designed to resolve these issues.
               This application was designed to resolve all of that.
-              By being able to parse through user-curated recipes as well as utilize an API to find
-              general recipes, any user can find what they are looking for with the additional
+              By being able to parse through user-curated recipes,
+              any user can find what they are looking for with the additional
               social aspect.
             </p>
             <h3 className="title">Who is it made by?</h3>
