@@ -75,12 +75,6 @@ function Feed() {
         }),
       });
   }
-  async function editRecipe(recipe) {
-    setRecipeID(recipe._id.toString());
-    setEditRecipe(true);
-    setRecipeVisible(true);
-    setRecipeContent(recipe);
-  }
   async function postComment(recipe) {
     const { id } = recipe;
     await fetch('/api/recipe/comment',
@@ -193,7 +187,7 @@ function Feed() {
                           <FontAwesomeIcon icon={faTrash} />
                         </span>
                       </a>
-                      <a href="#" onClick={() => { editRecipe(recipe); }}>
+                      <a href="#" onClick={() => { setRecipeID(recipe._id.toString()); setEditRecipe(true); setRecipeVisible(true); setRecipeContent(recipe); }}>
                         <span className="icon is-pulled-right">
                           <FontAwesomeIcon icon={faEdit} />
                         </span>
