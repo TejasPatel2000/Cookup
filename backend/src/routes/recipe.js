@@ -104,8 +104,6 @@ router.post('/comment', async (ctx) => {
 
   const user = await User.findByLogin(session.user);
   const recipe = await Recipe.findById(recipeId);
-  console.log(user)
-  console.log(recipeId)
 
   if (user && recipe && text) {
     try {

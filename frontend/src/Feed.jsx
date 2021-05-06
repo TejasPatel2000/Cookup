@@ -82,7 +82,7 @@ function Feed() {
     setRecipeContent(recipe);
   }
   async function postComment(recipe) {
-    const { id } = recipe.by._id;
+    const { id } = recipe;
     console.log('daddy', recipe.by._id);
     await fetch('/api/recipe/comment',
       {
@@ -91,7 +91,7 @@ function Feed() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          recipeId: recipe.by._id,
+          recipeId: id,
           text: inputMap[id],
         }),
       });
